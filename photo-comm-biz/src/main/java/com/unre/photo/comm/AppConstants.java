@@ -23,6 +23,11 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	//register模块  1003
 	public final static String QUERY_ADD_USER_ERROR_CODE = "10300001";
 	public final static String QUERY_ADD_USER_ERROR_MESSAGE = "用户添加失败:输入信息不正确！";
+	public final static String QUERY_ADD_TEL_ERROR_CODE = "10300002";
+	public final static String QUERY_ADD_TEL_ERROR_MESSAGE = "手机号已存在！";
+	public final static String QUERY_ADD_MAIL_ERROR_CODE = "10300003";
+	public final static String QUERY_ADD_MAIL_ERROR_MESSAGE = "邮箱已存在！";
+
 	
 	//photo 10040000
 	//Panorama Engine 
