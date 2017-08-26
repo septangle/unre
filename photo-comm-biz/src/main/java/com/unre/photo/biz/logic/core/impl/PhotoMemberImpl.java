@@ -51,30 +51,24 @@ public class PhotoMemberImpl implements IPhotoMemberBiz {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			/*	 LOGGER.error(AppConstants.QUERY_FAIL_PLAN_ERROR_MESSAGE, e);
-				 throw new
-				 BusinessException(AppConstants.QUERY_FAIL_PLAN_ERROR_CODE,
-				 AppConstants.QUERY_FAIL_PLAN_ERROR_MESSAGE);*/
-
 		}
 		return photoMemberDtoList;
 	}
 
-	// 娉ㄥ唽
+	// 注册
 	@Override
 	public PhotoMemberDto addPhotoMember(PhotoMemberDto photoMemberDto) throws BusinessException {
 		PhotoMember photomember = new PhotoMember();
 		photomember.setTel(photoMemberDto.getTel());
 		photomember.setMail(photoMemberDto.getMail());
-		List<PhotoMember> photoMemberslist =photoMemberMapper.selectByTelOrMail(photomember);
-		if (photoMemberslist.size()>0) {
+		List<PhotoMember> photoMemberslist = photoMemberMapper.selectByTelOrMail(photomember);
+		if (photoMemberslist.size() > 0) {
 			for (int i = 0; i < photoMemberslist.size(); i++) {
-				PhotoMember photoMember =photoMemberslist.get(i);
+				PhotoMember photoMember = photoMemberslist.get(i);
 				if (photoMember.getTel().equals(photoMemberDto.getTel())) {
 					throw new BusinessException(AppConstants.QUERY_ADD_TEL_ERROR_CODE,
 							AppConstants.QUERY_ADD_TEL_ERROR_MESSAGE);
-				}else if (photoMember.getMail().equals(photoMemberDto.getMail())) {
+				} else if (photoMember.getMail().equals(photoMemberDto.getMail())) {
 					throw new BusinessException(AppConstants.QUERY_ADD_MAIL_ERROR_CODE,
 							AppConstants.QUERY_ADD_MAIL_ERROR_MESSAGE);
 				}
@@ -98,7 +92,7 @@ public class PhotoMemberImpl implements IPhotoMemberBiz {
 
 	}
 
-	// 鐧诲綍
+	// 登录
 	@Override
 	public PhotoMemberDto queryLoginUsers(PhotoMemberDto photoMemberDto) throws BusinessException {
 		PhotoMember photomember;

@@ -4,6 +4,8 @@
 package com.unre.photo.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.base.Objects;
+import com.unre.photo.biz.dto.PhotoMemberDto;
 import com.unre.photo.biz.logic.facade.IPhotoMemberFacade;
 import com.unre.photo.biz.request.PhotoMemberRequest;
 import com.unre.photo.biz.response.PhotoMemberResponse;
+import com.unre.photo.util.MD5Util;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -62,7 +67,11 @@ public class PhotoMemberController extends BaseController<PhotoMemberController>
 			HttpServletRequest servletRequest) throws Exception {
 		PhotoMemberResponse PhotoMemberResponse = null;
 		try {
+			request.getPhotoMemberDto().setPassword(MD5Util.encodeMD5String(request.getPhotoMemberDto().getPassword()));
 			PhotoMemberResponse = photoMemberFacade.login(request);
+			if (PhotoMemberResponse != null) {
+				servletRequest.getSession().setAttribute("photomemberDto", PhotoMemberResponse.getPhotoMemberDto());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,11 +96,30 @@ public class PhotoMemberController extends BaseController<PhotoMemberController>
 			HttpServletRequest servletRequest) throws Exception {
 		PhotoMemberResponse PhotoMemberResponse = null;
 		try {
+			request.getPhotoMemberDto().setPassword(MD5Util.encodeMD5String(request.getPhotoMemberDto().getPassword()));
 			PhotoMemberResponse = photoMemberFacade.register(request);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return PhotoMemberResponse;
+
+	}
+
+	//注销
+	@ApiOperation(value = "注销", httpMethod = "POST", response = PhotoMemberResponse.class)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "photoMemberDto.MemberName", value = "MemberName", required = false, dataType = "long"), })
+	@RequestMapping(value = "/doLogout.do", method = RequestMethod.POST)
+	public @ResponseBody boolean doLogout(HttpServletRequest request, @RequestBody PhotoMemberRequest requests) {
+		boolean flag = false;
+		HttpSession session = request.getSession();
+		PhotoMemberDto phonto = (PhotoMemberDto) session.getAttribute("photomemberDto");
+		if (phonto != null) {
+			session.removeAttribute("photomemberDto");
+			flag = true;
+		}
+		return flag;
 
 	}
 

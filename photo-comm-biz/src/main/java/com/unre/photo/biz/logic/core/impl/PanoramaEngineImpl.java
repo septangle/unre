@@ -89,14 +89,14 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 			//3. 更新scan状态，新增scan_item
 			photoScanBizImpl.saveUploadedImages(benacoScanId, imageFiles);
-
+			retFlg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE,
 					AppConstants.PENGINE_ADD_PHOTOS_ERROR_MESSAGE);
 		}
 
-		return false;
+		return retFlg;
 	}
 
 	@Override

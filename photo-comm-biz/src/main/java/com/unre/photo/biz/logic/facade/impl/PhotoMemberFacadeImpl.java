@@ -55,7 +55,7 @@ public class PhotoMemberFacadeImpl implements IPhotoMemberFacade {
 	// 登录
 	@Override
 	public PhotoMemberResponse login(PhotoMemberRequest request) throws Exception {
-		PhotoMemberResponse response = new PhotoMemberResponse();
+        PhotoMemberResponse response = new PhotoMemberResponse();
 		response = new PhotoMemberResponse();
 		PhotoMemberDto photoMemberDto = photoMemberBiz.queryLoginUsers(request.getPhotoMemberDto());
 		response.setPhotoMemberDto(photoMemberDto);
