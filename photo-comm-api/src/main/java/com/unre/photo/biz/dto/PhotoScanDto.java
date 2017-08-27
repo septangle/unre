@@ -17,6 +17,7 @@ public class PhotoScanDto {
 	private Date createTime;
 	private Integer updateBy;
 	private Date updateTime;
+	private Long uid;
 
 	public Long getId() {
 		return id;
@@ -58,11 +59,12 @@ public class PhotoScanDto {
 		this.title = title;
 	}
 
-	public String getdescription() {
+
+	public String getDescription() {
 		return description;
 	}
 
-	public void setdescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -120,6 +122,14 @@ public class PhotoScanDto {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public Long getUid() {
+		return uid;
+	}
+
+	public void setUid(Long uid) {
+		this.uid = uid;
 	}
 
 }

@@ -30,10 +30,15 @@ public class PhotoMemberImpl implements IPhotoMemberBiz {
 
 		try {
 			PhotoMember photoMember = photoMemberMapper.selectByPrimaryKey(photoMemberId);
+			if (photoMember == null) {
+				throw new BusinessException(AppConstants.QUERY_LOGIN_USERID_ERROR_CODE,
+						AppConstants.QUERY_LOGIN_USERID_ERROR_MESSAGE);
+			}
 			photoMemberDto = ModelUtil.modelToDto(photoMember, PhotoMemberDto.class);
 		} catch (Exception e) {
-			LOGGER.error("err", e);
-			throw new BusinessException("err", "err");
+			LOGGER.error(AppConstants.QUERY_LOGIN_USERID_ERROR_CODE, e);
+			throw new BusinessException(AppConstants.QUERY_LOGIN_USERID_ERROR_CODE,
+					AppConstants.QUERY_LOGIN_USERID_ERROR_MESSAGE);
 		}
 		return photoMemberDto;
 	}

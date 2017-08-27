@@ -26,6 +26,9 @@ public class PhotoScan {
     private Date updateTime;
 
     private Long version;
+    
+	private Long uid;
+
 
     public Long getId() {
         return id;
@@ -122,4 +125,13 @@ public class PhotoScan {
     public void setVersion(Long version) {
         this.version = version;
     }
+
+	public Long getUid() {
+		return uid;
+	}
+
+	public void setUid(Long uid) {
+		this.uid = uid;
+	}
+    
 }

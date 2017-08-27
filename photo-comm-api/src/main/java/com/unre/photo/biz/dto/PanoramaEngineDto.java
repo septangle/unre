@@ -18,6 +18,8 @@ public class PanoramaEngineDto {
 	private String previewUrl;
 	
 	private String scanStatus;
+	
+	private Long uid;
 
 	public String getApiBaseUrl() {
 		return apiBaseUrl;
@@ -73,6 +75,14 @@ public class PanoramaEngineDto {
 
 	public void setScanStatus(String scanStatus) {
 		this.scanStatus = scanStatus;
+	}
+
+	public Long getUid() {
+		return uid;
+	}
+
+	public void setUid(Long uid) {
+		this.uid = uid;
 	}
 
 }

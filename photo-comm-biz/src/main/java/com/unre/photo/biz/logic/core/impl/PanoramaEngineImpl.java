@@ -38,6 +38,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 		retPanEngineDto.setFiles(panoramaEngineDto.getFiles());
 		retPanEngineDto.setApiBaseUrl(panoramaEngineDto.getApiBaseUrl());
 		retPanEngineDto.setApiKey(panoramaEngineDto.getApiKey());
+		retPanEngineDto.setUid(panoramaEngineDto.getUid());
 		try {
 			//1. 调用BenacoAPI生成scan id
 			Map<String, Object> params = new HashMap<String, Object>();
@@ -57,6 +58,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			//保存至scan表
 			PhotoScanDto photoScanDto = new PhotoScanDto();
 			photoScanDto.setBenacoScanId(benacoScanId);
+			photoScanDto.setUid(retPanEngineDto.getUid());
 			photoScanBizImpl.addPhotoScan(photoScanDto);
 
 			//返回 benaco scan id

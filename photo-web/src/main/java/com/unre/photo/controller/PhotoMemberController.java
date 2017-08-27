@@ -4,28 +4,31 @@
 package com.unre.photo.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.base.Objects;
 import com.unre.photo.biz.dto.PhotoMemberDto;
+import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IPhotoMemberFacade;
 import com.unre.photo.biz.request.PhotoMemberRequest;
+import com.unre.photo.biz.response.BaseResponse;
+import com.unre.photo.biz.response.Error;
 import com.unre.photo.biz.response.PhotoMemberResponse;
+import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.MD5Util;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 /**
- * @author TDH
+ * @author zx
  *
  */
 @Controller
@@ -64,10 +67,16 @@ public class PhotoMemberController extends BaseController<PhotoMemberController>
 			@ApiImplicitParam(name = "photoMemberDto.tel", value = "联系电话", required = true, dataType = "string"), })
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public @ResponseBody PhotoMemberResponse queryLoginUsers(@RequestBody PhotoMemberRequest request,
-			HttpServletRequest servletRequest) throws Exception {
+			HttpServletRequest servletRequest) throws BusinessException {
 		PhotoMemberResponse PhotoMemberResponse = null;
+		HttpSession session = servletRequest.getSession();
+        PhotoMemberDto phonto = (PhotoMemberDto) session.getAttribute("photomemberDto");
+        if (phonto != null) {
+        	throw new BusinessException(AppConstants.QUERY_LOGIN_USERLOING_ERROR_CODE,
+					AppConstants.QUERY_LOGIN_USERLOING_ERROR_MESSAGE);	
+		}
 		try {
-			request.getPhotoMemberDto().setPassword(MD5Util.encodeMD5String(request.getPhotoMemberDto().getPassword()));
+            request.getPhotoMemberDto().setPassword(MD5Util.encodeMD5String(request.getPhotoMemberDto().getPassword()));
 			PhotoMemberResponse = photoMemberFacade.login(request);
 			if (PhotoMemberResponse != null) {
 				servletRequest.getSession().setAttribute("photomemberDto", PhotoMemberResponse.getPhotoMemberDto());

@@ -15,7 +15,11 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String SCFILE_PROCESS_COMPLETE = "5"; //处理完成
 
 	//会员 1001
-	
+	public final static String QUERY_LOGIN_USERID_ERROR_CODE = "10100001";
+	public final static String QUERY_LOGIN_USERID_ERROR_MESSAGE = "该用户不存在！";
+	public final static String QUERY_LOGIN_USERLOING_ERROR_CODE = "10100002";
+	public final static String QUERY_LOGIN_USERLOING_ERROR_MESSAGE = "该用户已登录！";
+
 	//login模块 1002
 	public final static String QUERY_LOGIN_USER_ERROR_CODE = "10200001";
 	public final static String QUERY_LOGIN_USER_ERROR_MESSAGE = "用户登录失败:账号或密码错误！";
