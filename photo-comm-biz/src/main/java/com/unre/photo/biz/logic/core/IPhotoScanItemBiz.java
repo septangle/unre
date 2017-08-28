@@ -1,12 +1,9 @@
 package com.unre.photo.biz.logic.core;
 
 import java.util.List;
-
-import com.unre.photo.biz.dto.PhotoMemberDto;
-import com.unre.photo.biz.dto.PhotoScanDto;
 import com.unre.photo.biz.dto.PhotoScanItemDto;
 import com.unre.photo.biz.exception.BusinessException;
-import com.unre.photo.biz.request.PhotoScanItemRequest;
+
 
 public interface IPhotoScanItemBiz {
 

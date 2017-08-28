@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 import com.unre.photo.biz.dto.PhotoScanItemDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IPhotoScanItemBiz;
-import com.unre.photo.biz.request.PhotoScanItemRequest;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.comm.dal.dao.PhotoScanItemMapper;
-import com.unre.photo.comm.dal.model.PhotoScan;
 import com.unre.photo.comm.dal.model.PhotoScanItem;
 import com.unre.photo.util.ModelUtil;
 

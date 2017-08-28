@@ -3,7 +3,6 @@ package com.unre.photo.controller;
 import java.io.File;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
 import com.unre.photo.biz.logic.facade.IPanoramaEngineFacade;
 import com.unre.photo.biz.request.PanoramaEngineRequest;
 import com.unre.photo.biz.response.PanoramaEngineResponse;
 import com.unre.photo.biz.response.PhotoScanItemResponse;
+import com.unre.photo.util.PhotoUrl;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -29,14 +28,17 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	@Autowired
 	private IPanoramaEngineFacade panoramaEngineFacade;
 
+	@Autowired
+	private PhotoUrl photoUrl;
+
 	@ApiOperation(value = "创建scanID", httpMethod = "POST", response = PhotoScanItemResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string"), })
 	@RequestMapping(value = "/createScan.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse createScan(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		request.getPanoramaEngineDto().setApiKey("3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
-		request.getPanoramaEngineDto().setApiBaseUrl("https://beta.benaco.com/api/beta/scans/");
+		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
+		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		return panoramaEngineFacade.createScan(request);
 	}
 
@@ -46,9 +48,10 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	@RequestMapping(value = "/addPhotos.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse addPhotos(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		request.getPanoramaEngineDto().setApiKey("3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
-		request.getPanoramaEngineDto().setApiBaseUrl("https://beta.benaco.com/api/beta/scans/");
+		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
+		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		// 实例化一个文件解析器
+		@SuppressWarnings("unused")
 		CommonsMultipartResolver coMultiResolver = new CommonsMultipartResolver(
 				servletRequest.getSession().getServletContext());
 		// 判断request请求中是否有文件上传
@@ -84,8 +87,8 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	@RequestMapping(value = "/startProcessing.do", method = RequestMethod.POST)
 	public PanoramaEngineResponse startProcessing(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		request.getPanoramaEngineDto().setApiKey("3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
-		request.getPanoramaEngineDto().setApiBaseUrl("https://beta.benaco.com/api/beta/scans/");
+		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
+		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		return panoramaEngineFacade.startProcessing(request);
 	}
 
@@ -93,8 +96,8 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	@RequestMapping(value = "/queryScanStatus.do", method = RequestMethod.POST)
 	public PanoramaEngineResponse queryScanStatus(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		request.getPanoramaEngineDto().setApiKey("3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
-		request.getPanoramaEngineDto().setApiBaseUrl("https://beta.benaco.com/api/beta/scans/");
+		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
+		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		return panoramaEngineFacade.queryScanStatus(request);
 	}
 }

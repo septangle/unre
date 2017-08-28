@@ -3,13 +3,10 @@ package com.unre.photo.biz.logic.facade.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
-import com.unre.photo.biz.dto.PhotoScanDto;
 import com.unre.photo.biz.dto.PhotoScanItemDto;
 import com.unre.photo.biz.logic.core.IPhotoScanItemBiz;
 import com.unre.photo.biz.logic.facade.IPhotoScanItemFacade;
 import com.unre.photo.biz.request.PhotoScanItemRequest;
-import com.unre.photo.biz.request.PhotoScanRequest;
 import com.unre.photo.biz.response.PhotoScanItemResponse;
 import com.unre.photo.comm.AppConstants;
 

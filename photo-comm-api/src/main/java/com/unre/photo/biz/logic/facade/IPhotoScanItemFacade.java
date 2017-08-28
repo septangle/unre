@@ -1,7 +1,6 @@
 package com.unre.photo.biz.logic.facade;
 
 import com.unre.photo.biz.request.PhotoScanItemRequest;
-import com.unre.photo.biz.request.PhotoScanRequest;
 import com.unre.photo.biz.response.PhotoScanItemResponse;
 
 public interface IPhotoScanItemFacade {

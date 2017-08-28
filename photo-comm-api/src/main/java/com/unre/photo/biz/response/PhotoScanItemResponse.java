@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.unre.photo.biz.dto.PhotoScanItemDto;
 
+@SuppressWarnings("serial")
 public class PhotoScanItemResponse extends BaseResponse{
 	private PhotoScanItemDto photoScanItemDto;
 

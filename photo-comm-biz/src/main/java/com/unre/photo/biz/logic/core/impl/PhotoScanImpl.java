@@ -26,7 +26,7 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 
 	@Autowired
 	private PhotoScanMapper photoScanMapper;
-	
+
 	@Autowired
 	private IPhotoScanItemBiz photoScanItemBiz;
 
@@ -41,8 +41,7 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 			photoScanDto = ModelUtil.modelToDto(photoScan, PhotoScanDto.class);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_FIND_ERROR_CODE, e);
-			throw new BusinessException(AppConstants.SCAN_FIND_ERROR_CODE,
-					AppConstants.SCAN_FIND_ERROR_MESSAGE);
+			throw new BusinessException(AppConstants.SCAN_FIND_ERROR_CODE, AppConstants.SCAN_FIND_ERROR_MESSAGE);
 		}
 		return photoScanDto;
 	}
@@ -51,19 +50,16 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 	public List<PhotoScanDto> queryPhotoScan(PhotoScanDto photoScanDto) throws BusinessException {
 		List<PhotoScanDto> photoScanoList = new ArrayList<PhotoScanDto>();
 		try {
-			PhotoScan photoScan = ModelUtil.dtoToModel(photoScanDto,
-					PhotoScan.class);
+			PhotoScan photoScan = ModelUtil.dtoToModel(photoScanDto, PhotoScan.class);
 			List<PhotoScan> photoScanList = photoScanMapper.selectBySelective(photoScan);
 			if (!CollectionUtils.isEmpty(photoScanList)) {
 				for (PhotoScan p : photoScanList) {
-					photoScanoList.add(ModelUtil.modelToDto(p,
-							PhotoScanDto.class));
+					photoScanoList.add(ModelUtil.modelToDto(p, PhotoScanDto.class));
 				}
 			}
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_QUERY_ERROR_CODE, e);
-			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE,
-					AppConstants.SCAN_QUERY_ERROR_MESSAGE);
+			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
 		}
 		return photoScanoList;
 	}
@@ -79,8 +75,7 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 			retPhotoDto = this.findPhotoScanById(id);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_ADD_ERROR_CODE, e);
-			throw new BusinessException(AppConstants.SCAN_ADD_ERROR_CODE,
-					AppConstants.SCAN_ADD_ERROR_MESSAGE);
+			throw new BusinessException(AppConstants.SCAN_ADD_ERROR_CODE, AppConstants.SCAN_ADD_ERROR_MESSAGE);
 		}
 		return retPhotoDto;
 	}
@@ -96,20 +91,19 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 			}
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_UPDATE_ERROR_MESSAGE, e);
-			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
-					AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
+			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE, AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 		}
 	}
 
 	@Override
 	public void updatePhotoScanByBenacoId(PhotoScanDto photoScanDto) throws BusinessException {
 		try {
-	
+
 			//1.更新scan状态
 			PhotoScan pScanParm = new PhotoScan();
 			pScanParm.setBenacoScanId(photoScanDto.getBenacoScanId());
 			List<PhotoScan> pScanList = photoScanMapper.selectBySelective(pScanParm);
-			if(pScanList.size()==0 || pScanList.size()>1){
+			if (pScanList.size() == 0 || pScanList.size() > 1) {
 				throw new BusinessException(AppConstants.SCAN_BENACO_SCAN_ID_ERROR_CODE,
 						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
 			}
@@ -122,14 +116,23 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 			}
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_UPDATE_ERROR_MESSAGE, e);
-			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
-					AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
+			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE, AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 		}
 	}
 
 	@Override
-	public void deletePhotoScan(Long id) throws BusinessException {
-		// TODO Auto-generated method stub
+	public boolean deletePhotoScan(Long id) throws BusinessException {
+		boolean flg = false;
+		try {
+			int delScan = photoScanMapper.deleteByPrimaryKey(id);
+			if (delScan == 1) {
+				flg = true;
+			}
+		} catch (Exception e) {
+			throw new BusinessException(AppConstants.SCAN__DELETE_SCAN_ID_ERROR_CODE,
+					AppConstants.SCAN__DELETE_SCAN_ID_ERROR_MESSAGE);
+		}
+		return flg;
 
 	}
 
@@ -141,16 +144,16 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 		try {
 			//1.更新scan状态
 			PhotoScan pScanParm = new PhotoScan();
-			pScanParm.setBenacoScanId(benacoScanId);			
+			pScanParm.setBenacoScanId(benacoScanId);
 			List<PhotoScan> pScanList = photoScanMapper.selectBySelective(pScanParm);
-			if(pScanList.size()==0 || pScanList.size()>1){
+			if (pScanList.size() == 0 || pScanList.size() > 1) {
 				throw new BusinessException(AppConstants.SCAN_BENACO_SCAN_ID_ERROR_CODE,
 						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
 			}
 			PhotoScan pScan = pScanList.get(0);
 			pScan.setStatus(AppConstants.SFILE_UPLOAD_COMPLETE);
 			int i = photoScanMapper.updatePhotoScanByBenacoId(pScan);
-			
+
 			//2. 新增scan item
 			for (File f : imageFiles) {
 				String imageFullPath = f.getPath() + f.getName();
@@ -160,14 +163,14 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 				photoScanItemBiz.addPhotoScanItem(pScanItemDto);
 			}
 			flg = true;
-			
+
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_SAVE_IMAGE_ERROR_MESSAGE, e);
 			throw new BusinessException(AppConstants.SCAN_SAVE_IMAGE_ERROR_CODE,
 					AppConstants.SCAN_SAVE_IMAGE_ERROR_MESSAGE);
 		}
-		
+
 		return flg;
 	}
-    
+
 }

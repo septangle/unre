@@ -70,6 +70,10 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String SCAN_BENACO_SCAN_ID_ERROR_CODE = "10050006";
 	public final static String SCAN_BENACO_SCAN_ID_ERROR_MESSAGE = "benaco scan id 异常!";
 	
+	public final static String SCAN__DELETE_SCAN_ID_ERROR_CODE = "10050007";
+	public final static String SCAN__DELETE_SCAN_ID_ERROR_MESSAGE = "scan id 异常!";
+	
+	
 	//Photo Scan Item
 	
 	public final static String SCANITEM_UPDATE_ERROR_CODE = "10060004";

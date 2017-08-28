@@ -69,7 +69,7 @@ public interface IPhotoScanBiz {
 	 * @return boolean 
 	 * @throws BusinessException
 	 */
-	public void deletePhotoScan(Long id) throws BusinessException;
+	public boolean deletePhotoScan(Long id) throws BusinessException;
 	
 	/**
 	 * 保存已经成功上传至benaco的图片

@@ -10,6 +10,7 @@ import com.unre.photo.biz.logic.core.IPhotoScanBiz;
 import com.unre.photo.biz.logic.facade.IPhotoScanFacade;
 import com.unre.photo.biz.request.PhotoScanRequest;
 import com.unre.photo.biz.response.PhotoScanResponse;
+import com.unre.photo.comm.AppConstants;
 
 /**
  * @author TDH
@@ -41,9 +42,12 @@ public class PhotoScanFacadeImpl implements IPhotoScanFacade {
 	}
 
 	@Override
-	public void deletePhotoScan(Long id) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public PhotoScanResponse deletePhotoScan(Long id) throws Exception {
+		PhotoScanResponse response = new PhotoScanResponse();
+		boolean flag= photoScanBiz.deletePhotoScan(id);
+		String code = flag? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
+		response.setCode(code);
+		return response;		
 	}
 
 	@Override
