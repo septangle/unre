@@ -23,7 +23,7 @@ public interface IPhotoScanFacade {
 	 * @param id
 	 * @throws Exception
 	 */
-	public void deletePhotoScan(Long id) throws Exception;
+	public PhotoScanResponse deletePhotoScan(Long id) throws Exception;
 
 	/**
 	 * 更新PhotoScan
