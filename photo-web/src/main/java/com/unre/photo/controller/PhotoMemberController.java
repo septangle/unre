@@ -78,7 +78,7 @@ public class PhotoMemberController extends BaseController<PhotoMemberController>
 		try {
             request.getPhotoMemberDto().setPassword(MD5Util.encodeMD5String(request.getPhotoMemberDto().getPassword()));
 			PhotoMemberResponse = photoMemberFacade.login(request);
-			if (PhotoMemberResponse != null) {
+			if (PhotoMemberResponse != null && PhotoMemberResponse.getPhotoMemberDto() != null) {
 				servletRequest.getSession().setAttribute("photomemberDto", PhotoMemberResponse.getPhotoMemberDto());
 			}
 		} catch (Exception e) {

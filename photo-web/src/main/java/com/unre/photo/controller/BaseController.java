@@ -5,8 +5,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.response.BaseResponse;
 import com.unre.photo.biz.response.Error;
+import com.unre.photo.comm.AppConstants;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
@@ -34,7 +36,17 @@ public class BaseController<T> {
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody BaseResponse exceptionHandler(Exception e) {
 		BaseResponse response = new BaseResponse();
-		response.setError(new Error(e.getMessage(), e.getCause().toString()));
+		
+		String errCode = "";
+		String errMessage = "";
+		if(e instanceof BusinessException) {
+			errCode = ((BusinessException)e).getCode();
+			errMessage = ((BusinessException)e).getMessage();
+		} else {
+			errCode = AppConstants.FAIL_CODE;
+			errMessage = e.getMessage();
+		}
+		response.setError(new Error(errCode, errMessage));
 		logger.error(e.getMessage(), e.getCause());
 		return response;
 	}
