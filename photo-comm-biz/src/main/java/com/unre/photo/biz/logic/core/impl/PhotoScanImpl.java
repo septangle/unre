@@ -81,25 +81,28 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 	}
 
 	@Override
-	public void updatePhotoScan(PhotoScanDto photoScanDto) throws BusinessException {
+	public boolean updatePhotoScan(PhotoScanDto photoScanDto) throws BusinessException {
+		boolean flg = false;
 		try {
 			PhotoScan photoScan = ModelUtil.dtoToModel(photoScanDto, PhotoScan.class);
-			int flag = photoScanMapper.updateBySelective(photoScan);
-			if (1 != flag) { // flag == 1 操作成功,否则操作失败
+			int number = photoScanMapper.updateBySelective(photoScan);
+			if (number == 0){ // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 			}
+			flg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_UPDATE_ERROR_MESSAGE, e);
 			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE, AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 		}
+		return flg;
 	}
 
 	@Override
-	public void updatePhotoScanByBenacoId(PhotoScanDto photoScanDto) throws BusinessException {
+	public boolean updatePhotoScanByBenacoId(PhotoScanDto photoScanDto) throws BusinessException {
+		boolean flg = false;
 		try {
-
-			//1.更新scan状态
+		    //1.先查出来
 			PhotoScan pScanParm = new PhotoScan();
 			pScanParm.setBenacoScanId(photoScanDto.getBenacoScanId());
 			List<PhotoScan> pScanList = photoScanMapper.selectBySelective(pScanParm);
@@ -109,15 +112,19 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 			}
 			PhotoScan pScan = pScanList.get(0);
 			pScan.setStatus(AppConstants.SFILE_PROCESSING);
+			//2.后更新scan状态
 			int i = photoScanMapper.updatePhotoScanByBenacoId(pScan);
 			if (i != 1) { // i == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 			}
+			flg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_UPDATE_ERROR_MESSAGE, e);
 			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE, AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 		}
+		
+		return flg;
 	}
 
 	@Override

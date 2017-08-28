@@ -43,10 +43,10 @@ public interface IPanoramaEngineFacade {
 	 * @return PanoramaEngineResponse.scanId
 	 * @throws Exception
 	 */
-	PanoramaEngineResponse generateScan(PanoramaEngineRequest request) throws Exception;
+	//PanoramaEngineResponse generateScan(PanoramaEngineRequest request) throws Exception;
 
 	/**
-	 * 上传benaco scan
+	 * 查询 scan
 	 * 
 	 * @param photoMemberDto 
 	 *  

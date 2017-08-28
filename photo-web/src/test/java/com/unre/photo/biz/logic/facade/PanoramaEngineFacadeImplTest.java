@@ -60,7 +60,7 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 	}
 	
 	//@Test
-	@SuppressWarnings("unused")
+	/*@SuppressWarnings("unused")
 	public void testGenerateScan() {
 		try {
 			PanoramaEngineRequest request = new PanoramaEngineRequest();
@@ -85,6 +85,6 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 }

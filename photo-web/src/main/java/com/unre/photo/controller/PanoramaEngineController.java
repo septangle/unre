@@ -31,20 +31,20 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	@Autowired
 	private PhotoUrl photoUrl;
 
-	@ApiOperation(value = "创建scanID", httpMethod = "POST", response = PhotoScanItemResponse.class)
+	/*@ApiOperation(value = "创建scanID", httpMethod = "POST", response = PhotoScanItemResponse.class)
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string"), })
+			@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string")})
 	@RequestMapping(value = "/createScan.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse createScan(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
 		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		return panoramaEngineFacade.createScan(request);
-	}
+	}*/
 
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "panoramaEngineDto.benacoScanId", value = "scanid名称", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "panoramaEngineDto.files", value = "files", required = true, dataType = "List<File>"), })
+		@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "panoramaEngineDto.files", value = "files", required = true, dataType = "List<File>")})
 	@RequestMapping(value = "/addPhotos.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse addPhotos(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
@@ -75,26 +75,26 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 					tempFile.mkdir();
 				}
 				fileUrlList.add(tempFile);
-
 			}
 			request.getPanoramaEngineDto().setFiles(fileUrlList);
 		}
 		return panoramaEngineFacade.addPhotos(request);
-
 	}
-
-	@ResponseBody
+    
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "panoramaEngineDto.benacoScanId", value = "Benaco Scan Id", required = true, dataType = "string" ), })
 	@RequestMapping(value = "/startProcessing.do", method = RequestMethod.POST)
-	public PanoramaEngineResponse startProcessing(@RequestBody PanoramaEngineRequest request,
+	public @ResponseBody PanoramaEngineResponse startProcessing(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
 		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		return panoramaEngineFacade.startProcessing(request);
 	}
-
-	@ResponseBody
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "panoramaEngineDto.benacoScanId", value = "Benaco Scan Id", required = true, dataType = "string" ), })
 	@RequestMapping(value = "/queryScanStatus.do", method = RequestMethod.POST)
-	public PanoramaEngineResponse queryScanStatus(@RequestBody PanoramaEngineRequest request,
+	public @ResponseBody PanoramaEngineResponse queryScanStatus(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
 		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());

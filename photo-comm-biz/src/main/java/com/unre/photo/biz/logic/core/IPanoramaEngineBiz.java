@@ -33,7 +33,7 @@ public interface IPanoramaEngineBiz {
 	 * @throws Exception
 	 */
 	public boolean startProcessing(PanoramaEngineDto panoramaEngineDto) throws Exception;
-
+	
 	/**
 	 * 查询Scan状态
 	 * 

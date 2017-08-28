@@ -51,9 +51,13 @@ public class PhotoScanFacadeImpl implements IPhotoScanFacade {
 	}
 
 	@Override
-	public void updatePhotoScan(PhotoScanRequest request) throws Exception {
+	public PhotoScanResponse updatePhotoScan(PhotoScanRequest request) throws Exception {
+		PhotoScanResponse response = new PhotoScanResponse();
 		PhotoScanDto photoScanDto = request.getPhotoScanDto();
-		photoScanBiz.updatePhotoScan(photoScanDto);
+		boolean flag = photoScanBiz.updatePhotoScan(photoScanDto);
+		String code = flag? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
+		response.setCode(code);
+		return response;
 	}
 
 }

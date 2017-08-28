@@ -30,9 +30,9 @@ public interface IPhotoScanFacade {
 	 * 
 	 * @param request
 	 * 
-	 * @return void
+	 * @return PhotoScanResponse
 	 * @throws BusinessException
 	 */
-	public void updatePhotoScan(PhotoScanRequest request) throws Exception;
+	public PhotoScanResponse updatePhotoScan(PhotoScanRequest request) throws Exception;
 
 }

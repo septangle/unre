@@ -10,7 +10,6 @@ import com.unre.photo.biz.request.PanoramaEngineRequest;
 import com.unre.photo.biz.response.PanoramaEngineResponse;
 import com.unre.photo.comm.AppConstants;
 
-@SuppressWarnings("unused")
 @Service
 public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 
@@ -28,6 +27,12 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 	@Override
 	public PanoramaEngineResponse addPhotos(PanoramaEngineRequest request) throws Exception {
 		PanoramaEngineResponse retResponse = new PanoramaEngineResponse();
+		
+		// 1.创建scan id
+		PanoramaEngineDto panoramaEngineDto = panoramaEngineBiz.createScan(request.getPanoramaEngineDto());
+		String benacoScanId = panoramaEngineDto.getBenacoScanId();
+		// 2.上传照片
+		request.getPanoramaEngineDto().setBenacoScanId(benacoScanId);
 		boolean flg  = panoramaEngineBiz.addPhotos(request.getPanoramaEngineDto());
 		String code = flg? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
 		retResponse.setCode(code);
@@ -43,7 +48,7 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 		return retResponse;
 	}
 
-	@Override
+	/*@Override
 	public PanoramaEngineResponse generateScan(PanoramaEngineRequest request) throws Exception {
 		PanoramaEngineResponse response = new PanoramaEngineResponse();
 
@@ -57,7 +62,7 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 		String code = flg? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
 		response.setCode(code);
 		return response;
-	}
+	}*/
 
 	@Override
 	public PanoramaEngineResponse queryScanStatus(PanoramaEngineRequest request) throws Exception {

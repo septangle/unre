@@ -49,7 +49,7 @@ public interface IPhotoScanBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public void updatePhotoScan(PhotoScanDto photoScanDto) throws BusinessException;
+	public boolean updatePhotoScan(PhotoScanDto photoScanDto) throws BusinessException;
 
 	/**
 	 * 更新PhotoScan
@@ -59,7 +59,7 @@ public interface IPhotoScanBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public void updatePhotoScanByBenacoId(PhotoScanDto photoScanDto) throws BusinessException;
+	public boolean updatePhotoScanByBenacoId(PhotoScanDto photoScanDto) throws BusinessException;
 	
 	/**
 	 * 删除PhotoScan
