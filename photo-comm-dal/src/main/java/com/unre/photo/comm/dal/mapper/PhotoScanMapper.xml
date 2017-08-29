@@ -187,7 +187,7 @@
 
 	<!-- ==================自定义查询 ======================= -->
 	<select id="selectBySelective" resultMap="BaseResultMap"
-		parameterType="com.unre.photo.comm.dal.model.PhotoMember">
+		parameterType="com.unre.photo.comm.dal.model.PhotoScan">
 		select
 		<include refid="Base_Column_List" />
 		from tbl_photo_scan
@@ -222,10 +222,13 @@
 		<if test="updateTime != null">
 			and update_time = #{updateTime,jdbcType=TIMESTAMP}
 		</if>
+		<if test="uid != null">
+			and uid = #{uid,jdbcType=BIGINT}
+		</if>
 		order by create_time desc
 	</select>
 
-	<update id="updateBySelective" parameterType="com.unre.photo.comm.dal.model.PhotoMember">
+	<update id="updateBySelective" parameterType="com.unre.photo.comm.dal.model.PhotoScan">
 		update tbl_photo_scan
 		<set>
 			<if test="memberId != null">
@@ -266,7 +269,7 @@
 		and version = #{version,jdbcType=BIGINT}
 	</update>
 
-	<update id="updatePhotoScanByBenacoId" parameterType="com.unre.photo.comm.dal.model.PhotoMember">
+	<update id="updatePhotoScanByBenacoId" parameterType="com.unre.photo.comm.dal.model.PhotoScan">
 		update tbl_photo_scan
 		<set>
 			<if test="memberId != null">
