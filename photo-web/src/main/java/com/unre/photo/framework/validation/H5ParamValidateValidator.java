@@ -31,6 +31,11 @@ public class H5ParamValidateValidator implements IValidator {
 	public ValidationH5Response validate(ResettableStreamHttpServletRequest request, Object handler) {
 		ValidationH5Response vH5Response = new ValidationH5Response();
 		try {
+			
+			if("GET".equals(request.getMethod())){//目前不支持对GET的校验
+				return vH5Response;
+			}
+			
 			request.setCharacterEncoding("UTF-8");
 			if (handler instanceof HandlerMethod) {
 				HandlerMethod handlerMethod = (HandlerMethod) handler;

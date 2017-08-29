@@ -42,18 +42,22 @@ public class PhotoMemberController extends BaseController<PhotoMemberController>
 			@ApiImplicitParam(name = "photoMemberDto.industry", value = "行业", required = false, dataType = "string"),
 			@ApiImplicitParam(name = "photoMemberDto.contact", value = "联系人", required = false, dataType = "string"),
 			@ApiImplicitParam(name = "photoMemberDto.mail", value = "邮箱", required = false, dataType = "string") })
-	@RequestMapping(value = "/queryPhotoMember.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/queryMember.do", method = RequestMethod.POST)
 	public @ResponseBody PhotoMemberResponse queryPhotoMember(@RequestBody PhotoMemberRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		return photoMemberFacade.queryPhotoMember(request);
 	}
-
-	@RequestMapping(value = "/查询当前用户", method = RequestMethod.GET)
-	public PhotoMemberResponse findPhotoMemberById(@RequestBody PhotoMemberRequest request,
-			HttpServletRequest servletRequest) throws Exception {
+    
+	@ApiOperation(value = "查询当前会员", httpMethod = "GET", response = PhotoMemberResponse.class)
+	@RequestMapping(value = "/getCurrMember", method = RequestMethod.GET)
+	public @ResponseBody PhotoMemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		Long id = (Long) session.getAttribute("ID");
-		request.getPhotoMemberDto().setId(id);
+		if(id == null) throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		PhotoMemberRequest request = new PhotoMemberRequest();
+		PhotoMemberDto memberDto =  new PhotoMemberDto();
+		memberDto.setId(id);
+		request.setPhotoMemberDto(memberDto);
 		return photoMemberFacade.findPhotoMemberById(request);
 	}
 
