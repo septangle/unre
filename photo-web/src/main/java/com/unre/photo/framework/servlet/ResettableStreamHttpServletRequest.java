@@ -5,9 +5,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+
 import org.apache.commons.io.IOUtils;
 
 public class ResettableStreamHttpServletRequest extends HttpServletRequestWrapper {
@@ -37,7 +40,7 @@ public class ResettableStreamHttpServletRequest extends HttpServletRequestWrappe
 	@Override
 	public ServletInputStream getInputStream() throws IOException {
 		if (rawData == null) {
-			rawData = IOUtils.toByteArray(this.request.getReader());
+			rawData = IOUtils.toByteArray(this.request.getReader(),Charset.forName("utf-8"));
 			servletStream.stream = new ByteArrayInputStream(rawData);
 		}
 		return servletStream;
