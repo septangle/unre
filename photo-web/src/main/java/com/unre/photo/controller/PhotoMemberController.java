@@ -53,7 +53,8 @@ public class PhotoMemberController extends BaseController<PhotoMemberController>
 	public @ResponseBody PhotoMemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		Long id = (Long) session.getAttribute("ID");
-		if(id == null) throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		if(id == null) 
+			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		PhotoMemberRequest request = new PhotoMemberRequest();
 		PhotoMemberDto memberDto =  new PhotoMemberDto();
 		memberDto.setId(id);
