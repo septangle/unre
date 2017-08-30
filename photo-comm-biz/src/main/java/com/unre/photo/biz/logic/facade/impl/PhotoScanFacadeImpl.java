@@ -42,9 +42,9 @@ public class PhotoScanFacadeImpl implements IPhotoScanFacade {
 	}
 
 	@Override
-	public PhotoScanResponse deletePhotoScan(Long id) throws Exception {
+	public PhotoScanResponse deletePhotoScan(PhotoScanRequest request) throws Exception {
 		PhotoScanResponse response = new PhotoScanResponse();
-		boolean flag= photoScanBiz.deletePhotoScan(id);
+		boolean flag= photoScanBiz.deletePhotoScan(request.getPhotoScanDto().getId());
 		String code = flag? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
 		response.setCode(code);
 		return response;		

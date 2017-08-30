@@ -12,6 +12,7 @@ public interface PhotoScanMapper {
 	int insertSelective(PhotoScan record);
 
 	PhotoScan selectByPrimaryKey(Long id);
+	
 
 	int updateByPrimaryKeySelective(PhotoScan record);
 
@@ -23,4 +24,11 @@ public interface PhotoScanMapper {
 	int updateBySelective(PhotoScan record);
 	
 	int updatePhotoScanByBenacoId(PhotoScan record);
+	
+	List<PhotoScan> selByStatus();
+	
+	int upByStatus(PhotoScan record);
+
+	
+
 }

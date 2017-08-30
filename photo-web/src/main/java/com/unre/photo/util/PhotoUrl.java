@@ -11,6 +11,9 @@ public  class PhotoUrl {
 	
 	@Value("${photo.serviceUrl}")
     private String url;
+	
+	@Value("${photo.path}")
+	private String path;
     
 	public String getKey() {
 		return key;
@@ -23,6 +26,12 @@ public  class PhotoUrl {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
 	}
     
     

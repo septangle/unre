@@ -30,7 +30,7 @@ public class PhotoMemberController extends BaseController<PhotoMemberController>
 	@Autowired
 	private IPhotoMemberFacade photoMemberFacade;
 
-	@ApiOperation(value = "查询会员", httpMethod = "POST", response = PhotoMemberResponse.class)
+/*	@ApiOperation(value = "查询会员", httpMethod = "POST", response = PhotoMemberResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "photoMemberDto.memberName", value = "会员名称", required = false, dataType = "string"),
 			@ApiImplicitParam(name = "photoMemberDto.tel", value = "联系电话", required = false, dataType = "string"),
@@ -46,7 +46,7 @@ public class PhotoMemberController extends BaseController<PhotoMemberController>
 	public @ResponseBody PhotoMemberResponse queryPhotoMember(@RequestBody PhotoMemberRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		return photoMemberFacade.queryPhotoMember(request);
-	}
+	}*/
     
 	@ApiOperation(value = "查询当前会员", httpMethod = "GET", response = PhotoMemberResponse.class)
 	@RequestMapping(value = "/getCurrMember", method = RequestMethod.GET)

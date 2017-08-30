@@ -81,5 +81,12 @@ public interface IPhotoScanBiz {
 	 * @throws BusinessException
 	 */
 	public boolean saveUploadedImages(String benacoScanId,List<File> imageFiles) throws BusinessException;
+	
+
+	/**
+	 * 更新status信息
+	 * 
+	 */
+	public void queryStatus();
 
 }

@@ -2,7 +2,9 @@ package com.unre.photo.biz.logic.core.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
@@ -19,9 +21,13 @@ import com.unre.photo.biz.logic.core.IPhotoScanItemBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.comm.dal.dao.PhotoScanMapper;
 import com.unre.photo.comm.dal.model.PhotoScan;
+import com.unre.photo.util.HttpClientResponse;
+import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.ModelUtil;
 
-@Service
+import net.sf.json.JSONObject;
+
+@Service("photoScan")
 public class PhotoScanImpl implements IPhotoScanBiz {
 
 	@Autowired
@@ -86,7 +92,7 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 		try {
 			PhotoScan photoScan = ModelUtil.dtoToModel(photoScanDto, PhotoScan.class);
 			int number = photoScanMapper.updateBySelective(photoScan);
-			if (number == 0){ // flag == 1 操作成功,否则操作失败
+			if (number == 0) { // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 			}
@@ -102,7 +108,7 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 	public boolean updatePhotoScanByBenacoId(PhotoScanDto photoScanDto) throws BusinessException {
 		boolean flg = false;
 		try {
-		    //1.先查出来
+			//1.先查出来
 			PhotoScan pScanParm = new PhotoScan();
 			pScanParm.setBenacoScanId(photoScanDto.getBenacoScanId());
 			List<PhotoScan> pScanList = photoScanMapper.selectBySelective(pScanParm);
@@ -123,7 +129,7 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 			LOGGER.error(AppConstants.SCAN_UPDATE_ERROR_MESSAGE, e);
 			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE, AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 		}
-		
+
 		return flg;
 	}
 
@@ -136,6 +142,7 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 				flg = true;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new BusinessException(AppConstants.SCAN__DELETE_SCAN_ID_ERROR_CODE,
 					AppConstants.SCAN__DELETE_SCAN_ID_ERROR_MESSAGE);
 		}
@@ -180,4 +187,31 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 		return flg;
 	}
 
+	public void queryStatus() {
+		PhotoScan p = new PhotoScan();
+		List<PhotoScan> photoScanList = photoScanMapper.selByStatus();
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("key", "3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
+		JSONObject json = JSONObject.fromObject(params);
+		for (int i = 0; i < photoScanList.size(); i++) {
+			String photoUrl = "https://beta.benaco.com/api/beta/scans/id/" + photoScanList.get(i).getBenacoScanId() + "/status";
+			HttpClientResponse hcResponse = HttpClientUtil.doPost(photoUrl, json);
+			String httpRetCode = hcResponse.getCode();
+			if ("200".equals(httpRetCode)) {
+				String context = hcResponse.getContext();
+				JSONObject result = JSONObject.fromObject(context);
+				String status = result.getString("status");
+				if ("failed".equals(status)) {
+					p.setBenacoScanId(photoScanList.get(i).getBenacoScanId());
+                    p.setStatus("4");
+					photoScanMapper.upByStatus(p);
+				}else if ("completed".equals(status)) {
+					p.setBenacoScanId(photoScanList.get(i).getBenacoScanId());
+					p.setStatus("5");
+					photoScanMapper.upByStatus(p);
+				}
+			}
+		}
+
+	}
 }

@@ -27,6 +27,7 @@
 			<list>
 				<value>classpath:spring/photo_web_spring.properties</value>
 				<value>classpath:spring/jdbc.properties</value>
+				<value>classpath:panoramaEngineURL.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -83,4 +84,12 @@
 
 	<import resource="classpath:spring/dao_spring.xml" />
     <import resource="classpath*:spring/photo_biz_spring.xml"/>
+    
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">  
+        <property name="triggers">  
+            <list>  
+            </list>  
+        </property>  
+    </bean> 
+ 
 </beans>

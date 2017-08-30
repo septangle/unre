@@ -18,6 +18,7 @@ import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
 import com.unre.photo.biz.logic.core.IPhotoScanBiz;
 import com.unre.photo.comm.AppConstants;
+import com.unre.photo.comm.dal.model.PhotoScan;
 import com.unre.photo.util.HttpClientResponse;
 import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.JsonUtil;
@@ -173,5 +174,6 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 		return retPanEngineDto;
 	}
+    
 
 }
