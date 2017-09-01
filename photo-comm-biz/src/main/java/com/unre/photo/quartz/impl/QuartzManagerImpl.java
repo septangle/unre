@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.unre.photo.quartz.QuartzManager;
 
-@Component("quartzManager")
+@Component()
 public class QuartzManagerImpl implements QuartzManager {
 	
 	@Autowired

@@ -1,21 +1,26 @@
 package com.unre.photo.comm.dal.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
-public class PhotoScan {
+public class Order {
     private Long id;
-
-    private String benacoScanId;
 
     private Long memberId;
 
-    private Long btchNo;
+    private BigDecimal totalAmount;
 
-    private Integer title;
+    private BigDecimal actualAmount;
 
-    private String description;
+    private Long goodsId;
+
+    private BigDecimal goodsActualPrice;
+
+    private Integer goodsNum;
 
     private String status;
+
+    private Long version;
 
     private Integer createBy;
 
@@ -25,25 +30,12 @@ public class PhotoScan {
 
     private Date updateTime;
 
-    private Long version;
-    
-	private Long uid;
-
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getBenacoScanId() {
-        return benacoScanId;
-    }
-
-    public void setBenacoScanId(String benacoScanId) {
-        this.benacoScanId = benacoScanId == null ? null : benacoScanId.trim();
     }
 
     public Long getMemberId() {
@@ -54,28 +46,44 @@ public class PhotoScan {
         this.memberId = memberId;
     }
 
-    public Long getBtchNo() {
-        return btchNo;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setBtchNo(Long btchNo) {
-        this.btchNo = btchNo;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public Integer getTitle() {
-        return title;
+    public BigDecimal getActualAmount() {
+        return actualAmount;
     }
 
-    public void setTitle(Integer title) {
-        this.title = title;
+    public void setActualAmount(BigDecimal actualAmount) {
+        this.actualAmount = actualAmount;
     }
 
-    public String getDescription() {
-        return description;
+    public Long getGoodsId() {
+        return goodsId;
     }
 
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public BigDecimal getGoodsActualPrice() {
+        return goodsActualPrice;
+    }
+
+    public void setGoodsActualPrice(BigDecimal goodsActualPrice) {
+        this.goodsActualPrice = goodsActualPrice;
+    }
+
+    public Integer getGoodsNum() {
+        return goodsNum;
+    }
+
+    public void setGoodsNum(Integer goodsNum) {
+        this.goodsNum = goodsNum;
     }
 
     public String getStatus() {
@@ -84,6 +92,14 @@ public class PhotoScan {
 
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Integer getCreateBy() {
@@ -117,21 +133,4 @@ public class PhotoScan {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-	public Long getUid() {
-		return uid;
-	}
-
-	public void setUid(Long uid) {
-		this.uid = uid;
-	}
-    
 }

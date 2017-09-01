@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.unre.photo.comm.dal.dao.PhotoScanMapper">
-	<resultMap id="BaseResultMap" type="com.unre.photo.comm.dal.model.PhotoScan">
+<mapper namespace="com.unre.photo.comm.dal.dao.ProcessMapper">
+	<resultMap id="BaseResultMap" type="com.unre.photo.comm.dal.model.Process">
 		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="benaco_scan_id" property="benacoScanId"
+	    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+        <result column="benaco_scan_id" property="benacoScanId"
 			jdbcType="VARCHAR" />
 		<result column="member_id" property="memberId" jdbcType="BIGINT" />
 		<result column="btch_no" property="btchNo" jdbcType="BIGINT" />
-		<result column="title" property="title" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
 		<result column="description" property="description" jdbcType="VARCHAR" />
-		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="type" property="type" jdbcType="CHAR" />
+        <result column="status" property="status" jdbcType="CHAR" />
 		<result column="create_by" property="createBy" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="delete_flag" property="deleteFlag" jdbcType="CHAR" />
 		<result column="update_by" property="updateBy" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="version" property="version" jdbcType="BIGINT" />
 		<result column="uid" property="uid" jdbcType="BIGINT" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, benaco_scan_id, member_id, btch_no, title, description,
-		status,
+		id,order_id,benaco_scan_id, member_id, btch_no, title, description,type,
+		status,delete_flag,
 		create_by, create_time,
 		update_by, update_time, version, uid
 	</sql>
@@ -27,35 +30,40 @@
 		parameterType="java.lang.Long">
 		select
 		<include refid="Base_Column_List" />
-		from tbl_photo_scan
+		from tbl_process
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
 		delete from
-		tbl_photo_scan
+		tbl_process
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
-	<insert id="insert" parameterType="com.unre.photo.comm.dal.model.PhotoScan"
+	<insert id="insert" parameterType="com.unre.photo.comm.dal.model.Process"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into tbl_photo_scan
-		(benaco_scan_id, member_id, btch_no,
-		title, description, status,
+		insert into tbl_process
+		(order_id,benaco_scan_id, member_id, btch_no,
+		title, description,type ,status,
 		create_by, create_time, update_by,
 		update_time, version)
 		values
-		(#{benacoScanId,jdbcType=VARCHAR}, #{memberId,jdbcType=BIGINT},
+		(#{orderId,jdbcType=BIGINT},
+		#{benacoScanId,jdbcType=VARCHAR}, #{memberId,jdbcType=BIGINT},
 		#{btchNo,jdbcType=BIGINT},
-		#{title,jdbcType=INTEGER},
-		#{description,jdbcType=VARCHAR}, #{status,jdbcType=CHAR},
+		#{title,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR}, #{type,jdbcType=CHAR},
+		#{status,jdbcType=CHAR},
 		#{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
 		#{updateBy,jdbcType=INTEGER},
 		#{updateTime,jdbcType=TIMESTAMP},
 		#{version,jdbcType=BIGINT})
 	</insert>
-	<insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.PhotoScan"
+	<insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.Process"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into tbl_photo_scan
+		insert into tbl_process
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="orderId != null">
+				order_Id,
+			</if>
 			<if test="benacoScanId != null">
 				benaco_scan_id,
 			</if>
@@ -70,6 +78,9 @@
 			</if>
 			<if test="description != null">
 				description,
+			</if>
+			<if test="type != null">
+				type,
 			</if>
 			<if test="status != null">
 				status,
@@ -104,10 +115,13 @@
 				#{btchNo,jdbcType=BIGINT},
 			</if>
 			<if test="title != null">
-				#{title,jdbcType=INTEGER},
+				#{title,jdbcType=VARCHAR},
 			</if>
 			<if test="description != null">
 				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=CHAR},
 			</if>
 			<if test="status != null">
 				#{status,jdbcType=CHAR},
@@ -132,9 +146,12 @@
 			</if>
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.unre.photo.comm.dal.model.PhotoScan">
-		update tbl_photo_scan
+	<update id="updateByPrimaryKeySelective" parameterType="com.unre.photo.comm.dal.model.Process">
+		update tbl_process
 		<set>
+	    	<if test="orderId != null">
+				order_id = #{orderId,jdbcType=CHAR},
+			</if>
 			<if test="benacoScanId != null">
 				benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR},
 			</if>
@@ -145,10 +162,13 @@
 				btch_no = #{btchNo,jdbcType=BIGINT},
 			</if>
 			<if test="title != null">
-				title = #{title,jdbcType=INTEGER},
+				title = #{title,jdbcType=VARCHAR},
 			</if>
 			<if test="description != null">
 				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=CHAR},
 			</if>
 			<if test="status != null">
 				status = #{status,jdbcType=CHAR},
@@ -174,14 +194,14 @@
 		</set>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.PhotoScan">
+	<update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Process">
 		update
-		tbl_photo_scan
+		tbl_process
 		set benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR},
 		member_id = #{memberId,jdbcType=BIGINT},
 		btch_no =
 		#{btchNo,jdbcType=BIGINT},
-		title = #{title,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
 		description = #{description,jdbcType=VARCHAR},
 		status =
 		#{status,jdbcType=CHAR},
@@ -198,11 +218,14 @@
 
 	<!-- ==================自定义查询 ======================= -->
 	<select id="selectBySelective" resultMap="BaseResultMap"
-		parameterType="com.unre.photo.comm.dal.model.PhotoScan">
+		parameterType="com.unre.photo.comm.dal.model.Process">
 		select
 		<include refid="Base_Column_List" />
-		from tbl_photo_scan
+		from tbl_process
 		where 1=1
+		<if test="orderId != null">
+			and order_id = #{orderId,jdbcType=BIGINT}
+		</if>
 		<if test="memberId != null">
 			and member_id = #{memberId,jdbcType=BIGINT}
 		</if>
@@ -213,10 +236,13 @@
 			and btch_no = #{btchNo,jdbcType=BIGINT}
 		</if>
 		<if test="title != null">
-			and title = #{title,jdbcType=INTEGER}
+			and title = #{title,jdbcType=VARCHAR}
 		</if>
 		<if test="description != null">
 			and description = #{description,jdbcType=VARCHAR}
+		</if>
+		<if test="type != null">
+			and type = #{type,jdbcType=CHAR}
 		</if>
 		<if test="status != null">
 			and status = #{status,jdbcType=CHAR}
@@ -239,9 +265,12 @@
 		order by create_time desc
 	</select>
 
-	<update id="updateBySelective" parameterType="com.unre.photo.comm.dal.model.PhotoScan">
-		update tbl_photo_scan
+	<update id="updateBySelective" parameterType="com.unre.photo.comm.dal.model.Process">
+		update tbl_process
 		<set>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=BIGINT},
+			</if>
 			<if test="memberId != null">
 				member_id = #{memberId,jdbcType=BIGINT},
 			</if>
@@ -252,10 +281,13 @@
 				btch_no = #{btchNo,jdbcType=BIGINT},
 			</if>
 			<if test="title != null">
-				title = #{title,jdbcType=INTEGER},
+				title = #{title,jdbcType=VARCHAR},
 			</if>
 			<if test="description != null">
 				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=CHAR},
 			</if>
 			<if test="status != null">
 				status = #{status,jdbcType=CHAR},
@@ -281,8 +313,8 @@
 		#{version,jdbcType=BIGINT}
 	</update>
 
-	<update id="updatePhotoScanByBenacoId" parameterType="com.unre.photo.comm.dal.model.PhotoScan">
-		update tbl_photo_scan
+	<update id="updateProcessByBenacoId" parameterType="com.unre.photo.comm.dal.model.Process">
+		update tbl_process
 		<set>
 			<if test="memberId != null">
 				member_id = #{memberId,jdbcType=BIGINT},
@@ -291,7 +323,7 @@
 				btch_no = #{btchNo,jdbcType=BIGINT},
 			</if>
 			<if test="title != null">
-				title = #{title,jdbcType=INTEGER},
+				title = #{title,jdbcType=VARCHAR},
 			</if>
 			<if test="description != null">
 				description = #{description,jdbcType=VARCHAR},
@@ -312,13 +344,13 @@
 	<select id="selByStatus" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from tbl_photo_scan
+		from tbl_process
 		where status=3
 	</select>
 	
 	<!-- 更新beanonId -->
-	<update id="upByStatus" parameterType="com.unre.photo.comm.dal.model.PhotoScan">
-		update tbl_photo_scan
+	<update id="upByStatus" parameterType="com.unre.photo.comm.dal.model.Process">
+		update tbl_process
 		<set>
 		   <if test="status != null">
 				status = #{status,jdbcType=CHAR},

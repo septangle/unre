@@ -17,7 +17,7 @@ public interface IPanoramaEngineBiz {
 	/**
 	 * 添加scan的3D照片
 	 * 
-	 * @param photoMemberDto 
+	 * @param MemberDto 
 	 *  
 	 * @return PanoramaEngineDto
 	 * @throws Exception
@@ -27,7 +27,7 @@ public interface IPanoramaEngineBiz {
 	/**
 	 * 开始将3D照片制作成全景照片
 	 * 
-	 * @param photoMemberDto 
+	 * @param MemberDto 
 	 *  
 	 * @return boolean
 	 * @throws Exception
@@ -37,7 +37,7 @@ public interface IPanoramaEngineBiz {
 	/**
 	 * 查询Scan状态
 	 * 
-	 * @param photoMemberDto 
+	 * @param MemberDto 
 	 *  
 	 * @return PanoramaEngineDto
 	 * @throws Exception
@@ -47,7 +47,7 @@ public interface IPanoramaEngineBiz {
 	/**
 	 * 预览Scan
 	 * 
-	 * @param photoMemberDto 
+	 * @param MemberDto 
 	 *  
 	 * @return PanoramaEngineDto
 	 * @throws Exception

@@ -1,14 +1,13 @@
-package com.unre.photo.biz.dto;
+package com.unre.photo.comm.dal.model;
 
 import java.util.Date;
 
-public class PhotoMemberDto {
-
+public class Member {
 	private Long id;
 
-	private String memberNo;
-
 	private String memberName;
+
+	private String memberNo;
 
 	private String password;
 
@@ -31,6 +30,8 @@ public class PhotoMemberDto {
 	private String type;
 
 	private String level;
+	
+	private String deleteFlag;
 
 	private Integer createBy;
 
@@ -39,22 +40,8 @@ public class PhotoMemberDto {
 	private Integer updateBy;
 
 	private Date updateTime;
-
-	public String getMemberName() {
-		return memberName;
-	}
-
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	
+	private String setType;
 
 	public Long getId() {
 		return id;
@@ -64,20 +51,53 @@ public class PhotoMemberDto {
 		this.id = id;
 	}
 
+	public String getDeleteFlag() {
+		return deleteFlag;
+	}
+
+	public void setDeleteFlag(String deleteFlag) {
+		this.deleteFlag = deleteFlag;
+	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName == null ? null : memberName.trim();
+	}
+
 	public String getMemberNo() {
 		return memberNo;
 	}
 
 	public void setMemberNo(String memberNo) {
-		this.memberNo = memberNo;
+		this.memberNo = memberNo == null ? null : memberNo.trim();
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password == null ? null : password.trim();
 	}
 
 	public String getCompany() {
 		return company;
 	}
 
+	
+	public String getSetType() {
+		return setType;
+	}
+
+	public void setSetType(String setType) {
+		this.setType = setType;
+	}
+
 	public void setCompany(String company) {
-		this.company = company;
+		this.company = company == null ? null : company.trim();
 	}
 
 	public String getProvince() {
@@ -85,7 +105,7 @@ public class PhotoMemberDto {
 	}
 
 	public void setProvince(String province) {
-		this.province = province;
+		this.province = province == null ? null : province.trim();
 	}
 
 	public String getCity() {
@@ -93,7 +113,7 @@ public class PhotoMemberDto {
 	}
 
 	public void setCity(String city) {
-		this.city = city;
+		this.city = city == null ? null : city.trim();
 	}
 
 	public String getAdress() {
@@ -101,7 +121,7 @@ public class PhotoMemberDto {
 	}
 
 	public void setAdress(String adress) {
-		this.adress = adress;
+		this.adress = adress == null ? null : adress.trim();
 	}
 
 	public String getIndustry() {
@@ -109,7 +129,7 @@ public class PhotoMemberDto {
 	}
 
 	public void setIndustry(String industry) {
-		this.industry = industry;
+		this.industry = industry == null ? null : industry.trim();
 	}
 
 	public String getContact() {
@@ -117,7 +137,7 @@ public class PhotoMemberDto {
 	}
 
 	public void setContact(String contact) {
-		this.contact = contact;
+		this.contact = contact == null ? null : contact.trim();
 	}
 
 	public String getTel() {
@@ -125,7 +145,7 @@ public class PhotoMemberDto {
 	}
 
 	public void setTel(String tel) {
-		this.tel = tel;
+		this.tel = tel == null ? null : tel.trim();
 	}
 
 	public String getMail() {
@@ -133,7 +153,7 @@ public class PhotoMemberDto {
 	}
 
 	public void setMail(String mail) {
-		this.mail = mail;
+		this.mail = mail == null ? null : mail.trim();
 	}
 
 	public String getType() {
@@ -141,7 +161,7 @@ public class PhotoMemberDto {
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		this.type = type == null ? null : type.trim();
 	}
 
 	public String getLevel() {
@@ -149,7 +169,7 @@ public class PhotoMemberDto {
 	}
 
 	public void setLevel(String level) {
-		this.level = level;
+		this.level = level == null ? null : level.trim();
 	}
 
 	public Integer getCreateBy() {
@@ -183,5 +203,4 @@ public class PhotoMemberDto {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-
 }

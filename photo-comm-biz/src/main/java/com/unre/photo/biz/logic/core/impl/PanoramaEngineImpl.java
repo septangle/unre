@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.dto.PanoramaEngineDto;
-import com.unre.photo.biz.dto.PhotoScanDto;
+import com.unre.photo.biz.dto.ProcessDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
-import com.unre.photo.biz.logic.core.IPhotoScanBiz;
+import com.unre.photo.biz.logic.core.IProcessBiz;
 import com.unre.photo.comm.AppConstants;
-import com.unre.photo.comm.dal.model.PhotoScan;
+import com.unre.photo.comm.dal.model.Process;
 import com.unre.photo.util.HttpClientResponse;
 import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.JsonUtil;
@@ -29,7 +29,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	private static final Log LOGGER = LogFactory.getLog(PanoramaEngineImpl.class);
 
 	@Autowired
-	private IPhotoScanBiz photoScanBizImpl;
+	private IProcessBiz processBizImpl;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -57,10 +57,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				benacoScanId = benacoScanId.substring(0, benacoScanId.length() - 1);
 
 			//保存至scan表
-			PhotoScanDto photoScanDto = new PhotoScanDto();
-			photoScanDto.setBenacoScanId(benacoScanId);
-			photoScanDto.setUid(retPanEngineDto.getUid());
-			photoScanBizImpl.addPhotoScan(photoScanDto);
+			ProcessDto processDto = new ProcessDto();
+			processDto.setBenacoScanId(benacoScanId);
+			processDto.setUid(retPanEngineDto.getUid());
+			processBizImpl.addProcess(processDto);
 
 			//返回 benaco scan id
 			panoramaEngineDto.setBenacoScanId(benacoScanId);
@@ -91,7 +91,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			//2. TODO 需要增加文件上传服务器指定目录
 
 			//3. 更新scan状态，新增scan_item
-			photoScanBizImpl.saveUploadedImages(benacoScanId, imageFiles);
+			processBizImpl.saveUploadedImages(benacoScanId, imageFiles);
 			retFlg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE, e);
@@ -118,10 +118,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			//2. 更新scan表中scanid对应记录的状态
 
 			if ("200".equals(retCode)) {
-				PhotoScanDto photoScanDto = new PhotoScanDto();
-				photoScanDto.setBenacoScanId(benacoScanId);
-				photoScanDto.setStatus(AppConstants.SFILE_PROCESSING);
-				photoScanBizImpl.updatePhotoScanByBenacoId(photoScanDto);
+				ProcessDto ProcessDto = new ProcessDto();
+				ProcessDto.setBenacoScanId(benacoScanId);
+				ProcessDto.setStatus(AppConstants.SFILE_PROCESSING);
+				processBizImpl.updateProcessByBenacoId(ProcessDto);
 
 				retFlg = true;
 			}

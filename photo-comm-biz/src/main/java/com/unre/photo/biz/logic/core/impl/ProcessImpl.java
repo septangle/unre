@@ -13,72 +13,72 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unre.photo.biz.dto.PhotoScanDto;
-import com.unre.photo.biz.dto.PhotoScanItemDto;
+import com.unre.photo.biz.dto.ProcessDto;
+import com.unre.photo.biz.dto.ProcessSourceDto;
 import com.unre.photo.biz.exception.BusinessException;
-import com.unre.photo.biz.logic.core.IPhotoScanBiz;
-import com.unre.photo.biz.logic.core.IPhotoScanItemBiz;
+import com.unre.photo.biz.logic.core.IProcessBiz;
+import com.unre.photo.biz.logic.core.IProcessSourceBiz;
 import com.unre.photo.comm.AppConstants;
-import com.unre.photo.comm.dal.dao.PhotoScanMapper;
-import com.unre.photo.comm.dal.model.PhotoScan;
+import com.unre.photo.comm.dal.dao.ProcessMapper;
+import com.unre.photo.comm.dal.model.Process;
 import com.unre.photo.util.HttpClientResponse;
 import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.ModelUtil;
 
 import net.sf.json.JSONObject;
 
-@Service("photoScan")
-public class PhotoScanImpl implements IPhotoScanBiz {
+@Service("Process")
+public class ProcessImpl implements IProcessBiz {
 
 	@Autowired
-	private PhotoScanMapper photoScanMapper;
+	private ProcessMapper processMapper;
 
 	@Autowired
-	private IPhotoScanItemBiz photoScanItemBiz;
+	private IProcessSourceBiz processSourceBiz;
 
-	private static final Log LOGGER = LogFactory.getLog(PhotoScanImpl.class);
+	private static final Log LOGGER = LogFactory.getLog(ProcessImpl.class);
 
 	@Override
-	public PhotoScanDto findPhotoScanById(Long photoScanId) throws BusinessException {
-		PhotoScanDto photoScanDto = null;
+	public ProcessDto findProcessById(Long processId) throws BusinessException {
+		ProcessDto ProcessDto = null;
 
 		try {
-			PhotoScan photoScan = photoScanMapper.selectByPrimaryKey(photoScanId);
-			photoScanDto = ModelUtil.modelToDto(photoScan, PhotoScanDto.class);
+			Process Process = processMapper.selectByPrimaryKey(processId);
+			ProcessDto = ModelUtil.modelToDto(Process, ProcessDto.class);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_FIND_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.SCAN_FIND_ERROR_CODE, AppConstants.SCAN_FIND_ERROR_MESSAGE);
 		}
-		return photoScanDto;
+		return ProcessDto;
 	}
 
 	@Override
-	public List<PhotoScanDto> queryPhotoScan(PhotoScanDto photoScanDto) throws BusinessException {
-		List<PhotoScanDto> photoScanoList = new ArrayList<PhotoScanDto>();
+	public List<ProcessDto> queryProcess(ProcessDto processDto) throws BusinessException {
+		List<ProcessDto> processoList = new ArrayList<ProcessDto>();
 		try {
-			PhotoScan photoScan = ModelUtil.dtoToModel(photoScanDto, PhotoScan.class);
-			List<PhotoScan> photoScanList = photoScanMapper.selectBySelective(photoScan);
-			if (!CollectionUtils.isEmpty(photoScanList)) {
-				for (PhotoScan p : photoScanList) {
-					photoScanoList.add(ModelUtil.modelToDto(p, PhotoScanDto.class));
+			Process Process = ModelUtil.dtoToModel(processDto, Process.class);
+			List<Process> ProcessList = processMapper.selectBySelective(Process);
+			if (!CollectionUtils.isEmpty(ProcessList)) {
+				for (Process p : ProcessList) {
+					processoList.add(ModelUtil.modelToDto(p, ProcessDto.class));
 				}
 			}
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_QUERY_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
 		}
-		return photoScanoList;
+		return processoList;
 	}
 
 	@SuppressWarnings("unused")
 	@Override
-	public PhotoScanDto addPhotoScan(PhotoScanDto photoScanDto) throws BusinessException {
-		PhotoScanDto retPhotoDto = null;
+	public ProcessDto addProcess(ProcessDto processDto) throws BusinessException {
+		ProcessDto retPhotoDto = null;
 		try {
-			PhotoScan photoScan = ModelUtil.dtoToModel(photoScanDto, PhotoScan.class);
-			int i = photoScanMapper.insertSelective(photoScan);
-			Long id = photoScan.getId();
-			retPhotoDto = this.findPhotoScanById(id);
+			Process process = ModelUtil.dtoToModel(processDto, Process.class);
+			int i = processMapper.insertSelective(process);
+			Long id = process.getId();
+			retPhotoDto = this.findProcessById(id);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_ADD_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.SCAN_ADD_ERROR_CODE, AppConstants.SCAN_ADD_ERROR_MESSAGE);
@@ -87,11 +87,11 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 	}
 
 	@Override
-	public boolean updatePhotoScan(PhotoScanDto photoScanDto) throws BusinessException {
+	public boolean updateProcess(ProcessDto processDto) throws BusinessException {
 		boolean flg = false;
 		try {
-			PhotoScan photoScan = ModelUtil.dtoToModel(photoScanDto, PhotoScan.class);
-			int number = photoScanMapper.updateBySelective(photoScan);
+			Process Process = ModelUtil.dtoToModel(processDto, Process.class);
+			int number = processMapper.updateBySelective(Process);
 			if (number == 0) { // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
@@ -105,21 +105,21 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 	}
 
 	@Override
-	public boolean updatePhotoScanByBenacoId(PhotoScanDto photoScanDto) throws BusinessException {
+	public boolean updateProcessByBenacoId(ProcessDto processDto) throws BusinessException {
 		boolean flg = false;
 		try {
 			//1.先查出来
-			PhotoScan pScanParm = new PhotoScan();
-			pScanParm.setBenacoScanId(photoScanDto.getBenacoScanId());
-			List<PhotoScan> pScanList = photoScanMapper.selectBySelective(pScanParm);
+			Process pScanParm = new Process();
+			pScanParm.setBenacoScanId(processDto.getBenacoScanId());
+			List<Process> pScanList = processMapper.selectBySelective(pScanParm);
 			if (pScanList.size() == 0 || pScanList.size() > 1) {
 				throw new BusinessException(AppConstants.SCAN_BENACO_SCAN_ID_ERROR_CODE,
 						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
 			}
-			PhotoScan pScan = pScanList.get(0);
+			Process pScan = pScanList.get(0);
 			pScan.setStatus(AppConstants.SFILE_PROCESSING);
 			//2.后更新scan状态
-			int i = photoScanMapper.updatePhotoScanByBenacoId(pScan);
+			int i = processMapper.updateProcessByBenacoId(pScan);
 			if (i != 1) { // i == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
@@ -134,10 +134,10 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 	}
 
 	@Override
-	public boolean deletePhotoScan(Long id) throws BusinessException {
+	public boolean deleteProcess(Long id) throws BusinessException {
 		boolean flg = false;
 		try {
-			int delScan = photoScanMapper.deleteByPrimaryKey(id);
+			int delScan = processMapper.deleteByPrimaryKey(id);
 			if (delScan == 1) {
 				flg = true;
 			}
@@ -157,24 +157,24 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 		boolean flg = false;
 		try {
 			//1.更新scan状态
-			PhotoScan pScanParm = new PhotoScan();
+			Process pScanParm = new Process();
 			pScanParm.setBenacoScanId(benacoScanId);
-			List<PhotoScan> pScanList = photoScanMapper.selectBySelective(pScanParm);
+			List<Process> pScanList = processMapper.selectBySelective(pScanParm);
 			if (pScanList.size() == 0 || pScanList.size() > 1) {
 				throw new BusinessException(AppConstants.SCAN_BENACO_SCAN_ID_ERROR_CODE,
 						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
 			}
-			PhotoScan pScan = pScanList.get(0);
+			Process pScan = pScanList.get(0);
 			pScan.setStatus(AppConstants.SFILE_UPLOAD_COMPLETE);
-			int i = photoScanMapper.updatePhotoScanByBenacoId(pScan);
+			int i = processMapper.updateProcessByBenacoId(pScan);
 
 			//2. 新增scan item
 			for (File f : imageFiles) {
 				String imageFullPath = f.getPath() + f.getName();
-				PhotoScanItemDto pScanItemDto = new PhotoScanItemDto();
+				ProcessSourceDto pScanItemDto = new ProcessSourceDto();
 				pScanItemDto.setBenacoScanId(benacoScanId);
 				pScanItemDto.setImagePath(imageFullPath);
-				photoScanItemBiz.addPhotoScanItem(pScanItemDto);
+				processSourceBiz.addProcessSource(pScanItemDto);
 			}
 			flg = true;
 
@@ -188,13 +188,13 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 	}
 
 	public void queryStatus() {
-		PhotoScan p = new PhotoScan();
-		List<PhotoScan> photoScanList = photoScanMapper.selByStatus();
+		Process p = new Process();
+		List<Process> processList = processMapper.selByStatus();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("key", "3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
 		JSONObject json = JSONObject.fromObject(params);
-		for (int i = 0; i < photoScanList.size(); i++) {
-			String photoUrl = "https://beta.benaco.com/api/beta/scans/id/" + photoScanList.get(i).getBenacoScanId() + "/status";
+		for (int i = 0; i < processList.size(); i++) {
+			String photoUrl = "https://beta.benaco.com/api/beta/scans/id/" + processList.get(i).getBenacoScanId() + "/status";
 			HttpClientResponse hcResponse = HttpClientUtil.doPost(photoUrl, json);
 			String httpRetCode = hcResponse.getCode();
 			if ("200".equals(httpRetCode)) {
@@ -202,13 +202,13 @@ public class PhotoScanImpl implements IPhotoScanBiz {
 				JSONObject result = JSONObject.fromObject(context);
 				String status = result.getString("status");
 				if ("failed".equals(status)) {
-					p.setBenacoScanId(photoScanList.get(i).getBenacoScanId());
+					p.setBenacoScanId(processList.get(i).getBenacoScanId());
                     p.setStatus("4");
-					photoScanMapper.upByStatus(p);
+                    processMapper.upByStatus(p);
 				}else if ("completed".equals(status)) {
-					p.setBenacoScanId(photoScanList.get(i).getBenacoScanId());
+					p.setBenacoScanId(processList.get(i).getBenacoScanId());
 					p.setStatus("5");
-					photoScanMapper.upByStatus(p);
+					processMapper.upByStatus(p);
 				}
 			}
 		}

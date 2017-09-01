@@ -1,13 +1,14 @@
-package com.unre.photo.comm.dal.model;
+package com.unre.photo.biz.dto;
 
 import java.util.Date;
 
-public class PhotoMember {
+public class MemberDto {
+
 	private Long id;
 
-	private String memberName;
-
 	private String memberNo;
+
+	private String memberName;
 
 	private String password;
 
@@ -38,6 +39,24 @@ public class PhotoMember {
 	private Integer updateBy;
 
 	private Date updateTime;
+	
+	private String setType;
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public Long getId() {
 		return id;
@@ -47,28 +66,12 @@ public class PhotoMember {
 		this.id = id;
 	}
 
-	public String getMemberName() {
-		return memberName;
-	}
-
-	public void setMemberName(String memberName) {
-		this.memberName = memberName == null ? null : memberName.trim();
-	}
-
 	public String getMemberNo() {
 		return memberNo;
 	}
 
 	public void setMemberNo(String memberNo) {
-		this.memberNo = memberNo == null ? null : memberNo.trim();
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password == null ? null : password.trim();
+		this.memberNo = memberNo;
 	}
 
 	public String getCompany() {
@@ -76,7 +79,7 @@ public class PhotoMember {
 	}
 
 	public void setCompany(String company) {
-		this.company = company == null ? null : company.trim();
+		this.company = company;
 	}
 
 	public String getProvince() {
@@ -84,7 +87,7 @@ public class PhotoMember {
 	}
 
 	public void setProvince(String province) {
-		this.province = province == null ? null : province.trim();
+		this.province = province;
 	}
 
 	public String getCity() {
@@ -92,7 +95,7 @@ public class PhotoMember {
 	}
 
 	public void setCity(String city) {
-		this.city = city == null ? null : city.trim();
+		this.city = city;
 	}
 
 	public String getAdress() {
@@ -100,7 +103,7 @@ public class PhotoMember {
 	}
 
 	public void setAdress(String adress) {
-		this.adress = adress == null ? null : adress.trim();
+		this.adress = adress;
 	}
 
 	public String getIndustry() {
@@ -108,7 +111,7 @@ public class PhotoMember {
 	}
 
 	public void setIndustry(String industry) {
-		this.industry = industry == null ? null : industry.trim();
+		this.industry = industry;
 	}
 
 	public String getContact() {
@@ -116,7 +119,7 @@ public class PhotoMember {
 	}
 
 	public void setContact(String contact) {
-		this.contact = contact == null ? null : contact.trim();
+		this.contact = contact;
 	}
 
 	public String getTel() {
@@ -124,7 +127,7 @@ public class PhotoMember {
 	}
 
 	public void setTel(String tel) {
-		this.tel = tel == null ? null : tel.trim();
+		this.tel = tel;
 	}
 
 	public String getMail() {
@@ -132,7 +135,7 @@ public class PhotoMember {
 	}
 
 	public void setMail(String mail) {
-		this.mail = mail == null ? null : mail.trim();
+		this.mail = mail;
 	}
 
 	public String getType() {
@@ -140,7 +143,16 @@ public class PhotoMember {
 	}
 
 	public void setType(String type) {
-		this.type = type == null ? null : type.trim();
+		this.type = type;
+	}
+
+	
+	public String getSetType() {
+		return setType;
+	}
+
+	public void setSetType(String setType) {
+		this.setType = setType;
 	}
 
 	public String getLevel() {
@@ -148,7 +160,7 @@ public class PhotoMember {
 	}
 
 	public void setLevel(String level) {
-		this.level = level == null ? null : level.trim();
+		this.level = level;
 	}
 
 	public Integer getCreateBy() {
@@ -182,4 +194,5 @@ public class PhotoMember {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+
 }

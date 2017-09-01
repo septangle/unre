@@ -8,7 +8,7 @@ public interface IPanoramaEngineFacade {
 	/**
 	 * 新增benaco scan
 	 * 
-	 * @param request.photoMemberDto 
+	 * @param request.MemberDto 
 	 *  
 	 * @return Response.PanoramaEngineDto.scanId
 	 * @throws Exception
@@ -18,7 +18,7 @@ public interface IPanoramaEngineFacade {
 	/**
 	 * 添加scan的3D照片
 	 * 
-	 * @param request.photoMemberDto 
+	 * @param request.MemberDto 
 	 *  
 	 * @return Response.PanoramaEngineDto
 	 * @throws Exception
@@ -28,7 +28,7 @@ public interface IPanoramaEngineFacade {
 	/**
 	 * 开始将3D照片制作成全景照片
 	 * 
-	 * @param request.photoMemberDto 
+	 * @param request.MemberDto 
 	 *  
 	 * @return PanoramaEngineResponse
 	 * @throws Exception
@@ -38,7 +38,7 @@ public interface IPanoramaEngineFacade {
 	/**
 	 * 新增benaco scan
 	 * 
-	 * @param request.photoMemberDto 
+	 * @param request.MemberDto 
 	 *  
 	 * @return PanoramaEngineResponse.scanId
 	 * @throws Exception
@@ -48,7 +48,7 @@ public interface IPanoramaEngineFacade {
 	/**
 	 * 查询 scan
 	 * 
-	 * @param photoMemberDto 
+	 * @param MemberDto 
 	 *  
 	 * @return PanoramaEngineResponse.scanId
 	 * @throws Exception

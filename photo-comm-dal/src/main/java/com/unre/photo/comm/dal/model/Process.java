@@ -1,22 +1,38 @@
-package com.unre.photo.biz.dto;
+package com.unre.photo.comm.dal.model;
 
 import java.util.Date;
 
-public class PhotoScanDto {
-
+public class Process {
 	private Long id;
-	private Long member_id;
+	
+	private Long orderId;
+
 	private String benacoScanId;
-	private Long btch_no;
+
+	private Long memberId;
+
+	private Long btchNo;
+
 	private String title;
+
 	private String description;
-	private String image_path;
-	private String thumb_image_path;
+	
+	private String type;
+
+	private String deleteFlag;
+
 	private String status;
+
 	private Integer createBy;
+
 	private Date createTime;
+
 	private Integer updateBy;
+
 	private Date updateTime;
+
+	private Long version;
+
 	private Long uid;
 
 	public Long getId() {
@@ -27,28 +43,52 @@ public class PhotoScanDto {
 		this.id = id;
 	}
 
+	public String getDeleteFlag() {
+		return deleteFlag;
+	}
+
+	public void setDeleteFlag(String deleteFlag) {
+		this.deleteFlag = deleteFlag;
+	}
+
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
 	public String getBenacoScanId() {
 		return benacoScanId;
 	}
 
 	public void setBenacoScanId(String benacoScanId) {
-		this.benacoScanId = benacoScanId;
+		this.benacoScanId = benacoScanId == null ? null : benacoScanId.trim();
 	}
 
-	public Long getMember_id() {
-		return member_id;
+	public Long getMemberId() {
+		return memberId;
 	}
 
-	public void setMember_id(Long member_id) {
-		this.member_id = member_id;
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
 	}
 
-	public Long getBtch_no() {
-		return btch_no;
+	public Long getBtchNo() {
+		return btchNo;
 	}
 
-	public void setBtch_no(Long btch_no) {
-		this.btch_no = btch_no;
+	public void setBtchNo(Long btchNo) {
+		this.btchNo = btchNo;
 	}
 
 	public String getTitle() {
@@ -59,29 +99,12 @@ public class PhotoScanDto {
 		this.title = title;
 	}
 
-
 	public String getDescription() {
 		return description;
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getImage_path() {
-		return image_path;
-	}
-
-	public void setImage_path(String image_path) {
-		this.image_path = image_path;
-	}
-
-	public String getThumb_image_path() {
-		return thumb_image_path;
-	}
-
-	public void setThumb_image_path(String thumb_image_path) {
-		this.thumb_image_path = thumb_image_path;
+		this.description = description == null ? null : description.trim();
 	}
 
 	public String getStatus() {
@@ -89,7 +112,7 @@ public class PhotoScanDto {
 	}
 
 	public void setStatus(String status) {
-		this.status = status;
+		this.status = status == null ? null : status.trim();
 	}
 
 	public Integer getCreateBy() {
@@ -122,6 +145,14 @@ public class PhotoScanDto {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Long getUid() {

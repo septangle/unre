@@ -1,25 +1,25 @@
-package com.unre.photo.biz.dto;
+package com.unre.photo.comm.dal.model;
 
 import java.util.Date;
 
-public class PhotoScanItemDto {
+public class ProcessSource {
 	private Long id;
 
-    private Long scanId;
-    
-    private String benacoScanId;
+	private Long processId;
 
-    private String imagePath;
+	private String imagePath;
 
-    private String thumbImagePath;
+	private String thumbImagePath;
 
-    private Integer createBy;
+	private Integer createBy;
+	
+	private String deleteFlag;
 
-    private Date createTime;
+	private Date createTime;
 
-    private Integer updateBy;
+	private Integer updateBy;
 
-    private Date updateTime;
+	private Date updateTime;
 
 	public Long getId() {
 		return id;
@@ -29,28 +29,29 @@ public class PhotoScanItemDto {
 		this.id = id;
 	}
 
-	public Long getScanId() {
-		return scanId;
+	public Long getProcessId() {
+		return processId;
 	}
 
-	public void setScanId(Long scanId) {
-		this.scanId = scanId;
+	public void setProcessId(Long processId) {
+		this.processId = processId;
 	}
 
-	public String getBenacoScanId() {
-		return benacoScanId;
+	public String getDeleteFlag() {
+		return deleteFlag;
 	}
 
-	public void setBenacoScanId(String benacoScanId) {
-		this.benacoScanId = benacoScanId;
+	public void setDeleteFlag(String deleteFlag) {
+		this.deleteFlag = deleteFlag;
 	}
+	
 
 	public String getImagePath() {
 		return imagePath;
 	}
 
 	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
+		this.imagePath = imagePath == null ? null : imagePath.trim();
 	}
 
 	public String getThumbImagePath() {
@@ -58,7 +59,7 @@ public class PhotoScanItemDto {
 	}
 
 	public void setThumbImagePath(String thumbImagePath) {
-		this.thumbImagePath = thumbImagePath;
+		this.thumbImagePath = thumbImagePath == null ? null : thumbImagePath.trim();
 	}
 
 	public Integer getCreateBy() {
@@ -92,7 +93,4 @@ public class PhotoScanItemDto {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-    
-    
-    
 }
