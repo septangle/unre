@@ -2,7 +2,7 @@ package com.unre.photo.biz.logic.core;
 
 import java.util.List;
 
-import com.unre.photo.biz.dto.PhotoMemberDto;
+import com.unre.photo.biz.dto.MemberDto;
 import com.unre.photo.biz.exception.BusinessException;
 
 /**
@@ -19,7 +19,7 @@ public interface IPhotoMemberBiz {
 	 * 
 	 * @throws BusinessException
 	 */
-	public PhotoMemberDto findPhotoMemberById(Long photoMemberId) throws BusinessException;
+	public MemberDto findPhotoMemberById(Long photoMemberId) throws BusinessException;
 
 	/**
 	 * 查询满足条件的PhotoMember
@@ -29,7 +29,7 @@ public interface IPhotoMemberBiz {
 	 * 
 	 * @throws BusinessException
 	 */
-	public List<PhotoMemberDto> queryPhotoMember(PhotoMemberDto photoMemberDto) throws BusinessException;
+	public List<MemberDto> queryPhotoMember(MemberDto photoMemberDto) throws BusinessException;
 
 	/**
 	 * 新增PhotoMember
@@ -38,7 +38,7 @@ public interface IPhotoMemberBiz {
 	 * @return PhotoMemberDto
 	 * @throws BusinessException
 	 */
-	public PhotoMemberDto addPhotoMember(PhotoMemberDto photoMemberDto) throws BusinessException;
+	public MemberDto addPhotoMember(MemberDto photoMemberDto) throws BusinessException;
 
 	/**
 	 * 更新PhotoMember
@@ -48,7 +48,7 @@ public interface IPhotoMemberBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public void updatePhotoMember(PhotoMemberDto photoMemberDto) throws BusinessException;
+	public void updatePhotoMember(MemberDto memberDto) throws BusinessException;
 
 	/**
 	 * 删除PhotoMember
@@ -68,6 +68,6 @@ public interface IPhotoMemberBiz {
 	 * @return photoMemberDto -Dto
 	 * @throws BusinessException
 	 */
-	public PhotoMemberDto queryLoginUsers(PhotoMemberDto photoMemberDto) throws BusinessException;
+	public MemberDto queryLoginUsers(MemberDto memberDto) throws BusinessException;
 
 }

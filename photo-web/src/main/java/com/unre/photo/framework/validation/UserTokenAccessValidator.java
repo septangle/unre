@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.unre.photo.biz.logic.facade.IPhotoMemberFacade;
+import com.unre.photo.biz.logic.facade.IMemberFacade;
 import com.unre.photo.biz.response.ValidationH5Response;
 import com.unre.photo.framework.servlet.ResettableStreamHttpServletRequest;
 
@@ -14,7 +14,7 @@ public class UserTokenAccessValidator implements IValidator {
 	private static final Log LOGGER = LogFactory.getLog(UserTokenAccessValidator.class);
 
 	@Autowired
-	private IPhotoMemberFacade photoMemberFacade;
+	private IMemberFacade memberFacade;
 
 	@Override
 	public ValidationH5Response validate(ResettableStreamHttpServletRequest request, Object handler) {
@@ -23,12 +23,12 @@ public class UserTokenAccessValidator implements IValidator {
 		return vH5Response;
 	}
 
-	public IPhotoMemberFacade getPhotoMemberFacade() {
-		return photoMemberFacade;
+	public IMemberFacade getPhotoMemberFacade() {
+		return memberFacade;
 	}
 
-	public void setPhotoMemberFacade(IPhotoMemberFacade photoMemberFacade) {
-		this.photoMemberFacade = photoMemberFacade;
+	public void setPhotoMemberFacade(IMemberFacade photoMemberFacade) {
+		this.memberFacade = photoMemberFacade;
 	}
 
 }
