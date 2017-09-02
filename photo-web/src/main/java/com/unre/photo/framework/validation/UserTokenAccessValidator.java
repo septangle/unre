@@ -23,12 +23,12 @@ public class UserTokenAccessValidator implements IValidator {
 		return vH5Response;
 	}
 
-	public IMemberFacade getPhotoMemberFacade() {
+	public IMemberFacade getmemberFacade() {
 		return memberFacade;
 	}
 
-	public void setPhotoMemberFacade(IMemberFacade photoMemberFacade) {
-		this.memberFacade = photoMemberFacade;
+	public void setmemberFacade(IMemberFacade memberFacade) {
+		this.memberFacade = memberFacade;
 	}
 
 }
