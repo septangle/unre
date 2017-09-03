@@ -13,14 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unre.photo.biz.dto.ProcessDto;
-import com.unre.photo.biz.dto.ProcessSourceDto;
+import com.unre.photo.biz.dto.OrderDto;
+import com.unre.photo.biz.dto.PanoramaDto;
 import com.unre.photo.biz.exception.BusinessException;
-import com.unre.photo.biz.logic.core.IProcessBiz;
-import com.unre.photo.biz.logic.core.IProcessSourceBiz;
+import com.unre.photo.biz.logic.core.IOrderBiz;
+import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.comm.AppConstants;
-import com.unre.photo.comm.dal.dao.ProcessMapper;
-import com.unre.photo.comm.dal.model.Process;
+import com.unre.photo.comm.dal.dao.OrderMapper;
+import com.unre.photo.comm.dal.model.Order;
 import com.unre.photo.util.HttpClientResponse;
 import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.ModelUtil;
@@ -28,23 +28,23 @@ import com.unre.photo.util.ModelUtil;
 import net.sf.json.JSONObject;
 
 @Service("Process")
-public class ProcessImpl implements IProcessBiz {
+public class OrderImpl implements IOrderBiz {
 
 	@Autowired
-	private ProcessMapper processMapper;
+	private OrderMapper orderMapper;
 
 	@Autowired
-	private IProcessSourceBiz processSourceBiz;
+	private IPanoramaBiz processSourceBiz;
 
-	private static final Log LOGGER = LogFactory.getLog(ProcessImpl.class);
+	private static final Log LOGGER = LogFactory.getLog(OrderImpl.class);
 
 	@Override
-	public ProcessDto findProcessById(Long processId) throws BusinessException {
-		ProcessDto ProcessDto = null;
+	public OrderDto findOrderById(Long processId) throws BusinessException {
+		OrderDto ProcessDto = null;
 
 		try {
-			Process Process = processMapper.selectByPrimaryKey(processId);
-			ProcessDto = ModelUtil.modelToDto(Process, ProcessDto.class);
+			Order Process = orderMapper.selectByPrimaryKey(processId);
+			ProcessDto = ModelUtil.modelToDto(Process, OrderDto.class);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_FIND_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.SCAN_FIND_ERROR_CODE, AppConstants.SCAN_FIND_ERROR_MESSAGE);
@@ -53,32 +53,32 @@ public class ProcessImpl implements IProcessBiz {
 	}
 
 	@Override
-	public List<ProcessDto> queryProcess(ProcessDto processDto) throws BusinessException {
-		List<ProcessDto> processoList = new ArrayList<ProcessDto>();
+	public List<OrderDto> queryOrder(OrderDto orderDto) throws BusinessException {
+		List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
 		try {
-			Process Process = ModelUtil.dtoToModel(processDto, Process.class);
-			List<Process> ProcessList = processMapper.selectBySelective(Process);
-			if (!CollectionUtils.isEmpty(ProcessList)) {
-				for (Process p : ProcessList) {
-					processoList.add(ModelUtil.modelToDto(p, ProcessDto.class));
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+			List<Order> orderList = orderMapper.selectBySelective(order);
+			if (!CollectionUtils.isEmpty(orderList)) {
+				for (Order p : orderList) {
+					orderDtoList.add(ModelUtil.modelToDto(p, OrderDto.class));
 				}
 			}
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_QUERY_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
 		}
-		return processoList;
+		return orderDtoList;
 	}
 
 	@SuppressWarnings("unused")
 	@Override
-	public ProcessDto addProcess(ProcessDto processDto) throws BusinessException {
-		ProcessDto retPhotoDto = null;
+	public OrderDto addOrder(OrderDto processDto) throws BusinessException {
+		OrderDto retPhotoDto = null;
 		try {
-			Process process = ModelUtil.dtoToModel(processDto, Process.class);
-			int i = processMapper.insertSelective(process);
+			Order process = ModelUtil.dtoToModel(processDto, Order.class);
+			int i = orderMapper.insertSelective(process);
 			Long id = process.getId();
-			retPhotoDto = this.findProcessById(id);
+			retPhotoDto = this.findOrderById(id);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_ADD_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.SCAN_ADD_ERROR_CODE, AppConstants.SCAN_ADD_ERROR_MESSAGE);
@@ -87,11 +87,11 @@ public class ProcessImpl implements IProcessBiz {
 	}
 
 	@Override
-	public boolean updateProcess(ProcessDto processDto) throws BusinessException {
+	public boolean updateOrder(OrderDto processDto) throws BusinessException {
 		boolean flg = false;
 		try {
-			Process Process = ModelUtil.dtoToModel(processDto, Process.class);
-			int number = processMapper.updateBySelective(Process);
+			Order Process = ModelUtil.dtoToModel(processDto, Order.class);
+			int number = orderMapper.updateBySelective(Process);
 			if (number == 0) { // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
@@ -105,21 +105,22 @@ public class ProcessImpl implements IProcessBiz {
 	}
 
 	@Override
-	public boolean updateProcessByBenacoId(ProcessDto processDto) throws BusinessException {
+	public boolean updateOrderByBenacoId(OrderDto processDto) throws BusinessException {
 		boolean flg = false;
 		try {
 			//1.先查出来
-			Process pScanParm = new Process();
+			Order pScanParm = new Order();
 			pScanParm.setBenacoScanId(processDto.getBenacoScanId());
-			List<Process> pScanList = processMapper.selectBySelective(pScanParm);
+			List<Order> pScanList = orderMapper.selectBySelective(pScanParm);
 			if (pScanList.size() == 0 || pScanList.size() > 1) {
 				throw new BusinessException(AppConstants.SCAN_BENACO_SCAN_ID_ERROR_CODE,
 						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
 			}
-			Process pScan = pScanList.get(0);
+			Order pScan = pScanList.get(0);
 			pScan.setStatus(AppConstants.SFILE_PROCESSING);
+			
 			//2.后更新scan状态
-			int i = processMapper.updateProcessByBenacoId(pScan);
+			int i = orderMapper.updateOrderByBenacoId(pScan);
 			if (i != 1) { // i == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
@@ -137,7 +138,7 @@ public class ProcessImpl implements IProcessBiz {
 	public boolean deleteProcess(Long id) throws BusinessException {
 		boolean flg = false;
 		try {
-			int delScan = processMapper.deleteByPrimaryKey(id);
+			int delScan = orderMapper.deleteByPrimaryKey(id);
 			if (delScan == 1) {
 				flg = true;
 			}
@@ -147,7 +148,6 @@ public class ProcessImpl implements IProcessBiz {
 					AppConstants.SCAN__DELETE_SCAN_ID_ERROR_MESSAGE);
 		}
 		return flg;
-
 	}
 
 	@SuppressWarnings("unused")
@@ -157,22 +157,22 @@ public class ProcessImpl implements IProcessBiz {
 		boolean flg = false;
 		try {
 			//1.更新scan状态
-			Process pScanParm = new Process();
+			Order pScanParm = new Order();
 			pScanParm.setBenacoScanId(benacoScanId);
-			List<Process> pScanList = processMapper.selectBySelective(pScanParm);
+			List<Order> pScanList = orderMapper.selectBySelective(pScanParm);
 			if (pScanList.size() == 0 || pScanList.size() > 1) {
 				throw new BusinessException(AppConstants.SCAN_BENACO_SCAN_ID_ERROR_CODE,
 						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
 			}
-			Process pScan = pScanList.get(0);
+			Order pScan = pScanList.get(0);
 			pScan.setStatus(AppConstants.SFILE_UPLOAD_COMPLETE);
-			int i = processMapper.updateProcessByBenacoId(pScan);
+			int i = orderMapper.updateOrderByBenacoId(pScan);
 
 			//2. 新增scan item
 			for (File f : imageFiles) {
 				String imageFullPath = f.getPath() + f.getName();
-				ProcessSourceDto pScanItemDto = new ProcessSourceDto();
-				pScanItemDto.setBenacoScanId(benacoScanId);
+				PanoramaDto pScanItemDto = new PanoramaDto();
+			//	pScanItemDto.setBenacoScanId(benacoScanId);
 				pScanItemDto.setImagePath(imageFullPath);
 				processSourceBiz.addProcessSource(pScanItemDto);
 			}
@@ -187,9 +187,9 @@ public class ProcessImpl implements IProcessBiz {
 		return flg;
 	}
 
-	public void queryStatus() {
-		Process p = new Process();
-		List<Process> processList = processMapper.selByStatus();
+	public void updateStatus() {
+		Order p = new Order();
+		List<Order> processList = orderMapper.selectUnclosedOrder();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("key", "3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
 		JSONObject json = JSONObject.fromObject(params);
@@ -204,11 +204,11 @@ public class ProcessImpl implements IProcessBiz {
 				if ("failed".equals(status)) {
 					p.setBenacoScanId(processList.get(i).getBenacoScanId());
                     p.setStatus("4");
-                    processMapper.upByStatus(p);
+                    orderMapper.updateStatus(p);
 				}else if ("completed".equals(status)) {
 					p.setBenacoScanId(processList.get(i).getBenacoScanId());
 					p.setStatus("5");
-					processMapper.upByStatus(p);
+					orderMapper.updateStatus(p);
 				}
 			}
 		}

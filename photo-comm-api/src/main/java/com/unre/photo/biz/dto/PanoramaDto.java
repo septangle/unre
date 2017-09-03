@@ -1,8 +1,8 @@
-package com.unre.photo.comm.dal.model;
+package com.unre.photo.biz.dto;
 
 import java.util.Date;
 
-public class Panorama {
+public class PanoramaDto {
     private Long id;
 
     private Long orderId;

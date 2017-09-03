@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.unre.photo.biz.dto.ProcessDto;
-import com.unre.photo.biz.logic.core.IProcessBiz;
+import com.unre.photo.biz.dto.OrderDto;
+import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.biz.logic.facade.IProcessFacade;
-import com.unre.photo.biz.request.ProcessRequest;
+import com.unre.photo.biz.request.OrderRequest;
 import com.unre.photo.biz.response.ProcessResponse;
 import com.unre.photo.comm.AppConstants;
 
@@ -20,29 +20,29 @@ import com.unre.photo.comm.AppConstants;
 public class ProcessFacadeImpl implements IProcessFacade {
 
 	@Autowired
-	private IProcessBiz processBiz;
+	private IOrderBiz processBiz;
 
 	@Override
-	public ProcessResponse queryProcess(ProcessRequest request) throws Exception {
-		List<ProcessDto> ProcessDtoList = processBiz.queryProcess(request.getProcessDto());
+	public ProcessResponse queryProcess(OrderRequest request) throws Exception {
+		List<OrderDto> ProcessDtoList = processBiz.queryOrder(request.getProcessDto());
 		ProcessResponse response = new ProcessResponse();
 		response.setProcessDtoList(ProcessDtoList);
 		return response;
 	}
 
 	@Override
-	public ProcessResponse findProcessById(ProcessRequest request) throws Exception {
+	public ProcessResponse findProcessById(OrderRequest request) throws Exception {
 		ProcessResponse response = new ProcessResponse();
-		ProcessDto ProcessParm = request.getProcessDto();
+		OrderDto ProcessParm = request.getProcessDto();
 		if (ProcessParm != null) {
-			ProcessDto ProcessDto = processBiz.findProcessById(ProcessParm.getId());
+			OrderDto ProcessDto = processBiz.findOrderById(ProcessParm.getId());
 			response.setProcessDto(ProcessDto);
 		}
 		return response;
 	}
 
 	@Override
-	public ProcessResponse deleteProcess(ProcessRequest request) throws Exception {
+	public ProcessResponse deleteProcess(OrderRequest request) throws Exception {
 		ProcessResponse response = new ProcessResponse();
 		boolean flag= processBiz.deleteProcess(request.getProcessDto().getId());
 		String code = flag? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
@@ -51,10 +51,10 @@ public class ProcessFacadeImpl implements IProcessFacade {
 	}
 
 	@Override
-	public ProcessResponse updateProcess(ProcessRequest request) throws Exception {
+	public ProcessResponse updateProcess(OrderRequest request) throws Exception {
 		ProcessResponse response = new ProcessResponse();
-		ProcessDto ProcessDto = request.getProcessDto();
-		boolean flag = processBiz.updateProcess(ProcessDto);
+		OrderDto ProcessDto = request.getProcessDto();
+		boolean flag = processBiz.updateOrder(ProcessDto);
 		String code = flag? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
 		response.setCode(code);
 		return response;

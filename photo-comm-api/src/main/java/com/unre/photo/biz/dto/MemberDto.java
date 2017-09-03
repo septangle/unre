@@ -3,196 +3,213 @@ package com.unre.photo.biz.dto;
 import java.util.Date;
 
 public class MemberDto {
+    private Long id;
 
-	private Long id;
+    private String memberName;
 
-	private String memberNo;
+    private String memberNo;
 
-	private String memberName;
+    private String password;
 
-	private String password;
+    private String company;
 
-	private String company;
+    private String province;
 
-	private String province;
+    private String city;
 
-	private String city;
+    private String adress;
 
-	private String adress;
+    private String industry;
 
-	private String industry;
+    private String contact;
 
-	private String contact;
+    private String tel;
 
-	private String tel;
+    private String mail;
 
-	private String mail;
+    private String type;
 
-	private String type;
+    private String setType;
 
-	private String level;
+    private String level;
 
-	private Integer createBy;
+    private String status;
 
-	private Date createTime;
+    private String isDeleted;
 
-	private Integer updateBy;
+    private Integer createBy;
 
-	private Date updateTime;
-	
-	private String setType;
+    private Date createTime;
 
-	public String getMemberName() {
-		return memberName;
-	}
+    private Integer updateBy;
 
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
-	}
+    private Date updateTime;
 
-	public String getPassword() {
-		return password;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public String getMemberName() {
+        return memberName;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setMemberName(String memberName) {
+        this.memberName = memberName == null ? null : memberName.trim();
+    }
 
-	public String getMemberNo() {
-		return memberNo;
-	}
+    public String getMemberNo() {
+        return memberNo;
+    }
 
-	public void setMemberNo(String memberNo) {
-		this.memberNo = memberNo;
-	}
+    public void setMemberNo(String memberNo) {
+        this.memberNo = memberNo == null ? null : memberNo.trim();
+    }
 
-	public String getCompany() {
-		return company;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setCompany(String company) {
-		this.company = company;
-	}
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
+    }
 
-	public String getProvince() {
-		return province;
-	}
+    public String getCompany() {
+        return company;
+    }
 
-	public void setProvince(String province) {
-		this.province = province;
-	}
+    public void setCompany(String company) {
+        this.company = company == null ? null : company.trim();
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public String getProvince() {
+        return province;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public void setProvince(String province) {
+        this.province = province == null ? null : province.trim();
+    }
 
-	public String getAdress() {
-		return adress;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public void setAdress(String adress) {
-		this.adress = adress;
-	}
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
 
-	public String getIndustry() {
-		return industry;
-	}
+    public String getAdress() {
+        return adress;
+    }
 
-	public void setIndustry(String industry) {
-		this.industry = industry;
-	}
+    public void setAdress(String adress) {
+        this.adress = adress == null ? null : adress.trim();
+    }
 
-	public String getContact() {
-		return contact;
-	}
+    public String getIndustry() {
+        return industry;
+    }
 
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
+    public void setIndustry(String industry) {
+        this.industry = industry == null ? null : industry.trim();
+    }
 
-	public String getTel() {
-		return tel;
-	}
+    public String getContact() {
+        return contact;
+    }
 
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
+    public void setContact(String contact) {
+        this.contact = contact == null ? null : contact.trim();
+    }
 
-	public String getMail() {
-		return mail;
-	}
+    public String getTel() {
+        return tel;
+    }
 
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
+    public void setTel(String tel) {
+        this.tel = tel == null ? null : tel.trim();
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getMail() {
+        return mail;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setMail(String mail) {
+        this.mail = mail == null ? null : mail.trim();
+    }
 
-	
-	public String getSetType() {
-		return setType;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setSetType(String setType) {
-		this.setType = setType;
-	}
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
+    }
 
-	public String getLevel() {
-		return level;
-	}
+    public String getSetType() {
+        return setType;
+    }
 
-	public void setLevel(String level) {
-		this.level = level;
-	}
+    public void setSetType(String setType) {
+        this.setType = setType == null ? null : setType.trim();
+    }
 
-	public Integer getCreateBy() {
-		return createBy;
-	}
+    public String getLevel() {
+        return level;
+    }
 
-	public void setCreateBy(Integer createBy) {
-		this.createBy = createBy;
-	}
+    public void setLevel(String level) {
+        this.level = level == null ? null : level.trim();
+    }
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
+    }
 
-	public Integer getUpdateBy() {
-		return updateBy;
-	}
+    public String getIsDeleted() {
+        return isDeleted;
+    }
 
-	public void setUpdateBy(Integer updateBy) {
-		this.updateBy = updateBy;
-	}
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted == null ? null : isDeleted.trim();
+    }
 
-	public Date getUpdateTime() {
-		return updateTime;
-	}
+    public Integer getCreateBy() {
+        return createBy;
+    }
 
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
+    public void setCreateBy(Integer createBy) {
+        this.createBy = createBy;
+    }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(Integer updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 }

@@ -5,13 +5,13 @@ import java.util.Date;
 public class Walkthrough {
     private Long id;
 
-    private Long processId;
+    private Long orderId;
 
     private String imagePath;
 
     private String thumbImagePath;
 
-    private String deleteFlag;
+    private String isDeleted;
 
     private Integer createBy;
 
@@ -29,12 +29,12 @@ public class Walkthrough {
         this.id = id;
     }
 
-    public Long getProcessId() {
-        return processId;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setProcessId(Long processId) {
-        this.processId = processId;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public String getImagePath() {
@@ -53,12 +53,12 @@ public class Walkthrough {
         this.thumbImagePath = thumbImagePath == null ? null : thumbImagePath.trim();
     }
 
-    public String getDeleteFlag() {
-        return deleteFlag;
+    public String getIsDeleted() {
+        return isDeleted;
     }
 
-    public void setDeleteFlag(String deleteFlag) {
-        this.deleteFlag = deleteFlag == null ? null : deleteFlag.trim();
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted == null ? null : isDeleted.trim();
     }
 
     public Integer getCreateBy() {

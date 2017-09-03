@@ -64,11 +64,5 @@ public class QuartzManagerImpl implements QuartzManager {
 		
 		
 		return isAction;
-		
-		
 	}
-	
-	
-	
-	
 }

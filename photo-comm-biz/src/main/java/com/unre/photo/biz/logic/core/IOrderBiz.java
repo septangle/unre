@@ -3,43 +3,53 @@ package com.unre.photo.biz.logic.core;
 import java.io.File;
 import java.util.List;
 
-import com.unre.photo.biz.dto.ProcessDto;
+import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.exception.BusinessException;
 
 /**
- * 图片扫描处理记录
+ * 订单（线上图片处理/线下消费）处理记录
  * @author jyh
  */
-public interface IProcessBiz {
+public interface IOrderBiz {
 
 	/**
-	 * 通过ID查询Process
+	 * 通过ID查询Order
 	 * 
 	 * @param ProcessId  --id
 	 * @return ProcessDto --Dto
 	 * 
 	 * @throws BusinessException
 	 */
-	public ProcessDto findProcessById(Long processId) throws BusinessException;
+	public OrderDto findOrderById(Long orderId) throws BusinessException;
 
 	/**
 	 * 查询满足条件的Process
 	 * 
-	 * @param ProcessDto --Dto
+	 * @param OrderDto --Dto
 	 * @return List
 	 * 
 	 * @throws BusinessException
 	 */
-	public List<ProcessDto> queryProcess(ProcessDto processDto) throws BusinessException;
+	public List<OrderDto> queryOrder(OrderDto orderDto) throws BusinessException;
 
 	/**
 	 * 新增Process
 	 * 
-	 * @param ProcessDto  
+	 * @param OrderDto  
 	 * @return ProcessDto
 	 * @throws BusinessException
 	 */
-	public ProcessDto addProcess(ProcessDto processDto) throws BusinessException;
+	public OrderDto addOrder(OrderDto orderDto) throws BusinessException;
+
+	/**
+	 * 更新Process
+	 * 
+	 * @param OrderDto --要更新的ProcessDto
+	 * 
+	 * @return boolean
+	 * @throws BusinessException
+	 */
+	public boolean updateOrder(OrderDto orderDto) throws BusinessException;
 
 	/**
 	 * 更新Process
@@ -49,17 +59,7 @@ public interface IProcessBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public boolean updateProcess(ProcessDto processDto) throws BusinessException;
-
-	/**
-	 * 更新Process
-	 * 
-	 * @param ProcessDto --要更新的ProcessDto
-	 * 
-	 * @return boolean
-	 * @throws BusinessException
-	 */
-	public boolean updateProcessByBenacoId(ProcessDto ProcessDto) throws BusinessException;
+	public boolean updateOrderByBenacoId(OrderDto ProcessDto) throws BusinessException;
 	
 	/**
 	 * 删除Process
@@ -87,6 +87,6 @@ public interface IProcessBiz {
 	 * 更新status信息
 	 * 
 	 */
-	public void queryStatus();
+	public void updateStatus();
 
 }

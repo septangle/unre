@@ -3,21 +3,22 @@ package com.unre.photo.biz.logic.facade.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import com.unre.photo.biz.dto.ProcessSourceDto;
-import com.unre.photo.biz.logic.core.IProcessSourceBiz;
+
+import com.unre.photo.biz.dto.PanoramaDto;
+import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.biz.logic.facade.IProcessSourceFacade;
-import com.unre.photo.biz.request.ProcessSourceRequest;
+import com.unre.photo.biz.request.PanoramaRequest;
 import com.unre.photo.biz.response.ProcessSourceResponse;
 import com.unre.photo.comm.AppConstants;
 
 @Service("ProcessSourceFacade")
 public class ProcessSourceFacadeImpl implements IProcessSourceFacade {
 
-	private IProcessSourceBiz processSourceBiz;
+	private IPanoramaBiz processSourceBiz;
 
 	@Override
-	public ProcessSourceResponse queryProcessSource(ProcessSourceRequest request) throws Exception {
-		List<ProcessSourceDto> processItemList = processSourceBiz.queryProcessSource(request.getProcessSourceDto());
+	public ProcessSourceResponse queryProcessSource(PanoramaRequest request) throws Exception {
+		List<PanoramaDto> processItemList = processSourceBiz.queryProcessSource(request.getProcessSourceDto());
 		ProcessSourceResponse response = new ProcessSourceResponse();
 		response.setProcessSourceDtoList(processItemList);
 		;
@@ -25,11 +26,11 @@ public class ProcessSourceFacadeImpl implements IProcessSourceFacade {
 	}
 
 	@Override
-	public ProcessSourceResponse findProcessSourceById(ProcessSourceRequest request) throws Exception {
+	public ProcessSourceResponse findProcessSourceById(PanoramaRequest request) throws Exception {
 		ProcessSourceResponse response = new ProcessSourceResponse();
-		ProcessSourceDto processItemParm = request.getProcessSourceDto();
+		PanoramaDto processItemParm = request.getProcessSourceDto();
 		if (processItemParm != null) {
-			ProcessSourceDto ProcessSourceDto = processSourceBiz.findProcessSourceById(processItemParm.getId());
+			PanoramaDto ProcessSourceDto = processSourceBiz.findProcessSourceById(processItemParm.getId());
 			response.setProcessSourceDto(ProcessSourceDto);
 		}
 		return response;
@@ -42,7 +43,7 @@ public class ProcessSourceFacadeImpl implements IProcessSourceFacade {
 	}
 
 	@Override
-	public ProcessSourceResponse updateProcessSource(ProcessSourceRequest request) throws Exception {
+	public ProcessSourceResponse updateProcessSource(PanoramaRequest request) throws Exception {
 		ProcessSourceResponse response = new ProcessSourceResponse();
 		boolean flag = processSourceBiz.updateProcessSource(request.getProcessSourceDto());
 		String code = flag ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;

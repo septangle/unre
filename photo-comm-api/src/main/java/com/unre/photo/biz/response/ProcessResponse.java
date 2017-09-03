@@ -2,28 +2,28 @@ package com.unre.photo.biz.response;
 
 import java.util.List;
 
-import com.unre.photo.biz.dto.ProcessDto;
+import com.unre.photo.biz.dto.OrderDto;
 
 @SuppressWarnings("serial")
 public class ProcessResponse extends BaseResponse {
 
-	private ProcessDto ProcessDto;
+	private OrderDto ProcessDto;
 
-	private List<ProcessDto> ProcessDtoList;
+	private List<OrderDto> ProcessDtoList;
 
-	public ProcessDto getProcessDto() {
+	public OrderDto getProcessDto() {
 		return ProcessDto;
 	}
 
-	public void setProcessDto(ProcessDto ProcessDto) {
+	public void setProcessDto(OrderDto ProcessDto) {
 		this.ProcessDto = ProcessDto;
 	}
 
-	public List<ProcessDto> getProcessDtoList() {
+	public List<OrderDto> getProcessDtoList() {
 		return ProcessDtoList;
 	}
 
-	public void setProcessDtoList(List<ProcessDto> ProcessDtoList) {
+	public void setProcessDtoList(List<OrderDto> ProcessDtoList) {
 		this.ProcessDtoList = ProcessDtoList;
 	}
 

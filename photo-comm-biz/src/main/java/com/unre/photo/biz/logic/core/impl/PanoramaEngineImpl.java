@@ -13,12 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.dto.PanoramaEngineDto;
-import com.unre.photo.biz.dto.ProcessDto;
+import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
-import com.unre.photo.biz.logic.core.IProcessBiz;
+import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.comm.AppConstants;
-import com.unre.photo.comm.dal.model.Process;
 import com.unre.photo.util.HttpClientResponse;
 import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.JsonUtil;
@@ -29,7 +28,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	private static final Log LOGGER = LogFactory.getLog(PanoramaEngineImpl.class);
 
 	@Autowired
-	private IProcessBiz processBizImpl;
+	private IOrderBiz processBizImpl;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -57,10 +56,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				benacoScanId = benacoScanId.substring(0, benacoScanId.length() - 1);
 
 			//保存至scan表
-			ProcessDto processDto = new ProcessDto();
+			OrderDto processDto = new OrderDto();
 			processDto.setBenacoScanId(benacoScanId);
-			processDto.setUid(retPanEngineDto.getUid());
-			processBizImpl.addProcess(processDto);
+			processDto.setId(retPanEngineDto.getUid());
+			processBizImpl.addOrder(processDto);
 
 			//返回 benaco scan id
 			panoramaEngineDto.setBenacoScanId(benacoScanId);
@@ -118,10 +117,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			//2. 更新scan表中scanid对应记录的状态
 
 			if ("200".equals(retCode)) {
-				ProcessDto ProcessDto = new ProcessDto();
+				OrderDto ProcessDto = new OrderDto();
 				ProcessDto.setBenacoScanId(benacoScanId);
 				ProcessDto.setStatus(AppConstants.SFILE_PROCESSING);
-				processBizImpl.updateProcessByBenacoId(ProcessDto);
+				processBizImpl.updateOrderByBenacoId(ProcessDto);
 
 				retFlg = true;
 			}

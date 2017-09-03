@@ -13,7 +13,7 @@
     <result column="desc" property="desc" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
-    <result column="is_delete" property="isDelete" jdbcType="CHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="CHAR" />
     <result column="version" property="version" jdbcType="BIGINT" />
     <result column="create_by" property="createBy" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -22,8 +22,8 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, member_id, total_amount, actual_amount, goods_id, goods_actual_price, goods_num, 
-    benaco_scan_id, desc, type, status, is_delete, version, create_by, create_time, update_by, 
-    update_time
+    benaco_scan_id, desc, type, status, is_deleted, version, create_by, create_time, 
+    update_by, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -39,13 +39,13 @@
     insert into tbl_order (member_id, total_amount, actual_amount, 
       goods_id, goods_actual_price, goods_num, 
       benaco_scan_id, desc, type, 
-      status, is_delete, version, 
+      status, is_deleted, version, 
       create_by, create_time, update_by, 
       update_time)
     values (#{memberId,jdbcType=BIGINT}, #{totalAmount,jdbcType=DECIMAL}, #{actualAmount,jdbcType=DECIMAL}, 
       #{goodsId,jdbcType=BIGINT}, #{goodsActualPrice,jdbcType=DECIMAL}, #{goodsNum,jdbcType=INTEGER}, 
       #{benacoScanId,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
-      #{status,jdbcType=CHAR}, #{isDelete,jdbcType=CHAR}, #{version,jdbcType=BIGINT}, 
+      #{status,jdbcType=CHAR}, #{isDeleted,jdbcType=CHAR}, #{version,jdbcType=BIGINT}, 
       #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -82,8 +82,8 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="isDelete != null" >
-        is_delete,
+      <if test="isDeleted != null" >
+        is_deleted,
       </if>
       <if test="version != null" >
         version,
@@ -132,8 +132,8 @@
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
-      <if test="isDelete != null" >
-        #{isDelete,jdbcType=CHAR},
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=CHAR},
       </if>
       <if test="version != null" >
         #{version,jdbcType=BIGINT},
@@ -185,8 +185,8 @@
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
-      <if test="isDelete != null" >
-        is_delete = #{isDelete,jdbcType=CHAR},
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=CHAR},
       </if>
       <if test="version != null" >
         version = #{version,jdbcType=BIGINT},
@@ -218,7 +218,7 @@
       desc = #{desc,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
-      is_delete = #{isDelete,jdbcType=CHAR},
+      is_deleted = #{isDeleted,jdbcType=CHAR},
       version = #{version,jdbcType=BIGINT},
       create_by = #{createBy,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

@@ -1,11 +1,11 @@
 package com.unre.photo.biz.logic.core;
 
 import java.util.List;
-import com.unre.photo.biz.dto.ProcessSourceDto;
+import com.unre.photo.biz.dto.PanoramaDto;
 import com.unre.photo.biz.exception.BusinessException;
 
 
-public interface IProcessSourceBiz {
+public interface IPanoramaBiz {
 
 	/**
 	 * 通过ID查询ProcessItem
@@ -15,7 +15,7 @@ public interface IProcessSourceBiz {
 	 * 
 	 * @throws BusinessException
 	 */
-	public ProcessSourceDto findProcessSourceById(Long processSourceId) throws BusinessException;
+	public PanoramaDto findProcessSourceById(Long processSourceId) throws BusinessException;
 	
 	/**
 	 * 查询满足条件的ProcessItem
@@ -25,7 +25,7 @@ public interface IProcessSourceBiz {
 	 * 
 	 * @throws BusinessException
 	 */
-	public List<ProcessSourceDto> queryProcessSource(ProcessSourceDto processSourceDto) throws BusinessException;
+	public List<PanoramaDto> queryProcessSource(PanoramaDto processSourceDto) throws BusinessException;
 
 
 	/**
@@ -35,7 +35,7 @@ public interface IProcessSourceBiz {
 	 * @return MemberDto
 	 * @throws BusinessException
 	 */
-	public ProcessSourceDto addProcessSource(ProcessSourceDto processSourceDto) throws BusinessException;
+	public PanoramaDto addProcessSource(PanoramaDto processSourceDto) throws BusinessException;
 
 
 
@@ -57,6 +57,6 @@ public interface IProcessSourceBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public boolean updateProcessSource(ProcessSourceDto processSourceDto) throws BusinessException;
+	public boolean updateProcessSource(PanoramaDto processSourceDto) throws BusinessException;
 	
 }

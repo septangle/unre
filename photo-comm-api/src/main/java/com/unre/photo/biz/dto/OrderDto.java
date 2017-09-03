@@ -1,9 +1,9 @@
-package com.unre.photo.comm.dal.model;
+package com.unre.photo.biz.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Order {
+public class OrderDto {
     private Long id;
 
     private Long memberId;

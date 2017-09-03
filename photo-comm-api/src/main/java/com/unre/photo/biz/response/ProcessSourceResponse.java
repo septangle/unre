@@ -2,27 +2,27 @@ package com.unre.photo.biz.response;
 
 import java.util.List;
 
-import com.unre.photo.biz.dto.ProcessSourceDto;
+import com.unre.photo.biz.dto.PanoramaDto;
 
 @SuppressWarnings("serial")
 public class ProcessSourceResponse extends BaseResponse{
-	private ProcessSourceDto ProcessSourceDto;
+	private PanoramaDto ProcessSourceDto;
 
-	private List<ProcessSourceDto> ProcessSourceDtoList;
+	private List<PanoramaDto> ProcessSourceDtoList;
 
-	public ProcessSourceDto getProcessSourceDto() {
+	public PanoramaDto getProcessSourceDto() {
 		return ProcessSourceDto;
 	}
 
-	public void setProcessSourceDto(ProcessSourceDto ProcessSourceDto) {
+	public void setProcessSourceDto(PanoramaDto ProcessSourceDto) {
 		this.ProcessSourceDto = ProcessSourceDto;
 	}
 
-	public List<ProcessSourceDto> getProcessSourceDtoList() {
+	public List<PanoramaDto> getProcessSourceDtoList() {
 		return ProcessSourceDtoList;
 	}
 
-	public void setProcessSourceDtoList(List<ProcessSourceDto> ProcessSourceDtoList) {
+	public void setProcessSourceDtoList(List<PanoramaDto> ProcessSourceDtoList) {
 		this.ProcessSourceDtoList = ProcessSourceDtoList;
 	}
 

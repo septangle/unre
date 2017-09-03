@@ -3,18 +3,18 @@
 <mapper namespace="com.unre.photo.comm.dal.dao.WalkthroughMapper" >
   <resultMap id="BaseResultMap" type="com.unre.photo.comm.dal.model.Walkthrough" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="process_id" property="processId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
     <result column="image_path" property="imagePath" jdbcType="VARCHAR" />
     <result column="thumb_image_path" property="thumbImagePath" jdbcType="VARCHAR" />
-    <result column="delete_flag" property="deleteFlag" jdbcType="CHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_by" property="updateBy" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, process_id, image_path, thumb_image_path, delete_flag, create_by, create_time, 
-    update_by, update_time
+    id, order_id, image_path, thumb_image_path, is_deleted, create_by, create_time, update_by, 
+    update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -27,18 +27,18 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.unre.photo.comm.dal.model.Walkthrough" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_walkthrough (process_id, image_path, thumb_image_path, 
-      delete_flag, create_by, create_time, 
+    insert into tbl_walkthrough (order_id, image_path, thumb_image_path, 
+      is_deleted, create_by, create_time, 
       update_by, update_time)
-    values (#{processId,jdbcType=BIGINT}, #{imagePath,jdbcType=VARCHAR}, #{thumbImagePath,jdbcType=VARCHAR}, 
-      #{deleteFlag,jdbcType=CHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{orderId,jdbcType=BIGINT}, #{imagePath,jdbcType=VARCHAR}, #{thumbImagePath,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=CHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.Walkthrough" useGeneratedKeys="true" keyProperty="id" >
     insert into tbl_walkthrough
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="processId != null" >
-        process_id,
+      <if test="orderId != null" >
+        order_id,
       </if>
       <if test="imagePath != null" >
         image_path,
@@ -46,8 +46,8 @@
       <if test="thumbImagePath != null" >
         thumb_image_path,
       </if>
-      <if test="deleteFlag != null" >
-        delete_flag,
+      <if test="isDeleted != null" >
+        is_deleted,
       </if>
       <if test="createBy != null" >
         create_by,
@@ -63,8 +63,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="processId != null" >
-        #{processId,jdbcType=BIGINT},
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
       </if>
       <if test="imagePath != null" >
         #{imagePath,jdbcType=VARCHAR},
@@ -72,8 +72,8 @@
       <if test="thumbImagePath != null" >
         #{thumbImagePath,jdbcType=VARCHAR},
       </if>
-      <if test="deleteFlag != null" >
-        #{deleteFlag,jdbcType=CHAR},
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=CHAR},
       </if>
       <if test="createBy != null" >
         #{createBy,jdbcType=INTEGER},
@@ -92,8 +92,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.unre.photo.comm.dal.model.Walkthrough" >
     update tbl_walkthrough
     <set >
-      <if test="processId != null" >
-        process_id = #{processId,jdbcType=BIGINT},
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=BIGINT},
       </if>
       <if test="imagePath != null" >
         image_path = #{imagePath,jdbcType=VARCHAR},
@@ -101,8 +101,8 @@
       <if test="thumbImagePath != null" >
         thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR},
       </if>
-      <if test="deleteFlag != null" >
-        delete_flag = #{deleteFlag,jdbcType=CHAR},
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=CHAR},
       </if>
       <if test="createBy != null" >
         create_by = #{createBy,jdbcType=INTEGER},
@@ -121,10 +121,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Walkthrough" >
     update tbl_walkthrough
-    set process_id = #{processId,jdbcType=BIGINT},
+    set order_id = #{orderId,jdbcType=BIGINT},
       image_path = #{imagePath,jdbcType=VARCHAR},
       thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR},
-      delete_flag = #{deleteFlag,jdbcType=CHAR},
+      is_deleted = #{isDeleted,jdbcType=CHAR},
       create_by = #{createBy,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=INTEGER},

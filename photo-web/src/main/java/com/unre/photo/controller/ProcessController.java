@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.unre.photo.biz.dto.ProcessDto;
+import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IProcessFacade;
-import com.unre.photo.biz.request.ProcessRequest;
+import com.unre.photo.biz.request.OrderRequest;
 import com.unre.photo.biz.response.ProcessResponse;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.quartz.QuartzManager;
@@ -43,8 +43,8 @@ public class ProcessController extends BaseController<ProcessController> {
 		Long id = (Long) session.getAttribute("ID");
 		if(id == null) 
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
-		ProcessRequest request = new ProcessRequest();
-		ProcessDto scanDto =  new ProcessDto();
+		OrderRequest request = new OrderRequest();
+		OrderDto scanDto =  new OrderDto();
 		scanDto.setId(id);
 		request.setProcessDto(scanDto);
 		return processFacade.queryProcess(request);
@@ -76,7 +76,7 @@ public class ProcessController extends BaseController<ProcessController> {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "processDto.id", value = "ID", required = true, dataType = "long")})
 	@RequestMapping(value = "/deleteProcess.do", method = RequestMethod.POST)
-	public @ResponseBody ProcessResponse deleteProcess(@RequestBody ProcessRequest request,
+	public @ResponseBody ProcessResponse deleteProcess(@RequestBody OrderRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		return processFacade.deleteProcess(request);
 	}

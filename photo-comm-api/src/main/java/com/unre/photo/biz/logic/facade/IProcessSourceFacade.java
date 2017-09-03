@@ -1,6 +1,6 @@
 package com.unre.photo.biz.logic.facade;
 
-import com.unre.photo.biz.request.ProcessSourceRequest;
+import com.unre.photo.biz.request.PanoramaRequest;
 import com.unre.photo.biz.response.ProcessSourceResponse;
 
 public interface IProcessSourceFacade {
@@ -9,14 +9,14 @@ public interface IProcessSourceFacade {
 	 * @return
 	 * @throws Exception
 	 */
-	public ProcessSourceResponse queryProcessSource(ProcessSourceRequest request) throws Exception;
+	public ProcessSourceResponse queryProcessSource(PanoramaRequest request) throws Exception;
 
 	/**
 	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
-	public ProcessSourceResponse findProcessSourceById(ProcessSourceRequest request) throws Exception;
+	public ProcessSourceResponse findProcessSourceById(PanoramaRequest request) throws Exception;
 
 	/**
 	 * @param id
@@ -32,5 +32,5 @@ public interface IProcessSourceFacade {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public ProcessSourceResponse updateProcessSource(ProcessSourceRequest request) throws Exception;
+	public ProcessSourceResponse updateProcessSource(PanoramaRequest request) throws Exception;
 }

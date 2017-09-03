@@ -1,6 +1,6 @@
 package com.unre.photo.biz.logic.facade;
 
-import com.unre.photo.biz.request.ProcessRequest;
+import com.unre.photo.biz.request.OrderRequest;
 import com.unre.photo.biz.response.ProcessResponse;
 
 public interface IProcessFacade {
@@ -10,20 +10,20 @@ public interface IProcessFacade {
 	 * @return
 	 * @throws Exception
 	 */
-	public ProcessResponse queryProcess(ProcessRequest request) throws Exception;
+	public ProcessResponse queryProcess(OrderRequest request) throws Exception;
 
 	/**
 	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
-	public ProcessResponse findProcessById(ProcessRequest request) throws Exception;
+	public ProcessResponse findProcessById(OrderRequest request) throws Exception;
 
 	/**
 	 * @param id
 	 * @throws Exception
 	 */
-	public ProcessResponse deleteProcess(ProcessRequest request) throws Exception;
+	public ProcessResponse deleteProcess(OrderRequest request) throws Exception;
 
 	/**
 	 * 更新Process
@@ -33,6 +33,6 @@ public interface IProcessFacade {
 	 * @return ProcessResponse
 	 * @throws BusinessException
 	 */
-	public ProcessResponse updateProcess(ProcessRequest request) throws Exception;
+	public ProcessResponse updateProcess(OrderRequest request) throws Exception;
 
 }
