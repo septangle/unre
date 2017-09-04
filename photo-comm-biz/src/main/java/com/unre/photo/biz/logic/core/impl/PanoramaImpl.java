@@ -21,7 +21,7 @@ import com.unre.photo.util.ModelUtil;
 public class PanoramaImpl implements IPanoramaBiz {
 
 	@Autowired
-	private PanoramaMapper processSourceMapper;
+	private PanoramaMapper panoramaMapper;
 
 	private static final Log LOGGER = LogFactory.getLog(PanoramaImpl.class);
 
@@ -30,7 +30,7 @@ public class PanoramaImpl implements IPanoramaBiz {
 		PanoramaDto ProcessSourceDto = null;
 
 		try {
-			Panorama ProcessSource = processSourceMapper.selectByPrimaryKey(processSourceId);
+			Panorama ProcessSource = panoramaMapper.selectByPrimaryKey(processSourceId);
 			ProcessSourceDto = ModelUtil.modelToDto(ProcessSource, PanoramaDto.class);
 		} catch (Exception e) {
 
@@ -44,7 +44,7 @@ public class PanoramaImpl implements IPanoramaBiz {
 		List<PanoramaDto> MemberDtoList = new ArrayList<PanoramaDto>();
 		try {
 			Panorama ProcessSource = ModelUtil.dtoToModel(processSourceDto, Panorama.class);
-			List<Panorama> ProcessSourceList = processSourceMapper.selectBySelective(ProcessSource);
+			List<Panorama> ProcessSourceList = panoramaMapper.selectBySelective(ProcessSource);
 			if (!CollectionUtils.isEmpty(ProcessSourceList)) {
 				for (Panorama p : ProcessSourceList) {
 					MemberDtoList.add(ModelUtil.modelToDto(p, PanoramaDto.class));
@@ -61,7 +61,7 @@ public class PanoramaImpl implements IPanoramaBiz {
 	public PanoramaDto addProcessSource(PanoramaDto processSourceDto) throws BusinessException {
 		PanoramaDto photoRes = null;
 		Panorama processSource = ModelUtil.dtoToModel(processSourceDto, Panorama.class);
-		processSourceMapper.insertSelective(processSource);
+		panoramaMapper.insertSelective(processSource);
 		Long id =processSource.getId();
 		photoRes = findProcessSourceById(id);
 		return photoRes;
@@ -73,11 +73,12 @@ public class PanoramaImpl implements IPanoramaBiz {
 	}
 
 	@Override
-	public boolean updateProcessSource(PanoramaDto processSourceDto) throws BusinessException {
+	public boolean updatePanorama(PanoramaDto panoramaDto) throws BusinessException {
 		boolean flag = false;
 		try {
-			Panorama processSource = ModelUtil.dtoToModel(processSourceDto, Panorama.class);
-			int a = processSourceMapper.updateBySelective(processSource);
+			panoramaDto.setIsDeleted("1");
+			Panorama panorama = ModelUtil.dtoToModel(panoramaDto, Panorama.class);
+			int a = panoramaMapper.updateBySelective(panorama);
 			if (1 != a) { // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCANITEM_UPDATE_ERROR_CODE,
 						AppConstants.SCANITEM_UPDATE_ERROR_MESSAGE);

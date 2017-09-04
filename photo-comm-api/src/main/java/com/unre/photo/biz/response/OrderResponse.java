@@ -5,26 +5,30 @@ import java.util.List;
 import com.unre.photo.biz.dto.OrderDto;
 
 @SuppressWarnings("serial")
-public class ProcessResponse extends BaseResponse {
+public class OrderResponse extends BaseResponse {
 
-	private OrderDto ProcessDto;
+	private OrderDto processDto;
 
-	private List<OrderDto> ProcessDtoList;
+	private List<OrderDto> processDtoList;
+
+
 
 	public OrderDto getProcessDto() {
-		return ProcessDto;
+		return processDto;
 	}
 
-	public void setProcessDto(OrderDto ProcessDto) {
-		this.ProcessDto = ProcessDto;
+	public void setProcessDto(OrderDto processDto) {
+		this.processDto = processDto;
 	}
 
 	public List<OrderDto> getProcessDtoList() {
-		return ProcessDtoList;
+		return processDtoList;
 	}
 
-	public void setProcessDtoList(List<OrderDto> ProcessDtoList) {
-		this.ProcessDtoList = ProcessDtoList;
+	public void setProcessDtoList(List<OrderDto> processDtoList) {
+		this.processDtoList = processDtoList;
 	}
+
+
 
 }

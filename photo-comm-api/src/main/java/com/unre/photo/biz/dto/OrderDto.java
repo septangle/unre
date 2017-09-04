@@ -2,6 +2,8 @@ package com.unre.photo.biz.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 
 public class OrderDto {
     private Long id;
@@ -37,8 +39,19 @@ public class OrderDto {
     private Integer updateBy;
 
     private Date updateTime;
+    
+    private List<PanoramaDto> panorama;
 
-    public Long getId() {
+
+    public List<PanoramaDto> getPanorama() {
+		return panorama;
+	}
+
+	public void setPanorama(List<PanoramaDto> panorama) {
+		this.panorama = panorama;
+	}
+
+	public Long getId() {
         return id;
     }
 

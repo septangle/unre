@@ -173,11 +173,11 @@ public class MemberDto {
         this.status = status == null ? null : status.trim();
     }
 
-    public String getIsDeleted() {
+    public String getisDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(String isDeleted) {
+    public void setisDeleted(String isDeleted) {
         this.isDeleted = isDeleted == null ? null : isDeleted.trim();
     }
 

@@ -6,12 +6,14 @@ import com.unre.photo.biz.dto.PanoramaDto;
 public class PanoramaRequest extends BaseRequest{
 	private PanoramaDto panoramaDto;
 
-	public PanoramaDto getProcessSourceDto() {
+	public PanoramaDto getPanoramaDto() {
 		return panoramaDto;
 	}
 
-	public void setProcessSourceDto(PanoramaDto panoramaDto) {
+	public void setPanoramaDto(PanoramaDto panoramaDto) {
 		this.panoramaDto = panoramaDto;
 	}
+
+	
 	
 }

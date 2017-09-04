@@ -52,24 +52,7 @@ public class OrderImpl implements IOrderBiz {
 		return ProcessDto;
 	}
 
-	@Override
-	public List<OrderDto> queryOrder(OrderDto orderDto) throws BusinessException {
-		List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
-		try {
-			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
-			List<Order> orderList = orderMapper.selectBySelective(order);
-			if (!CollectionUtils.isEmpty(orderList)) {
-				for (Order p : orderList) {
-					orderDtoList.add(ModelUtil.modelToDto(p, OrderDto.class));
-				}
-			}
-		} catch (Exception e) {
-			LOGGER.error(AppConstants.SCAN_QUERY_ERROR_CODE, e);
-			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
-		}
-		return orderDtoList;
-	}
-
+	
 	@SuppressWarnings("unused")
 	@Override
 	public OrderDto addOrder(OrderDto processDto) throws BusinessException {
@@ -90,6 +73,7 @@ public class OrderImpl implements IOrderBiz {
 	public boolean updateOrder(OrderDto processDto) throws BusinessException {
 		boolean flg = false;
 		try {
+			processDto.setIsDeleted("1");
 			Order Process = ModelUtil.dtoToModel(processDto, Order.class);
 			int number = orderMapper.updateBySelective(Process);
 			if (number == 0) { // flag == 1 操作成功,否则操作失败
@@ -214,4 +198,25 @@ public class OrderImpl implements IOrderBiz {
 		}
 
 	}
+
+	@Override
+	public List<OrderDto> querySelStatus(OrderDto orderDto) throws BusinessException {
+		List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
+		try {
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+			List<Order> orderList = orderMapper.SelStatus(order);
+			if (!CollectionUtils.isEmpty(orderList)) {
+				for (Order p : orderList) {
+					orderDtoList.add(ModelUtil.modelToDto(p, OrderDto.class));
+				}
+			}
+		} catch (Exception e) {
+		    e.printStackTrace();
+			LOGGER.error(AppConstants.SCAN_QUERY_ERROR_CODE, e);
+			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
+		}
+		return orderDtoList;
+	}
+	
+
 }

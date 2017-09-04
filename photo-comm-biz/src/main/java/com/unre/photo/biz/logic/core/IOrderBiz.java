@@ -22,15 +22,6 @@ public interface IOrderBiz {
 	 */
 	public OrderDto findOrderById(Long orderId) throws BusinessException;
 
-	/**
-	 * 查询满足条件的Process
-	 * 
-	 * @param OrderDto --Dto
-	 * @return List
-	 * 
-	 * @throws BusinessException
-	 */
-	public List<OrderDto> queryOrder(OrderDto orderDto) throws BusinessException;
 
 	/**
 	 * 新增Process
@@ -88,5 +79,14 @@ public interface IOrderBiz {
 	 * 
 	 */
 	public void updateStatus();
+	
+	/**
+	 * 查询当前用户场景
+	 * 
+	 * @param memberId
+	 * 
+	 * @return list
+	 */
+	public List<OrderDto> querySelStatus(OrderDto orderDto) throws BusinessException;
 
 }

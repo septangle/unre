@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.logic.core.IOrderBiz;
-import com.unre.photo.biz.logic.facade.IProcessFacade;
+import com.unre.photo.biz.logic.facade.IOrderFacade;
 import com.unre.photo.biz.request.OrderRequest;
-import com.unre.photo.biz.response.ProcessResponse;
+import com.unre.photo.biz.response.OrderResponse;
 import com.unre.photo.comm.AppConstants;
 
 /**
@@ -17,23 +17,17 @@ import com.unre.photo.comm.AppConstants;
  *
  */
 @Service
-public class ProcessFacadeImpl implements IProcessFacade {
+public class IOrderFacadeImpl implements IOrderFacade {
 
 	@Autowired
 	private IOrderBiz processBiz;
 
-	@Override
-	public ProcessResponse queryProcess(OrderRequest request) throws Exception {
-		List<OrderDto> ProcessDtoList = processBiz.queryOrder(request.getProcessDto());
-		ProcessResponse response = new ProcessResponse();
-		response.setProcessDtoList(ProcessDtoList);
-		return response;
-	}
+
 
 	@Override
-	public ProcessResponse findProcessById(OrderRequest request) throws Exception {
-		ProcessResponse response = new ProcessResponse();
-		OrderDto ProcessParm = request.getProcessDto();
+	public OrderResponse findProcessById(OrderRequest request) throws Exception {
+		OrderResponse response = new OrderResponse();
+		OrderDto ProcessParm = request.getOrderDto();
 		if (ProcessParm != null) {
 			OrderDto ProcessDto = processBiz.findOrderById(ProcessParm.getId());
 			response.setProcessDto(ProcessDto);
@@ -42,21 +36,30 @@ public class ProcessFacadeImpl implements IProcessFacade {
 	}
 
 	@Override
-	public ProcessResponse deleteProcess(OrderRequest request) throws Exception {
-		ProcessResponse response = new ProcessResponse();
-		boolean flag= processBiz.deleteProcess(request.getProcessDto().getId());
+	public OrderResponse deleteProcess(OrderRequest request) throws Exception {
+		OrderResponse response = new OrderResponse();
+		boolean flag= processBiz.updateOrder(request.getOrderDto());
 		String code = flag? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
 		response.setCode(code);
 		return response;		
 	}
 
 	@Override
-	public ProcessResponse updateProcess(OrderRequest request) throws Exception {
-		ProcessResponse response = new ProcessResponse();
-		OrderDto ProcessDto = request.getProcessDto();
-		boolean flag = processBiz.updateOrder(ProcessDto);
+	public OrderResponse updateProcess(OrderRequest request) throws Exception {
+		OrderResponse response = new OrderResponse();
+		OrderDto orderDto = request.getOrderDto();
+		boolean flag = processBiz.updateOrder(orderDto);
 		String code = flag? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
 		response.setCode(code);
+		return response;
+	}
+
+	//查询当前用户场景
+	@Override
+	public OrderResponse queryStatus(OrderRequest request) throws Exception {
+		List<OrderDto> processDtoList = processBiz.querySelStatus(request.getOrderDto());
+		OrderResponse response = new OrderResponse();
+		response.setProcessDtoList(processDtoList);
 		return response;
 	}
 

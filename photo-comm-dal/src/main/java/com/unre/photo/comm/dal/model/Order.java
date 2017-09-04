@@ -2,175 +2,187 @@ package com.unre.photo.comm.dal.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Order {
-    private Long id;
+	private Long id;
 
-    private Long memberId;
+	private Long memberId;
 
-    private BigDecimal totalAmount;
+	private BigDecimal totalAmount;
 
-    private BigDecimal actualAmount;
+	private BigDecimal actualAmount;
 
-    private Long goodsId;
+	private Long goodsId;
 
-    private BigDecimal goodsActualPrice;
+	private BigDecimal goodsActualPrice;
 
-    private Integer goodsNum;
+	private Integer goodsNum;
 
-    private String benacoScanId;
+	private String benacoScanId;
 
-    private String desc;
+	private String desc;
 
-    private String type;
+	private String type;
 
-    private String status;
+	private String status;
 
-    private String isDeleted;
+	private String isDeleted;
 
-    private Long version;
+	private Long version;
 
-    private Integer createBy;
+	private Integer createBy;
 
-    private Date createTime;
+	private Date createTime;
 
-    private Integer updateBy;
+	private Integer updateBy;
 
-    private Date updateTime;
+	private Date updateTime;
 
-    public Long getId() {
-        return id;
-    }
+	private List<Panorama> panorama;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Long getMemberId() {
-        return memberId;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
+	public Long getMemberId() {
+		return memberId;
+	}
 
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
 
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
+	public BigDecimal getTotalAmount() {
+		return totalAmount;
+	}
 
-    public BigDecimal getActualAmount() {
-        return actualAmount;
-    }
+	public void setTotalAmount(BigDecimal totalAmount) {
+		this.totalAmount = totalAmount;
+	}
 
-    public void setActualAmount(BigDecimal actualAmount) {
-        this.actualAmount = actualAmount;
-    }
+	public BigDecimal getActualAmount() {
+		return actualAmount;
+	}
 
-    public Long getGoodsId() {
-        return goodsId;
-    }
+	public void setActualAmount(BigDecimal actualAmount) {
+		this.actualAmount = actualAmount;
+	}
 
-    public void setGoodsId(Long goodsId) {
-        this.goodsId = goodsId;
-    }
+	public Long getGoodsId() {
+		return goodsId;
+	}
 
-    public BigDecimal getGoodsActualPrice() {
-        return goodsActualPrice;
-    }
+	public void setGoodsId(Long goodsId) {
+		this.goodsId = goodsId;
+	}
 
-    public void setGoodsActualPrice(BigDecimal goodsActualPrice) {
-        this.goodsActualPrice = goodsActualPrice;
-    }
+	public BigDecimal getGoodsActualPrice() {
+		return goodsActualPrice;
+	}
 
-    public Integer getGoodsNum() {
-        return goodsNum;
-    }
+	public void setGoodsActualPrice(BigDecimal goodsActualPrice) {
+		this.goodsActualPrice = goodsActualPrice;
+	}
 
-    public void setGoodsNum(Integer goodsNum) {
-        this.goodsNum = goodsNum;
-    }
+	public Integer getGoodsNum() {
+		return goodsNum;
+	}
 
-    public String getBenacoScanId() {
-        return benacoScanId;
-    }
+	public void setGoodsNum(Integer goodsNum) {
+		this.goodsNum = goodsNum;
+	}
 
-    public void setBenacoScanId(String benacoScanId) {
-        this.benacoScanId = benacoScanId == null ? null : benacoScanId.trim();
-    }
+	public String getBenacoScanId() {
+		return benacoScanId;
+	}
 
-    public String getDesc() {
-        return desc;
-    }
+	public void setBenacoScanId(String benacoScanId) {
+		this.benacoScanId = benacoScanId == null ? null : benacoScanId.trim();
+	}
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
-    }
+	public String getDesc() {
+		return desc;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public void setDesc(String desc) {
+		this.desc = desc == null ? null : desc.trim();
+	}
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public void setType(String type) {
+		this.type = type == null ? null : type.trim();
+	}
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public String getIsDeleted() {
-        return isDeleted;
-    }
+	public void setStatus(String status) {
+		this.status = status == null ? null : status.trim();
+	}
 
-    public void setIsDeleted(String isDeleted) {
-        this.isDeleted = isDeleted == null ? null : isDeleted.trim();
-    }
+	public String getIsDeleted() {
+		return isDeleted;
+	}
 
-    public Long getVersion() {
-        return version;
-    }
+	public void setIsDeleted(String isDeleted) {
+		this.isDeleted = isDeleted == null ? null : isDeleted.trim();
+	}
 
-    public void setVersion(Long version) {
-        this.version = version;
-    }
+	public Long getVersion() {
+		return version;
+	}
 
-    public Integer getCreateBy() {
-        return createBy;
-    }
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 
-    public void setCreateBy(Integer createBy) {
-        this.createBy = createBy;
-    }
+	public Integer getCreateBy() {
+		return createBy;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setCreateBy(Integer createBy) {
+		this.createBy = createBy;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public Integer getUpdateBy() {
-        return updateBy;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public void setUpdateBy(Integer updateBy) {
-        this.updateBy = updateBy;
-    }
+	public Integer getUpdateBy() {
+		return updateBy;
+	}
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+	public void setUpdateBy(Integer updateBy) {
+		this.updateBy = updateBy;
+	}
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public List<Panorama> getPanorama() {
+		return panorama;
+	}
+
+	public void setPanorama(List<Panorama> panorama) {
+		this.panorama = panorama;
+	}
+
 }

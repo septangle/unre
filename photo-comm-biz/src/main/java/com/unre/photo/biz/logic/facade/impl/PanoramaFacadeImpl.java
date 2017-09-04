@@ -6,46 +6,46 @@ import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.dto.PanoramaDto;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
-import com.unre.photo.biz.logic.facade.IProcessSourceFacade;
+import com.unre.photo.biz.logic.facade.IPanoramaFacade;
 import com.unre.photo.biz.request.PanoramaRequest;
-import com.unre.photo.biz.response.ProcessSourceResponse;
+import com.unre.photo.biz.response.PanoramaResponse;
 import com.unre.photo.comm.AppConstants;
 
-@Service("ProcessSourceFacade")
-public class ProcessSourceFacadeImpl implements IProcessSourceFacade {
+@Service("PanoramaFacade")
+public class PanoramaFacadeImpl implements IPanoramaFacade {
 
-	private IPanoramaBiz processSourceBiz;
+	private IPanoramaBiz panoramaBiz;
 
 	@Override
-	public ProcessSourceResponse queryProcessSource(PanoramaRequest request) throws Exception {
-		List<PanoramaDto> processItemList = processSourceBiz.queryProcessSource(request.getProcessSourceDto());
-		ProcessSourceResponse response = new ProcessSourceResponse();
+	public PanoramaResponse queryProcessSource(PanoramaRequest request) throws Exception {
+		List<PanoramaDto> processItemList = panoramaBiz.queryProcessSource(request.getPanoramaDto());
+		PanoramaResponse response = new PanoramaResponse();
 		response.setProcessSourceDtoList(processItemList);
 		;
 		return response;
 	}
 
 	@Override
-	public ProcessSourceResponse findProcessSourceById(PanoramaRequest request) throws Exception {
-		ProcessSourceResponse response = new ProcessSourceResponse();
-		PanoramaDto processItemParm = request.getProcessSourceDto();
+	public PanoramaResponse findProcessSourceById(PanoramaRequest request) throws Exception {
+		PanoramaResponse response = new PanoramaResponse();
+		PanoramaDto processItemParm = request.getPanoramaDto();
 		if (processItemParm != null) {
-			PanoramaDto ProcessSourceDto = processSourceBiz.findProcessSourceById(processItemParm.getId());
+			PanoramaDto ProcessSourceDto = panoramaBiz.findProcessSourceById(processItemParm.getId());
 			response.setProcessSourceDto(ProcessSourceDto);
 		}
 		return response;
 	}
 
 	@Override
-	public ProcessSourceResponse deleteProcessSource(Long id) throws Exception {
+	public PanoramaResponse deleteProcessSource(Long id) throws Exception {
 		return null;
 
 	}
 
 	@Override
-	public ProcessSourceResponse updateProcessSource(PanoramaRequest request) throws Exception {
-		ProcessSourceResponse response = new ProcessSourceResponse();
-		boolean flag = processSourceBiz.updateProcessSource(request.getProcessSourceDto());
+	public PanoramaResponse updatePanorama(PanoramaRequest request) throws Exception {
+		PanoramaResponse response = new PanoramaResponse();
+		boolean flag = panoramaBiz.updatePanorama(request.getPanoramaDto());
 		String code = flag ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
 		response.setCode(code);
 		return response;

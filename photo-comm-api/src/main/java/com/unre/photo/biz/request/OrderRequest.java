@@ -5,14 +5,16 @@ import com.unre.photo.biz.dto.OrderDto;
 @SuppressWarnings("serial")
 public class OrderRequest extends BaseRequest {
 
-	private OrderDto ProcessDto;
+	private OrderDto orderDto;
 
-	public OrderDto getProcessDto() {
-		return ProcessDto;
+	public OrderDto getOrderDto() {
+		return orderDto;
 	}
 
-	public void setProcessDto(OrderDto ProcessDto) {
-		this.ProcessDto = ProcessDto;
+	public void setOrderDto(OrderDto orderDto) {
+		this.orderDto = orderDto;
 	}
+
+	
 
 }

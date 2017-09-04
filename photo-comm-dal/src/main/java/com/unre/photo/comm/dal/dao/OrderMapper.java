@@ -26,4 +26,7 @@ public interface OrderMapper {
     List<Order> selectUnclosedOrder();
     
     int updateStatus(Order record);
+    
+    //查询当前用户场景
+    List<Order> SelStatus(Order record);
 }

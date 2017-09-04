@@ -57,6 +57,6 @@ public interface IPanoramaBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public boolean updateProcessSource(PanoramaDto processSourceDto) throws BusinessException;
+	public boolean updatePanorama(PanoramaDto panoramaDto) throws BusinessException;
 	
 }

@@ -1,229 +1,283 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.unre.photo.comm.dal.dao.OrderMapper" >
-  <resultMap id="BaseResultMap" type="com.unre.photo.comm.dal.model.Order" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="member_id" property="memberId" jdbcType="BIGINT" />
-    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
-    <result column="actual_amount" property="actualAmount" jdbcType="DECIMAL" />
-    <result column="goods_id" property="goodsId" jdbcType="BIGINT" />
-    <result column="goods_actual_price" property="goodsActualPrice" jdbcType="DECIMAL" />
-    <result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
-    <result column="benaco_scan_id" property="benacoScanId" jdbcType="VARCHAR" />
-    <result column="desc" property="desc" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
-    <result column="status" property="status" jdbcType="CHAR" />
-    <result column="is_deleted" property="isDeleted" jdbcType="CHAR" />
-    <result column="version" property="version" jdbcType="BIGINT" />
-    <result column="create_by" property="createBy" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, member_id, total_amount, actual_amount, goods_id, goods_actual_price, goods_num, 
-    benaco_scan_id, desc, type, status, is_deleted, version, create_by, create_time, 
-    update_by, update_time
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_order
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from tbl_order
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.unre.photo.comm.dal.model.Order" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_order (member_id, total_amount, actual_amount, 
-      goods_id, goods_actual_price, goods_num, 
-      benaco_scan_id, desc, type, 
-      status, is_deleted, version, 
-      create_by, create_time, update_by, 
-      update_time)
-    values (#{memberId,jdbcType=BIGINT}, #{totalAmount,jdbcType=DECIMAL}, #{actualAmount,jdbcType=DECIMAL}, 
-      #{goodsId,jdbcType=BIGINT}, #{goodsActualPrice,jdbcType=DECIMAL}, #{goodsNum,jdbcType=INTEGER}, 
-      #{benacoScanId,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
-      #{status,jdbcType=CHAR}, #{isDeleted,jdbcType=CHAR}, #{version,jdbcType=BIGINT}, 
-      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.Order" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_order
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="memberId != null" >
-        member_id,
-      </if>
-      <if test="totalAmount != null" >
-        total_amount,
-      </if>
-      <if test="actualAmount != null" >
-        actual_amount,
-      </if>
-      <if test="goodsId != null" >
-        goods_id,
-      </if>
-      <if test="goodsActualPrice != null" >
-        goods_actual_price,
-      </if>
-      <if test="goodsNum != null" >
-        goods_num,
-      </if>
-      <if test="benacoScanId != null" >
-        benaco_scan_id,
-      </if>
-      <if test="desc != null" >
-        desc,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted,
-      </if>
-      <if test="version != null" >
-        version,
-      </if>
-      <if test="createBy != null" >
-        create_by,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="updateBy != null" >
-        update_by,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="memberId != null" >
-        #{memberId,jdbcType=BIGINT},
-      </if>
-      <if test="totalAmount != null" >
-        #{totalAmount,jdbcType=DECIMAL},
-      </if>
-      <if test="actualAmount != null" >
-        #{actualAmount,jdbcType=DECIMAL},
-      </if>
-      <if test="goodsId != null" >
-        #{goodsId,jdbcType=BIGINT},
-      </if>
-      <if test="goodsActualPrice != null" >
-        #{goodsActualPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="goodsNum != null" >
-        #{goodsNum,jdbcType=INTEGER},
-      </if>
-      <if test="benacoScanId != null" >
-        #{benacoScanId,jdbcType=VARCHAR},
-      </if>
-      <if test="desc != null" >
-        #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null" >
-        #{type,jdbcType=CHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=CHAR},
-      </if>
-      <if test="isDeleted != null" >
-        #{isDeleted,jdbcType=CHAR},
-      </if>
-      <if test="version != null" >
-        #{version,jdbcType=BIGINT},
-      </if>
-      <if test="createBy != null" >
-        #{createBy,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateBy != null" >
-        #{updateBy,jdbcType=INTEGER},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.unre.photo.comm.dal.model.Order" >
-    update tbl_order
-    <set >
-      <if test="memberId != null" >
-        member_id = #{memberId,jdbcType=BIGINT},
-      </if>
-      <if test="totalAmount != null" >
-        total_amount = #{totalAmount,jdbcType=DECIMAL},
-      </if>
-      <if test="actualAmount != null" >
-        actual_amount = #{actualAmount,jdbcType=DECIMAL},
-      </if>
-      <if test="goodsId != null" >
-        goods_id = #{goodsId,jdbcType=BIGINT},
-      </if>
-      <if test="goodsActualPrice != null" >
-        goods_actual_price = #{goodsActualPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="goodsNum != null" >
-        goods_num = #{goodsNum,jdbcType=INTEGER},
-      </if>
-      <if test="benacoScanId != null" >
-        benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR},
-      </if>
-      <if test="desc != null" >
-        desc = #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=CHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=CHAR},
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted = #{isDeleted,jdbcType=CHAR},
-      </if>
-      <if test="version != null" >
-        version = #{version,jdbcType=BIGINT},
-      </if>
-      <if test="createBy != null" >
-        create_by = #{createBy,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateBy != null" >
-        update_by = #{updateBy,jdbcType=INTEGER},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Order" >
-    update tbl_order
-    set member_id = #{memberId,jdbcType=BIGINT},
-      total_amount = #{totalAmount,jdbcType=DECIMAL},
-      actual_amount = #{actualAmount,jdbcType=DECIMAL},
-      goods_id = #{goodsId,jdbcType=BIGINT},
-      goods_actual_price = #{goodsActualPrice,jdbcType=DECIMAL},
-      goods_num = #{goodsNum,jdbcType=INTEGER},
-      benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR},
-      desc = #{desc,jdbcType=VARCHAR},
-      type = #{type,jdbcType=CHAR},
-      status = #{status,jdbcType=CHAR},
-      is_deleted = #{isDeleted,jdbcType=CHAR},
-      version = #{version,jdbcType=BIGINT},
-      create_by = #{createBy,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_by = #{updateBy,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+<mapper namespace="com.unre.photo.comm.dal.dao.OrderMapper">
+	<resultMap id="BaseResultMap" type="com.unre.photo.comm.dal.model.Order">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="member_id" property="memberId" jdbcType="BIGINT" />
+		<result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+		<result column="actual_amount" property="actualAmount"
+			jdbcType="DECIMAL" />
+		<result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+		<result column="goods_actual_price" property="goodsActualPrice"
+			jdbcType="DECIMAL" />
+		<result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
+		<result column="benaco_scan_id" property="benacoScanId"
+			jdbcType="VARCHAR" />
+		<result column="desc" property="desc" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="CHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="CHAR" />
+		<result column="version" property="version" jdbcType="BIGINT" />
+		<result column="create_by" property="createBy" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<!-- 一对多查询关联 -->
+	<resultMap type="com.unre.photo.comm.dal.model.Order" id="slist">
+		<!-- 实体类属性对应数据库的主键字段，不然主键会查不到 -->
+		<id property="id" column="id" />
+		<result column="member_id" property="memberId" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<!-- 用collection标签 ,也是实体类属性要对应数据库字段 -->
+		<collection property="panorama"
+			ofType="com.unre.photo.comm.dal.model.Panorama">
+			<id property="orderId" column="order_id" />
+			<result property="imagePath" column="image_path" />
+			<result property="thumbImagePath" column="thumb_image_path" />
+		</collection>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, member_id, total_amount, actual_amount, goods_id,
+		goods_actual_price,
+		goods_num,
+		benaco_scan_id, desc, type, status,
+		is_deleted, version, create_by, create_time,
+		update_by, update_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_order
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		tbl_order
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.unre.photo.comm.dal.model.Order"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_order (member_id,
+		total_amount, actual_amount,
+		goods_id, goods_actual_price, goods_num,
+		benaco_scan_id, desc, type,
+		status, is_deleted, version,
+		create_by,
+		create_time, update_by,
+		update_time)
+		values
+		(#{memberId,jdbcType=BIGINT}, #{totalAmount,jdbcType=DECIMAL},
+		#{actualAmount,jdbcType=DECIMAL},
+		#{goodsId,jdbcType=BIGINT},
+		#{goodsActualPrice,jdbcType=DECIMAL}, #{goodsNum,jdbcType=INTEGER},
+		#{benacoScanId,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR},
+		#{type,jdbcType=CHAR},
+		#{status,jdbcType=CHAR},
+		#{isDeleted,jdbcType=CHAR}, #{version,jdbcType=BIGINT},
+		#{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateBy,jdbcType=INTEGER},
+		#{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.Order"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="memberId != null">
+				member_id,
+			</if>
+			<if test="totalAmount != null">
+				total_amount,
+			</if>
+			<if test="actualAmount != null">
+				actual_amount,
+			</if>
+			<if test="goodsId != null">
+				goods_id,
+			</if>
+			<if test="goodsActualPrice != null">
+				goods_actual_price,
+			</if>
+			<if test="goodsNum != null">
+				goods_num,
+			</if>
+			<if test="benacoScanId != null">
+				benaco_scan_id,
+			</if>
+			<if test="desc != null">
+				desc,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+			<if test="version != null">
+				version,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="memberId != null">
+				#{memberId,jdbcType=BIGINT},
+			</if>
+			<if test="totalAmount != null">
+				#{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="actualAmount != null">
+				#{actualAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsId != null">
+				#{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsActualPrice != null">
+				#{goodsActualPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsNum != null">
+				#{goodsNum,jdbcType=INTEGER},
+			</if>
+			<if test="benacoScanId != null">
+				#{benacoScanId,jdbcType=VARCHAR},
+			</if>
+			<if test="desc != null">
+				#{desc,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=CHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=CHAR},
+			</if>
+			<if test="version != null">
+				#{version,jdbcType=BIGINT},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.unre.photo.comm.dal.model.Order">
+		update tbl_order
+		<set>
+			<if test="memberId != null">
+				member_id = #{memberId,jdbcType=BIGINT},
+			</if>
+			<if test="totalAmount != null">
+				total_amount = #{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="actualAmount != null">
+				actual_amount = #{actualAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsActualPrice != null">
+				goods_actual_price =
+				#{goodsActualPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsNum != null">
+				goods_num = #{goodsNum,jdbcType=INTEGER},
+			</if>
+			<if test="benacoScanId != null">
+				benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR},
+			</if>
+			<if test="desc != null">
+				desc = #{desc,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=CHAR},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=CHAR},
+			</if>
+			<if test="version != null">
+				version = #{version,jdbcType=BIGINT},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Order">
+		update tbl_order
+		set member_id = #{memberId,jdbcType=BIGINT},
+		total_amount =
+		#{totalAmount,jdbcType=DECIMAL},
+		actual_amount =
+		#{actualAmount,jdbcType=DECIMAL},
+		goods_id =
+		#{goodsId,jdbcType=BIGINT},
+		goods_actual_price =
+		#{goodsActualPrice,jdbcType=DECIMAL},
+		goods_num =
+		#{goodsNum,jdbcType=INTEGER},
+		benaco_scan_id =
+		#{benacoScanId,jdbcType=VARCHAR},
+		desc = #{desc,jdbcType=VARCHAR},
+		type
+		= #{type,jdbcType=CHAR},
+		status = #{status,jdbcType=CHAR},
+		is_deleted =
+		#{isDeleted,jdbcType=CHAR},
+		version = #{version,jdbcType=BIGINT},
+		create_by = #{createBy,jdbcType=INTEGER},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_by =
+		#{updateBy,jdbcType=INTEGER},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- 查询当前用户所有场景 -->
+	<select id="SelStatus" parameterType="com.unre.photo.comm.dal.model.Order"
+		resultMap="slist">
+		select * from
+		tbl_order a left join tbl_panorama b on a.id=b.order_id where
+		a.member_id=#{member_id,jdbcType=BIGINT}
+	</select>
 </mapper>

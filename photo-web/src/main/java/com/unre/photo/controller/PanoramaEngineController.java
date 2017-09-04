@@ -21,7 +21,7 @@ import com.unre.photo.biz.logic.facade.IPanoramaEngineFacade;
 import com.unre.photo.biz.request.PanoramaEngineRequest;
 import com.unre.photo.biz.request.MemberRequest;
 import com.unre.photo.biz.response.PanoramaEngineResponse;
-import com.unre.photo.biz.response.ProcessSourceResponse;
+import com.unre.photo.biz.response.PanoramaResponse;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.PhotoUrl;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
@@ -37,17 +37,6 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 
 	@Autowired
 	private PhotoUrl photoUrl;
-
-	/*@ApiOperation(value = "创建scanID", httpMethod = "POST", response = ProcessSourceResponse.class)
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string")})
-	@RequestMapping(value = "/createScan.do", method = RequestMethod.POST)
-	public @ResponseBody PanoramaEngineResponse createScan(@RequestBody PanoramaEngineRequest request,
-			HttpServletRequest servletRequest) throws Exception {
-		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
-		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
-		return panoramaEngineFacade.createScan(request);
-	}*/
 
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string"),

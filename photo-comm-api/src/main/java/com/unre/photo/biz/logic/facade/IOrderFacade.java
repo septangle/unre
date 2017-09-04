@@ -1,29 +1,23 @@
 package com.unre.photo.biz.logic.facade;
 
 import com.unre.photo.biz.request.OrderRequest;
-import com.unre.photo.biz.response.ProcessResponse;
+import com.unre.photo.biz.response.OrderResponse;
 
-public interface IProcessFacade {
+public interface IOrderFacade {
 
-	/**
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	public ProcessResponse queryProcess(OrderRequest request) throws Exception;
 
 	/**
 	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
-	public ProcessResponse findProcessById(OrderRequest request) throws Exception;
+	public OrderResponse findProcessById(OrderRequest request) throws Exception;
 
 	/**
 	 * @param id
 	 * @throws Exception
 	 */
-	public ProcessResponse deleteProcess(OrderRequest request) throws Exception;
+	public OrderResponse deleteProcess(OrderRequest request) throws Exception;
 
 	/**
 	 * 更新Process
@@ -33,6 +27,15 @@ public interface IProcessFacade {
 	 * @return ProcessResponse
 	 * @throws BusinessException
 	 */
-	public ProcessResponse updateProcess(OrderRequest request) throws Exception;
+	public OrderResponse updateProcess(OrderRequest request) throws Exception;
+	
+	/**
+	 * 查询当前用户场景
+	 * @param memberid
+	 * 
+	 * @return list
+	 */
+	public OrderResponse queryStatus(OrderRequest request) throws Exception;
+	
 
 }

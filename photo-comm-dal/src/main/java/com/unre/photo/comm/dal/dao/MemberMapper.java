@@ -19,7 +19,12 @@ public interface MemberMapper {
     
     List<Member> selectBySelective(Member record);
     
+    
+    //登录
+    Member queryLoginUsers(Member record);
+    
+    //验证邮箱和手机号是否唯一
     List<Member> selectByTelOrMail(Member record);
     
-    Member queryLoginUsers(Member record);
+   
 }

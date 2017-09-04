@@ -5,7 +5,7 @@ import java.util.List;
 import com.unre.photo.biz.dto.PanoramaDto;
 
 @SuppressWarnings("serial")
-public class ProcessSourceResponse extends BaseResponse{
+public class PanoramaResponse extends BaseResponse{
 	private PanoramaDto ProcessSourceDto;
 
 	private List<PanoramaDto> ProcessSourceDtoList;

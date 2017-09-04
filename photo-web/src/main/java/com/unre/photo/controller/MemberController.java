@@ -29,25 +29,8 @@ public class MemberController extends BaseController<MemberController> {
 
 	@Autowired
 	private IMemberFacade memberFacade;
-
-/*	@ApiOperation(value = "查询会员", httpMethod = "POST", response = MemberResponse.class)
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "MemberDto.memberName", value = "会员名称", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "MemberDto.tel", value = "联系电话", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "MemberDto.password", value = "密码", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "MemberDto.company", value = "公司名称", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "MemberDto.province", value = "公司所在省份", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "MemberDto.city", value = "公司所在城市", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "MemberDto.adress", value = "地址", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "MemberDto.industry", value = "行业", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "MemberDto.contact", value = "联系人", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "MemberDto.mail", value = "邮箱", required = false, dataType = "string") })
-	@RequestMapping(value = "/queryMember.do", method = RequestMethod.POST)
-	public @ResponseBody MemberResponse queryMember(@RequestBody MemberRequest request,
-			HttpServletRequest servletRequest) throws Exception {
-		return memberFacade.queryMember(request);
-	}*/
     
+	//查询当前会员
 	@ApiOperation(value = "查询当前会员", httpMethod = "GET", response = MemberResponse.class)
 	@RequestMapping(value = "/getCurrMember", method = RequestMethod.GET)
 	public @ResponseBody MemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
@@ -61,17 +44,9 @@ public class MemberController extends BaseController<MemberController> {
 		request.setMemberDto(memberDto);
 		return memberFacade.findMemberById(request);
 	}
-
-	/*	@ApiOperation(value = "通过会员ID删除会员", httpMethod = "POST", response = MemberResponse.class)
-		@ApiImplicitParams({
-				@ApiImplicitParam(name = "MemberDto.id", value = "会员系统主键", required = true, dataType = "long") })
-		@RequestMapping(value = "/deleteMember.do", method = RequestMethod.POST)
-		public @ResponseBody MemberResponse deleteMember(Long id) throws Exception {
-			// TODO
-			return null;
-		}*/
-
-	@ApiOperation(value = "登陆", httpMethod = "POST", response = MemberResponse.class)
+	
+    //登录
+	@ApiOperation(value = "登录", httpMethod = "POST", response = MemberResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "memberDto.tel", value = "联系电话", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "memberDto.password", value = "密码", required = true, dataType = "string") })
@@ -111,7 +86,8 @@ public class MemberController extends BaseController<MemberController> {
 			@ApiImplicitParam(name = "memberDto.adress", value = "地址", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "memberDto.industry", value = "行业", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "memberDto.contact", value = "联系人", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "memberDto.mail", value = "邮箱", required = true, dataType = "string") })
+			@ApiImplicitParam(name = "memberDto.mail", value = "邮箱", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "memberDto.setType", value = "设置类型", required = true, dataType = "string")})
 	@RequestMapping(value = "/register.do", method = RequestMethod.POST)
 	public @ResponseBody MemberResponse register(@RequestBody MemberRequest request,
 			HttpServletRequest servletRequest) throws Exception {
@@ -127,8 +103,8 @@ public class MemberController extends BaseController<MemberController> {
 
 	}
 
-	//登出
-	@ApiOperation(value = "登出", httpMethod = "POST", response = MemberResponse.class)
+	//注销
+	@ApiOperation(value = "注销", httpMethod = "POST", response = MemberResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "memberDto.memberName", value = "memberName", required = false, dataType = "long"), })
 	@RequestMapping(value = "/logout.do", method = RequestMethod.POST)

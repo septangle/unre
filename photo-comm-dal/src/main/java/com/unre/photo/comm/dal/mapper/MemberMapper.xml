@@ -272,4 +272,31 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+    <!--登录 -->
+	<select id="queryLoginUsers" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Member">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_member
+		where tel = #{tel,jdbcType=VARCHAR}
+		and password =
+		#{password,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 验证手机号、邮箱 -->
+	<select id="selectByTelOrMail" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Member">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_member
+		where 1=1
+		<if test="tel != null">
+			and tel = #{tel,jdbcType=VARCHAR}
+		</if>
+
+		<if test="mail != null">
+			or mail = #{mail,jdbcType=VARCHAR}
+		</if>
+	</select>
+
 </mapper>
