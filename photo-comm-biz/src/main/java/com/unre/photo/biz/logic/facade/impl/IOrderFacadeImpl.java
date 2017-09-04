@@ -35,14 +35,7 @@ public class IOrderFacadeImpl implements IOrderFacade {
 		return response;
 	}
 
-	@Override
-	public OrderResponse deleteProcess(OrderRequest request) throws Exception {
-		OrderResponse response = new OrderResponse();
-		boolean flag= processBiz.updateOrder(request.getOrderDto());
-		String code = flag? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
-		response.setCode(code);
-		return response;		
-	}
+
 
 	@Override
 	public OrderResponse updateProcess(OrderRequest request) throws Exception {

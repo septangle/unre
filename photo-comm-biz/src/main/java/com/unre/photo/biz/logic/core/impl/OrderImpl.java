@@ -34,7 +34,7 @@ public class OrderImpl implements IOrderBiz {
 	private OrderMapper orderMapper;
 
 	@Autowired
-	private IPanoramaBiz processSourceBiz;
+	private IPanoramaBiz panoramaBiz;
 
 	private static final Log LOGGER = LogFactory.getLog(OrderImpl.class);
 
@@ -55,10 +55,10 @@ public class OrderImpl implements IOrderBiz {
 	
 	@SuppressWarnings("unused")
 	@Override
-	public OrderDto addOrder(OrderDto processDto) throws BusinessException {
+	public OrderDto addOrder(OrderDto orderDto) throws BusinessException {
 		OrderDto retPhotoDto = null;
 		try {
-			Order process = ModelUtil.dtoToModel(processDto, Order.class);
+			Order process = ModelUtil.dtoToModel(orderDto, Order.class);
 			int i = orderMapper.insertSelective(process);
 			Long id = process.getId();
 			retPhotoDto = this.findOrderById(id);
@@ -158,7 +158,7 @@ public class OrderImpl implements IOrderBiz {
 				PanoramaDto pScanItemDto = new PanoramaDto();
 			//	pScanItemDto.setBenacoScanId(benacoScanId);
 				pScanItemDto.setImagePath(imageFullPath);
-				processSourceBiz.addProcessSource(pScanItemDto);
+				panoramaBiz.addProcessSource(pScanItemDto);
 			}
 			flg = true;
 

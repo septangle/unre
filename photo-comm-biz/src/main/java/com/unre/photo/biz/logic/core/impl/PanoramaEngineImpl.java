@@ -56,10 +56,11 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				benacoScanId = benacoScanId.substring(0, benacoScanId.length() - 1);
 
 			//保存至scan表
-			OrderDto processDto = new OrderDto();
-			processDto.setBenacoScanId(benacoScanId);
-			processDto.setId(retPanEngineDto.getUid());
-			processBizImpl.addOrder(processDto);
+			OrderDto orderDto = new OrderDto();
+			orderDto.setBenacoScanId(benacoScanId);
+			orderDto.setMemberId(retPanEngineDto.getUid());
+			orderDto.setDesc(panoramaEngineDto.getTitle());
+			processBizImpl.addOrder(orderDto);
 
 			//返回 benaco scan id
 			panoramaEngineDto.setBenacoScanId(benacoScanId);
@@ -117,10 +118,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			//2. 更新scan表中scanid对应记录的状态
 
 			if ("200".equals(retCode)) {
-				OrderDto ProcessDto = new OrderDto();
-				ProcessDto.setBenacoScanId(benacoScanId);
-				ProcessDto.setStatus(AppConstants.SFILE_PROCESSING);
-				processBizImpl.updateOrderByBenacoId(ProcessDto);
+				OrderDto orderDto = new OrderDto();
+				orderDto.setBenacoScanId(benacoScanId);
+				orderDto.setStatus(AppConstants.SFILE_PROCESSING);
+				processBizImpl.updateOrderByBenacoId(orderDto);
 
 				retFlg = true;
 			}

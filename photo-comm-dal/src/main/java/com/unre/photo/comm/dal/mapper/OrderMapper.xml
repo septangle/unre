@@ -277,7 +277,8 @@
 	<select id="SelStatus" parameterType="com.unre.photo.comm.dal.model.Order"
 		resultMap="slist">
 		select * from
-		tbl_order a left join tbl_panorama b on a.id=b.order_id where
-		a.member_id=#{member_id,jdbcType=BIGINT}
+		tbl_order a left join tbl_panorama b on
+		a.id=b.order_id where
+		a.member_id=#{memberId,jdbcType=BIGINT}
 	</select>
 </mapper>

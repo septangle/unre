@@ -39,15 +39,6 @@ public interface IPanoramaBiz {
 
 
 
-	/**
-	 * 删除ProcessItem
-	 * 
-	 * @param id --要删除的ProcessItem( ID
-	 * 
-	 * @return boolean 
-	 * @throws BusinessException
-	 */
-	public void deleteProcessSource(Long id) throws BusinessException;
 	
 	/**
 	 * 更新ProcessItem

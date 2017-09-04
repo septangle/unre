@@ -18,11 +18,6 @@ public interface IPanoramaFacade {
 	 */
 	public PanoramaResponse findProcessSourceById(PanoramaRequest request) throws Exception;
 
-	/**
-	 * @param id
-	 * @throws Exception
-	 */
-	public PanoramaResponse deleteProcessSource(Long id) throws Exception;
 	
 	/**
 	 * 更新ProcessSource

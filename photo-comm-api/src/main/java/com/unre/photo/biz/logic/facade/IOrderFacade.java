@@ -13,11 +13,6 @@ public interface IOrderFacade {
 	 */
 	public OrderResponse findProcessById(OrderRequest request) throws Exception;
 
-	/**
-	 * @param id
-	 * @throws Exception
-	 */
-	public OrderResponse deleteProcess(OrderRequest request) throws Exception;
 
 	/**
 	 * 更新Process

@@ -36,15 +36,11 @@ public class PanoramaFacadeImpl implements IPanoramaFacade {
 		return response;
 	}
 
-	@Override
-	public PanoramaResponse deleteProcessSource(Long id) throws Exception {
-		return null;
-
-	}
 
 	@Override
 	public PanoramaResponse updatePanorama(PanoramaRequest request) throws Exception {
 		PanoramaResponse response = new PanoramaResponse();
+		System.out.println(request.getPanoramaDto());
 		boolean flag = panoramaBiz.updatePanorama(request.getPanoramaDto());
 		String code = flag ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
 		response.setCode(code);

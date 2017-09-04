@@ -67,10 +67,6 @@ public class PanoramaImpl implements IPanoramaBiz {
 		return photoRes;
 	}
 
-	@Override
-	public void deleteProcessSource(Long id) throws BusinessException {
-
-	}
 
 	@Override
 	public boolean updatePanorama(PanoramaDto panoramaDto) throws BusinessException {
@@ -78,7 +74,7 @@ public class PanoramaImpl implements IPanoramaBiz {
 		try {
 			panoramaDto.setIsDeleted("1");
 			Panorama panorama = ModelUtil.dtoToModel(panoramaDto, Panorama.class);
-			int a = panoramaMapper.updateBySelective(panorama);
+			int a = panoramaMapper.updateByPrimaryKeySelective(panorama);
 			if (1 != a) { // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCANITEM_UPDATE_ERROR_CODE,
 						AppConstants.SCANITEM_UPDATE_ERROR_MESSAGE);

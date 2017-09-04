@@ -16,8 +16,6 @@ public interface PanoramaMapper {
     int updateByPrimaryKeySelective(Panorama record);
 
     int updateByPrimaryKey(Panorama record);
-    
-    int updateBySelective(Panorama record);
-    
+        
     List<Panorama> selectBySelective(Panorama record);
 }
