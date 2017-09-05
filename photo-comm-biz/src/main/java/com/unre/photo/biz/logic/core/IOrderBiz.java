@@ -88,5 +88,15 @@ public interface IOrderBiz {
 	 * @return list
 	 */
 	public List<OrderDto> querySelStatus(OrderDto orderDto) throws BusinessException;
+	
+	/**
+	 * 通过ID查询Order
+	 * 
+	 * @param ProcessId  --id
+	 * @return ProcessDto --Dto
+	 * 
+	 * @throws BusinessException
+	 */
+	public OrderDto findOrder(OrderDto orderDto) throws BusinessException;
 
 }

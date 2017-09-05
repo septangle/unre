@@ -86,15 +86,16 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			String benacoScanId = panoramaEngineDto.getBenacoScanId();
 			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
 			List<File> imageFiles = panoramaEngineDto.getFiles();
-			System.out.println(imageFiles);
 			HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,
 					panoramaEngineDto.getBenacoScanId(), imageFiles);
 
 			//2. TODO 需要增加文件上传服务器指定目录
 
 			//3. 更新scan状态，新增scan_item
-			System.out.println(panoramaEngineDto.getId());
-			orderBizImpl.saveUploadedImages(panoramaEngineDto.getId(), imageFiles);
+			OrderDto orderDto = new OrderDto();
+			orderDto.setBenacoScanId(benacoScanId);
+			OrderDto o=orderBizImpl.findOrder(orderDto);
+			orderBizImpl.saveUploadedImages(o.getId(), imageFiles);
 			retFlg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE, e);
@@ -114,7 +115,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			params.put("key", panoramaEngineDto.getApiKey());
 			JSONObject json = JSONObject.fromObject(params);
 			String benacoScanId = panoramaEngineDto.getBenacoScanId();
-			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/start-processing";
+			String addPhotosUrl =/* panoramaEngineDto.getApiBaseUrl() + */"https://beta.benaco.com/scans/id/" + benacoScanId + "/start-processing";
 			HttpClientResponse hcResponse = HttpClientUtil.doPost(addPhotosUrl, json);
 
 			String retCode = hcResponse.getCode();

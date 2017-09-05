@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
@@ -93,7 +94,7 @@ public class OrderImpl implements IOrderBiz {
 	public boolean updateOrderByBenacoId(OrderDto processDto) throws BusinessException {
 		boolean flg = false;
 		try {
-			//1.先查出来
+			/*//1.先查出来
 			Order pScanParm = new Order();
 			pScanParm.setBenacoScanId(processDto.getBenacoScanId());
 			List<Order> pScanList = orderMapper.selectBySelective(pScanParm);
@@ -102,10 +103,14 @@ public class OrderImpl implements IOrderBiz {
 						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
 			}
 			Order pScan = pScanList.get(0);
-			pScan.setStatus(AppConstants.SFILE_PROCESSING);
+			pScan.setStatus(AppConstants.SFILE_PROCESSING);*/
+			
+			Order order = new Order();
+			order.setStatus(AppConstants.SFILE_PROCESSING);
+			order.setBenacoScanId(processDto.getBenacoScanId());
 			
 			//2.后更新scan状态
-			int i = orderMapper.updateOrderByBenacoId(pScan);
+			int i = orderMapper.updateOrderByBenacoId(order);
 			if (i != 1) { // i == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
@@ -217,6 +222,21 @@ public class OrderImpl implements IOrderBiz {
 			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
 		}
 		return orderDtoList;
+	}
+
+
+	@Override
+	public OrderDto findOrder(OrderDto orderDto) throws BusinessException {
+
+		try {
+			Order order=ModelUtil.dtoToModel(orderDto, Order.class);
+			Order orders = orderMapper.SelOrder(order);
+			orderDto = ModelUtil.modelToDto(orders, OrderDto.class);
+		} catch (Exception e) {
+			LOGGER.error(AppConstants.SCAN_FIND_ERROR_CODE, e);
+			throw new BusinessException(AppConstants.SCAN_FIND_ERROR_CODE, AppConstants.SCAN_FIND_ERROR_MESSAGE);
+		}
+		return orderDto;
 	}
 	
 

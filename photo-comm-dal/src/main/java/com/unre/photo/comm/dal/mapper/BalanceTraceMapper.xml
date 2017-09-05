@@ -15,13 +15,21 @@
     <result column="update_by" property="updateBy" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.unre.photo.comm.dal.model.BalanceTrace" extends="BaseResultMap" >
+    <result column="member_id" property="memberId" jdbcType="LONGVARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, trans_no, trans_type, amount, balance, status, remark, version, create_by, create_time, 
     update_by, update_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <sql id="Blob_Column_List" >
+    member_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from tbl_balance_trace
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -33,11 +41,13 @@
     insert into tbl_balance_trace (trans_no, trans_type, amount, 
       balance, status, remark, 
       version, create_by, create_time, 
-      update_by, update_time)
+      update_by, update_time, member_id
+      )
     values (#{transNo,jdbcType=VARCHAR}, #{transType,jdbcType=CHAR}, #{amount,jdbcType=DECIMAL}, 
       #{balance,jdbcType=DECIMAL}, #{status,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, 
       #{version,jdbcType=BIGINT}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{memberId,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.BalanceTrace" useGeneratedKeys="true" keyProperty="id" >
     insert into tbl_balance_trace
@@ -75,6 +85,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="transNo != null" >
@@ -109,6 +122,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -148,7 +164,26 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.unre.photo.comm.dal.model.BalanceTrace" >
+    update tbl_balance_trace
+    set trans_no = #{transNo,jdbcType=VARCHAR},
+      trans_type = #{transType,jdbcType=CHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      balance = #{balance,jdbcType=DECIMAL},
+      status = #{status,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      version = #{version,jdbcType=BIGINT},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      member_id = #{memberId,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.BalanceTrace" >

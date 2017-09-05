@@ -13,5 +13,7 @@ public interface BalanceTraceMapper {
 
     int updateByPrimaryKeySelective(BalanceTrace record);
 
+    int updateByPrimaryKeyWithBLOBs(BalanceTrace record);
+
     int updateByPrimaryKey(BalanceTrace record);
 }

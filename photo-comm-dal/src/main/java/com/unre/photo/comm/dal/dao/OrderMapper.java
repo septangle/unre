@@ -29,4 +29,7 @@ public interface OrderMapper {
     
     //查询当前用户场景
     List<Order> SelStatus(Order record);
+    
+    //根据benonId查询订单
+    Order SelOrder (Order record);
 }

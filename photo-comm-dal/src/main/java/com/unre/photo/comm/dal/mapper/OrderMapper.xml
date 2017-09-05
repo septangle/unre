@@ -8,9 +8,11 @@
 		<result column="actual_amount" property="actualAmount"
 			jdbcType="DECIMAL" />
 		<result column="goods_id" property="goodsId" jdbcType="BIGINT" />
-		<result column="goods_actual_price" property="goodsActualPrice" jdbcType="DECIMAL" />
+		<result column="goods_actual_price" property="goodsActualPrice"
+			jdbcType="DECIMAL" />
 		<result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
-		<result column="benaco_scan_id" property="benacoScanId" jdbcType="VARCHAR" />
+		<result column="benaco_scan_id" property="benacoScanId"
+			jdbcType="VARCHAR" />
 		<result column="description" property="description" jdbcType="VARCHAR" />
 		<result column="type" property="type" jdbcType="CHAR" />
 		<result column="status" property="status" jdbcType="CHAR" />
@@ -41,9 +43,11 @@
 		id, member_id, total_amount, actual_amount, goods_id,
 		goods_actual_price,
 		goods_num,
-		benaco_scan_id, description, type, status,
+		benaco_scan_id, description, type,
+		status,
 		is_deleted, version, create_by, create_time,
-		update_by, update_time
+		update_by,
+		update_time
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -254,15 +258,17 @@
 		#{goodsNum,jdbcType=INTEGER},
 		benaco_scan_id =
 		#{benacoScanId,jdbcType=VARCHAR},
-		description = 
+		description =
 		#{description,jdbcType=VARCHAR},
 		type
 		= #{type,jdbcType=CHAR},
-		status = #{status,jdbcType=CHAR},
+		status =
+		#{status,jdbcType=CHAR},
 		is_deleted =
 		#{isDeleted,jdbcType=CHAR},
 		version = #{version,jdbcType=BIGINT},
-		create_by = #{createBy,jdbcType=INTEGER},
+		create_by =
+		#{createBy,jdbcType=INTEGER},
 		create_time =
 		#{createTime,jdbcType=TIMESTAMP},
 		update_by =
@@ -280,4 +286,23 @@
 		a.id=b.order_id where
 		a.member_id=#{memberId,jdbcType=BIGINT}
 	</select>
+
+	<!-- 根据beanonId查询订单 -->
+	<select id="SelOrder" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Order">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_order
+		where benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR}
+	</select>
+
+	<!--根据beanonId更新status状态 -->
+	<update id="updateOrderByBenacoId" parameterType="com.unre.photo.comm.dal.model.Order">
+		update
+		tbl_order
+		set status = #{status,jdbcType=CHAR}
+		where benaco_scan_id =
+		#{benacoScanId,jdbcType=VARCHAR}
+	</update>
+
 </mapper>

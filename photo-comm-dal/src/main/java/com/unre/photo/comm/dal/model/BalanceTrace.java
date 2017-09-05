@@ -28,6 +28,8 @@ public class BalanceTrace {
 
     private Date updateTime;
 
+    private String memberId;
+
     public Long getId() {
         return id;
     }
@@ -122,5 +124,13 @@ public class BalanceTrace {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId == null ? null : memberId.trim();
     }
 }

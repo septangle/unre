@@ -70,13 +70,13 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 				// 项目下相对路径
 				String path = photoUrl.getPath() + fileName;
 				// 创建文件实例
-				File tempFile = new File(path); //文件保存路径为pathRoot + path
+				File tempFile = new File(path); 
 				if (!tempFile.getParentFile().exists()) {
-					tempFile.getParentFile().mkdir();
+					tempFile.getParentFile().createNewFile();
 				}
 
 				if (!tempFile.exists()) {
-					tempFile.mkdir();
+					tempFile.createNewFile();
 				}
 				fileUrlList.add(tempFile);
 			}
