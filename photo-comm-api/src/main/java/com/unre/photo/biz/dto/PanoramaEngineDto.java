@@ -4,6 +4,7 @@ import java.util.List;
 import java.io.File;
 
 public class PanoramaEngineDto {
+	private Long id;
 
 	private String apiBaseUrl;
 
@@ -20,6 +21,16 @@ public class PanoramaEngineDto {
 	private String scanStatus;
 	
 	private Long uid;
+	
+	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getApiBaseUrl() {
 		return apiBaseUrl;

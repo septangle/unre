@@ -39,17 +39,17 @@ public class OrderImpl implements IOrderBiz {
 	private static final Log LOGGER = LogFactory.getLog(OrderImpl.class);
 
 	@Override
-	public OrderDto findOrderById(Long processId) throws BusinessException {
-		OrderDto ProcessDto = null;
+	public OrderDto findOrderById(Long orderId) throws BusinessException {
+		OrderDto orderDto= new OrderDto();
 
 		try {
-			Order Process = orderMapper.selectByPrimaryKey(processId);
-			ProcessDto = ModelUtil.modelToDto(Process, OrderDto.class);
+			Order order = orderMapper.selectByPrimaryKey(orderId);
+			orderDto = ModelUtil.modelToDto(order, OrderDto.class);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_FIND_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.SCAN_FIND_ERROR_CODE, AppConstants.SCAN_FIND_ERROR_MESSAGE);
 		}
-		return ProcessDto;
+		return orderDto;
 	}
 
 	
@@ -58,9 +58,10 @@ public class OrderImpl implements IOrderBiz {
 	public OrderDto addOrder(OrderDto orderDto) throws BusinessException {
 		OrderDto retPhotoDto = null;
 		try {
-			Order process = ModelUtil.dtoToModel(orderDto, Order.class);
-			int i = orderMapper.insertSelective(process);
-			Long id = process.getId();
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+			int i = orderMapper.insertSelective(order);
+			System.out.println(order.getId());
+			Long id = order.getId();
 			retPhotoDto = this.findOrderById(id);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_ADD_ERROR_CODE, e);
@@ -137,10 +138,10 @@ public class OrderImpl implements IOrderBiz {
 	@SuppressWarnings("unused")
 	@Override
 	@Transactional(rollbackFor = BusinessException.class)
-	public boolean saveUploadedImages(String benacoScanId, List<File> imageFiles) throws BusinessException {
+	public boolean saveUploadedImages(long orderId, List<File> imageFiles) throws BusinessException {
 		boolean flg = false;
 		try {
-			//1.更新scan状态
+			/*//1.更新scan状态
 			Order pScanParm = new Order();
 			pScanParm.setBenacoScanId(benacoScanId);
 			List<Order> pScanList = orderMapper.selectBySelective(pScanParm);
@@ -150,13 +151,13 @@ public class OrderImpl implements IOrderBiz {
 			}
 			Order pScan = pScanList.get(0);
 			pScan.setStatus(AppConstants.SFILE_UPLOAD_COMPLETE);
-			int i = orderMapper.updateOrderByBenacoId(pScan);
+			int i = orderMapper.updateOrderByBenacoId(pScan);*/
 
 			//2. 新增scan item
 			for (File f : imageFiles) {
 				String imageFullPath = f.getPath() + f.getName();
 				PanoramaDto pScanItemDto = new PanoramaDto();
-			//	pScanItemDto.setBenacoScanId(benacoScanId);
+				pScanItemDto.setOrderId(orderId);
 				pScanItemDto.setImagePath(imageFullPath);
 				panoramaBiz.addProcessSource(pScanItemDto);
 			}

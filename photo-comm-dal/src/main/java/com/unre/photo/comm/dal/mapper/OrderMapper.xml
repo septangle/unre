@@ -8,12 +8,10 @@
 		<result column="actual_amount" property="actualAmount"
 			jdbcType="DECIMAL" />
 		<result column="goods_id" property="goodsId" jdbcType="BIGINT" />
-		<result column="goods_actual_price" property="goodsActualPrice"
-			jdbcType="DECIMAL" />
+		<result column="goods_actual_price" property="goodsActualPrice" jdbcType="DECIMAL" />
 		<result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
-		<result column="benaco_scan_id" property="benacoScanId"
-			jdbcType="VARCHAR" />
-		<result column="desc" property="desc" jdbcType="VARCHAR" />
+		<result column="benaco_scan_id" property="benacoScanId" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
 		<result column="type" property="type" jdbcType="CHAR" />
 		<result column="status" property="status" jdbcType="CHAR" />
 		<result column="is_deleted" property="isDeleted" jdbcType="CHAR" />
@@ -43,7 +41,7 @@
 		id, member_id, total_amount, actual_amount, goods_id,
 		goods_actual_price,
 		goods_num,
-		benaco_scan_id, desc, type, status,
+		benaco_scan_id, description, type, status,
 		is_deleted, version, create_by, create_time,
 		update_by, update_time
 	</sql>
@@ -64,7 +62,7 @@
 		insert into tbl_order (member_id,
 		total_amount, actual_amount,
 		goods_id, goods_actual_price, goods_num,
-		benaco_scan_id, desc, type,
+		benaco_scan_id, description, type,
 		status, is_deleted, version,
 		create_by,
 		create_time, update_by,
@@ -74,7 +72,7 @@
 		#{actualAmount,jdbcType=DECIMAL},
 		#{goodsId,jdbcType=BIGINT},
 		#{goodsActualPrice,jdbcType=DECIMAL}, #{goodsNum,jdbcType=INTEGER},
-		#{benacoScanId,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR},
+		#{benacoScanId,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
 		#{type,jdbcType=CHAR},
 		#{status,jdbcType=CHAR},
 		#{isDeleted,jdbcType=CHAR}, #{version,jdbcType=BIGINT},
@@ -107,8 +105,8 @@
 			<if test="benacoScanId != null">
 				benaco_scan_id,
 			</if>
-			<if test="desc != null">
-				desc,
+			<if test="description != null">
+				description,
 			</if>
 			<if test="type != null">
 				type,
@@ -157,8 +155,8 @@
 			<if test="benacoScanId != null">
 				#{benacoScanId,jdbcType=VARCHAR},
 			</if>
-			<if test="desc != null">
-				#{desc,jdbcType=VARCHAR},
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
 			</if>
 			<if test="type != null">
 				#{type,jdbcType=CHAR},
@@ -211,8 +209,8 @@
 			<if test="benacoScanId != null">
 				benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR},
 			</if>
-			<if test="desc != null">
-				desc = #{desc,jdbcType=VARCHAR},
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
 			</if>
 			<if test="type != null">
 				type = #{type,jdbcType=CHAR},
@@ -256,7 +254,8 @@
 		#{goodsNum,jdbcType=INTEGER},
 		benaco_scan_id =
 		#{benacoScanId,jdbcType=VARCHAR},
-		desc = #{desc,jdbcType=VARCHAR},
+		description = 
+		#{description,jdbcType=VARCHAR},
 		type
 		= #{type,jdbcType=CHAR},
 		status = #{status,jdbcType=CHAR},

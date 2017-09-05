@@ -22,7 +22,7 @@ public class OrderDto {
 
     private String benacoScanId;
 
-    private String desc;
+    private String description;
 
     private String type;
 
@@ -115,12 +115,12 @@ public class OrderDto {
         this.benacoScanId = benacoScanId == null ? null : benacoScanId.trim();
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 
     public String getType() {

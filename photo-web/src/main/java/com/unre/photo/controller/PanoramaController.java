@@ -23,12 +23,23 @@ public class PanoramaController extends BaseController<OrderController>{
    private IPanoramaFacade ipanoramaFacade;
    
    
-	@ApiOperation(value = "删除order", httpMethod = "POST", response = PanoramaResponse.class)
+   //删除Panorama场景
+	@ApiOperation(value = "删除Panorama", httpMethod = "POST", response = PanoramaResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaDto.id", value = "ID", required = true, dataType = "long")})
 	@RequestMapping(value = "/deletePanorama.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaResponse deleteProcess(@RequestBody PanoramaRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		return ipanoramaFacade.updatePanorama(request);
+	}
+	
+    //根据场景ID取得场景信息
+	@ApiOperation(value = "查询Panorama", httpMethod = "POST", response = PanoramaResponse.class)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "panoramaDto.id", value = "ID", required = true, dataType = "long")})
+	@RequestMapping(value = "/findPanorama.do", method = RequestMethod.POST)
+	public @ResponseBody PanoramaResponse findPanoramaById(@RequestBody PanoramaRequest request,
+			HttpServletRequest servletRequest) throws Exception {
+		return ipanoramaFacade.findProcessSourceById(request);
 	}
 }

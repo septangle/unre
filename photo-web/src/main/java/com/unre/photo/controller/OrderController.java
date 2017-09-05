@@ -33,7 +33,7 @@ public class OrderController extends BaseController<OrderController> {
 	
 
 
-	
+	 //查询当前用户所有场景
 	@ApiOperation(value = "查询当前用户panorama", httpMethod = "GET", response = OrderResponse.class)
 	@RequestMapping(value = "/getCurrMemberScan.do", method = RequestMethod.GET)
 	public @ResponseBody OrderResponse findCurrMemberProcessById(HttpServletRequest servletRequest) throws Exception {

@@ -23,7 +23,6 @@ public class PanoramaFacadeImpl implements IPanoramaFacade {
 		List<PanoramaDto> processItemList = panoramaBiz.queryProcessSource(request.getPanoramaDto());
 		PanoramaResponse response = new PanoramaResponse();
 		response.setProcessSourceDtoList(processItemList);
-		;
 		return response;
 	}
 

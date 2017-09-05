@@ -38,10 +38,11 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	@Autowired
 	private PhotoUrl photoUrl;
 
+	//新建场景（上传全景照片）
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "panoramaEngineDto.files", value = "files", required = true, dataType = "List<File>") })
-	@RequestMapping(value = "/addPanoramicPhotos.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/addPanoramas.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse addPhotos(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
@@ -84,9 +85,10 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		return panoramaEngineFacade.addPhotos(request);
 	}
 
+	//生成场景（全景照片->3D场景）
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaEngineDto.benacoScanId", value = "Benaco Scan Id", required = true, dataType = "string"), })
-	@RequestMapping(value = "/startProcessing.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/processPanoramas.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse startProcessing(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());

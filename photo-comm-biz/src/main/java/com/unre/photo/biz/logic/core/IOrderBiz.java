@@ -71,7 +71,7 @@ public interface IOrderBiz {
 	 * @return boolean 
 	 * @throws BusinessException
 	 */
-	public boolean saveUploadedImages(String benacoScanId,List<File> imageFiles) throws BusinessException;
+	public boolean saveUploadedImages(long orderId,List<File> imageFiles) throws BusinessException;
 	
 
 	/**

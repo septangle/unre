@@ -28,7 +28,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	private static final Log LOGGER = LogFactory.getLog(PanoramaEngineImpl.class);
 
 	@Autowired
-	private IOrderBiz processBizImpl;
+	private IOrderBiz orderBizImpl;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -59,12 +59,13 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			OrderDto orderDto = new OrderDto();
 			orderDto.setBenacoScanId(benacoScanId);
 			orderDto.setMemberId(retPanEngineDto.getUid());
-			orderDto.setDesc(panoramaEngineDto.getTitle());
-			processBizImpl.addOrder(orderDto);
+			orderDto.setDescription(panoramaEngineDto.getTitle());
+			orderBizImpl.addOrder(orderDto);
 
 			//返回 benaco scan id
 			panoramaEngineDto.setBenacoScanId(benacoScanId);
 			retPanEngineDto.setBenacoScanId(benacoScanId);
+			//retPanEngineDto.setId(orderDto.getId());
 
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_CREATE_SCAN_ERROR_CODE, e);
@@ -85,13 +86,15 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			String benacoScanId = panoramaEngineDto.getBenacoScanId();
 			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
 			List<File> imageFiles = panoramaEngineDto.getFiles();
+			System.out.println(imageFiles);
 			HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,
 					panoramaEngineDto.getBenacoScanId(), imageFiles);
 
 			//2. TODO 需要增加文件上传服务器指定目录
 
 			//3. 更新scan状态，新增scan_item
-			processBizImpl.saveUploadedImages(benacoScanId, imageFiles);
+			System.out.println(panoramaEngineDto.getId());
+			orderBizImpl.saveUploadedImages(panoramaEngineDto.getId(), imageFiles);
 			retFlg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE, e);
@@ -121,7 +124,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				OrderDto orderDto = new OrderDto();
 				orderDto.setBenacoScanId(benacoScanId);
 				orderDto.setStatus(AppConstants.SFILE_PROCESSING);
-				processBizImpl.updateOrderByBenacoId(orderDto);
+				orderBizImpl.updateOrderByBenacoId(orderDto);
 
 				retFlg = true;
 			}
