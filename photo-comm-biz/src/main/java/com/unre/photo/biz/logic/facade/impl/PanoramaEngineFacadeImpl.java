@@ -36,6 +36,8 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 		boolean flg  = panoramaEngineBiz.addPhotos(request.getPanoramaEngineDto());
 		String code = flg? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
 		retResponse.setCode(code);
+		panoramaEngineDto.setBenacoScanId(benacoScanId);
+		retResponse.setPanoramaEngineDto(panoramaEngineDto);
 		return retResponse;
 	}
 

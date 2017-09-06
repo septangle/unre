@@ -1,6 +1,7 @@
 package com.unre.photo.biz.logic.core.impl;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.dto.PanoramaEngineDto;
+import com.unre.photo.biz.dto.PriceDto;
+import com.unre.photo.biz.dto.MemberDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
+import com.unre.photo.biz.logic.core.IMemberBiz;
 import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.HttpClientResponse;
@@ -29,6 +33,9 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 	@Autowired
 	private IOrderBiz orderBizImpl;
+	
+	@Autowired
+	private IMemberBiz memberBizImpl;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -55,18 +62,25 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			if (benacoScanId.endsWith("\""))
 				benacoScanId = benacoScanId.substring(0, benacoScanId.length() - 1);
 
-			//保存至scan表
+			//保存至Order表
+			MemberDto members=memberBizImpl.findMemberById(panoramaEngineDto.getUid());
+			PriceDto p = memberBizImpl.SelPriceById(members);
+			int fileSize=panoramaEngineDto.getFiles().size();
+			Double files=(double) fileSize;
+			Double price=p.getPrice();
+			Double money =files*price;
+			BigDecimal d1TobigDe = new BigDecimal(money);  
 			OrderDto orderDto = new OrderDto();
 			orderDto.setBenacoScanId(benacoScanId);
 			orderDto.setMemberId(retPanEngineDto.getUid());
 			orderDto.setDescription(panoramaEngineDto.getTitle());
+			orderDto.setTotalAmount(d1TobigDe);
+			orderDto.setGoodsActualPrice(new BigDecimal(price));
 			orderBizImpl.addOrder(orderDto);
 
 			//返回 benaco scan id
 			panoramaEngineDto.setBenacoScanId(benacoScanId);
 			retPanEngineDto.setBenacoScanId(benacoScanId);
-			//retPanEngineDto.setId(orderDto.getId());
-
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_CREATE_SCAN_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.PENGINE_CREATE_SCAN_ERROR_CODE,
