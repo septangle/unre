@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.dto.MemberDto;
+import com.unre.photo.biz.dto.PriceDto;
 import com.unre.photo.biz.logic.core.IMemberBiz;
 import com.unre.photo.biz.logic.facade.IMemberFacade;
 import com.unre.photo.biz.request.MemberRequest;
 import com.unre.photo.biz.response.MemberResponse;
+import com.unre.photo.biz.response.PriceRespnose;
 /**
  * @author TDH
  *
@@ -69,5 +71,16 @@ public class MemberFacadeImpl implements IMemberFacade {
 			response.setMemberDto(MemberDto);
            return response;
 	}
+
+	@Override
+	public PriceRespnose SelPrice(MemberRequest request) throws Exception {
+		PriceRespnose priceRespnose= new PriceRespnose();
+		MemberDto memberDto = memberBiz.findMemberById(request.getMemberDto().getId());
+		PriceDto priceDto=memberBiz.SelPriceById(memberDto);
+		priceRespnose.setPriceDto(priceDto);
+		return priceRespnose;
+	}
+
+	
 
 }

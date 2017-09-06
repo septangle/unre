@@ -15,18 +15,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import com.unre.photo.biz.dto.MemberDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IPanoramaEngineFacade;
 import com.unre.photo.biz.request.PanoramaEngineRequest;
-import com.unre.photo.biz.request.MemberRequest;
 import com.unre.photo.biz.response.PanoramaEngineResponse;
-import com.unre.photo.biz.response.PanoramaResponse;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.PhotoUrl;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
-import com.wordnik.swagger.annotations.ApiOperation;
 
 @Controller
 @RequestMapping("/engine")

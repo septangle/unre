@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.unre.photo.controller;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +14,7 @@ import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IMemberFacade;
 import com.unre.photo.biz.request.MemberRequest;
 import com.unre.photo.biz.response.MemberResponse;
+import com.unre.photo.biz.response.PriceRespnose;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.MD5Util;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
@@ -29,23 +27,24 @@ public class MemberController extends BaseController<MemberController> {
 
 	@Autowired
 	private IMemberFacade memberFacade;
-    
+
 	//查询当前会员
 	@ApiOperation(value = "查询当前会员", httpMethod = "GET", response = MemberResponse.class)
 	@RequestMapping(value = "/getCurrMember", method = RequestMethod.GET)
 	public @ResponseBody MemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		Long id = (Long) session.getAttribute("ID");
-		if(id == null) 
-			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		if (id == null)
+			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
+					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		MemberRequest request = new MemberRequest();
-		MemberDto memberDto =  new MemberDto();
+		MemberDto memberDto = new MemberDto();
 		memberDto.setId(id);
 		request.setMemberDto(memberDto);
 		return memberFacade.findMemberById(request);
 	}
-	
-    //登录
+
+	//登录
 	@ApiOperation(value = "登录", httpMethod = "POST", response = MemberResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "memberDto.tel", value = "联系电话", required = true, dataType = "string"),
@@ -87,10 +86,10 @@ public class MemberController extends BaseController<MemberController> {
 			@ApiImplicitParam(name = "memberDto.industry", value = "行业", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "memberDto.contact", value = "联系人", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "memberDto.mail", value = "邮箱", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "memberDto.setType", value = "设置类型", required = true, dataType = "string")})
+			@ApiImplicitParam(name = "memberDto.setType", value = "设置类型", required = true, dataType = "string") })
 	@RequestMapping(value = "/register.do", method = RequestMethod.POST)
-	public @ResponseBody MemberResponse register(@RequestBody MemberRequest request,
-			HttpServletRequest servletRequest) throws Exception {
+	public @ResponseBody MemberResponse register(@RequestBody MemberRequest request, HttpServletRequest servletRequest)
+			throws Exception {
 		MemberResponse MemberResponse = null;
 		try {
 			request.getMemberDto().setPassword(MD5Util.encodeMD5String(request.getMemberDto().getPassword()));
@@ -118,6 +117,22 @@ public class MemberController extends BaseController<MemberController> {
 		}
 		return flag;
 
+	}
+
+	//查询当前login会员单价
+	@ApiOperation(value = "查询当前用户price", httpMethod = "GET", response = PriceRespnose.class)
+	@RequestMapping(value = "/getPrice.do", method = RequestMethod.GET)
+	public @ResponseBody PriceRespnose findCurrMemberPriceById(HttpServletRequest servletRequest) throws Exception {
+		HttpSession session = servletRequest.getSession();
+		Long id = (Long) session.getAttribute("ID");
+		if (id == null)
+			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
+					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		MemberRequest request = new MemberRequest();
+		MemberDto memberDto = new MemberDto();
+		memberDto.setId(id);
+		request.setMemberDto(memberDto);
+		return memberFacade.SelPrice(request);
 	}
 
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.unre.photo.controller;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,7 +5,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,8 +15,6 @@ import com.unre.photo.biz.logic.facade.IOrderFacade;
 import com.unre.photo.biz.request.OrderRequest;
 import com.unre.photo.biz.response.OrderResponse;
 import com.unre.photo.comm.AppConstants;
-import com.wordnik.swagger.annotations.ApiImplicitParam;
-import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 

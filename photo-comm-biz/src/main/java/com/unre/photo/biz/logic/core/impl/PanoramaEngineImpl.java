@@ -96,6 +96,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			orderDto.setBenacoScanId(benacoScanId);
 			OrderDto o=orderBizImpl.findOrder(orderDto);
 			orderBizImpl.saveUploadedImages(o.getId(), imageFiles);
+			OrderDto orderDtos = new OrderDto();
+			orderDtos.setBenacoScanId(benacoScanId);
+			orderDtos.setStatus(AppConstants.SFILE_INIT);
+			orderBizImpl.updateOrderByBenacoId(orderDtos);
 			retFlg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE, e);

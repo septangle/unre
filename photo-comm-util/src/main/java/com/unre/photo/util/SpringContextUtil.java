@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpringContextUtil implements ApplicationContextAware{
 	private static ApplicationContext ctx;
+	@SuppressWarnings("static-access")
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {

@@ -10,7 +10,7 @@ public class MemberLevelItem {
 
     private String name;
 
-    private Integer value;
+    private String value;
 
     private BigDecimal rebate;
 
@@ -48,11 +48,11 @@ public class MemberLevelItem {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

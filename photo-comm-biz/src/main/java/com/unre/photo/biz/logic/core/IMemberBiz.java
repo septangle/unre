@@ -3,6 +3,7 @@ package com.unre.photo.biz.logic.core;
 import java.util.List;
 
 import com.unre.photo.biz.dto.MemberDto;
+import com.unre.photo.biz.dto.PriceDto;
 import com.unre.photo.biz.exception.BusinessException;
 
 /**
@@ -70,4 +71,8 @@ public interface IMemberBiz {
 	 */
 	public MemberDto queryLoginUsers(MemberDto memberDto) throws BusinessException;
 
+	/**
+	 * 查询当前用户单价
+	 */
+	public PriceDto SelPriceById(MemberDto memberDto) throws BusinessException;
 }

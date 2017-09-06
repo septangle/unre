@@ -1,17 +1,24 @@
 package com.unre.photo.biz.logic.core.impl;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.unre.photo.biz.dto.MemberDto;
+import com.unre.photo.biz.dto.PriceDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IMemberBiz;
+import com.unre.photo.comm.dal.model.Goods;
 import com.unre.photo.comm.dal.model.Member;
+import com.unre.photo.comm.dal.model.MemberLevelItem;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.unre.photo.comm.AppConstants;
+import com.unre.photo.comm.dal.dao.GoodsMapper;
+import com.unre.photo.comm.dal.dao.MemberLevelItemMapper;
 import com.unre.photo.comm.dal.dao.MemberMapper;
 import com.unre.photo.util.ModelUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -21,6 +28,12 @@ public class MemberImpl implements IMemberBiz {
 
 	@Autowired
 	private MemberMapper memberMapper;
+	
+	@Autowired
+	private GoodsMapper goodMapper;
+	
+	@Autowired
+	private MemberLevelItemMapper   memberItemMapper;
 
 	private static final Log LOGGER = LogFactory.getLog(MemberImpl.class);
 
@@ -126,6 +139,15 @@ public class MemberImpl implements IMemberBiz {
 	public void deleteMember(Long id) throws BusinessException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public PriceDto SelPriceById(MemberDto memberDto) throws BusinessException {
+		MemberLevelItem item=memberItemMapper.selectByValue(memberDto.getLevel());
+    	Goods goods=goodMapper.selectByPrimaryKey(AppConstants.GOODS_ID_BENACO);
+    	PriceDto p = new PriceDto();
+    	p.setPrice(item.getRebate().multiply(goods.getPrice()).doubleValue());
+    	return p ;
 	}
 
 }

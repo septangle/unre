@@ -12,7 +12,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
@@ -61,7 +60,6 @@ public class OrderImpl implements IOrderBiz {
 		try {
 			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
 			int i = orderMapper.insertSelective(order);
-			System.out.println(order.getId());
 			Long id = order.getId();
 			retPhotoDto = this.findOrderById(id);
 		} catch (Exception e) {
@@ -91,7 +89,7 @@ public class OrderImpl implements IOrderBiz {
 	}
 
 	@Override
-	public boolean updateOrderByBenacoId(OrderDto processDto) throws BusinessException {
+	public boolean updateOrderByBenacoId(OrderDto orderDto) throws BusinessException {
 		boolean flg = false;
 		try {
 			/*//1.先查出来
@@ -105,11 +103,8 @@ public class OrderImpl implements IOrderBiz {
 			Order pScan = pScanList.get(0);
 			pScan.setStatus(AppConstants.SFILE_PROCESSING);*/
 			
-			Order order = new Order();
-			order.setStatus(AppConstants.SFILE_PROCESSING);
-			order.setBenacoScanId(processDto.getBenacoScanId());
-			
-			//2.后更新scan状态
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+            //2.后更新scan状态
 			int i = orderMapper.updateOrderByBenacoId(order);
 			if (i != 1) { // i == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
@@ -140,7 +135,6 @@ public class OrderImpl implements IOrderBiz {
 		return flg;
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	@Transactional(rollbackFor = BusinessException.class)
 	public boolean saveUploadedImages(long orderId, List<File> imageFiles) throws BusinessException {

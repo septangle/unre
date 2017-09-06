@@ -2,6 +2,7 @@ package com.unre.photo.biz.logic.facade;
 
 import com.unre.photo.biz.request.MemberRequest;
 import com.unre.photo.biz.response.MemberResponse;
+import com.unre.photo.biz.response.PriceRespnose;
 
 public interface IMemberFacade {
 
@@ -31,7 +32,7 @@ public interface IMemberFacade {
 	 * @param request
 	 * 
 	 * @return void
-	 * @throws BusinessException
+	 * @throws Exception
 	 */
 	public void updateMember(MemberRequest request) throws Exception;
 
@@ -52,5 +53,14 @@ public interface IMemberFacade {
 	 * @throws Exception
 	 */
 	public MemberResponse register(MemberRequest request) throws Exception;
-
+	
+	/**
+	 * 查询当前会员单价
+	 * 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	public PriceRespnose SelPrice(MemberRequest request) throws Exception;
+  
 }

@@ -23,7 +23,7 @@ public class PanoramaController extends BaseController<OrderController>{
    private IPanoramaFacade ipanoramaFacade;
    
    
-   //删除Panorama场景
+   //删除Panorama场景(做更新ID操作)
 	@ApiOperation(value = "删除Panorama", httpMethod = "POST", response = PanoramaResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaDto.id", value = "ID", required = true, dataType = "long")})

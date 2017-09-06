@@ -14,4 +14,7 @@ public interface MemberLevelItemMapper {
     int updateByPrimaryKeySelective(MemberLevelItem record);
 
     int updateByPrimaryKey(MemberLevelItem record);
+    
+    //根据value取得MemberLevelItem信息
+    MemberLevelItem selectByValue(String value);
 }
