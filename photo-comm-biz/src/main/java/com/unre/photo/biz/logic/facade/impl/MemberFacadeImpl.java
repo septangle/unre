@@ -48,7 +48,7 @@ public class MemberFacadeImpl implements IMemberFacade {
 
 	@Override
 	public void updateMember(MemberRequest request) throws Exception {
-
+        memberBiz.updateMember(request.getMemberDto());
 	}
 
 	// 登录

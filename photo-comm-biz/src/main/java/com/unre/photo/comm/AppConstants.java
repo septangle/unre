@@ -25,6 +25,9 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	//login模块 1002
 	public final static String QUERY_LOGIN_USER_ERROR_CODE = "10020001";
 	public final static String QUERY_LOGIN_USER_ERROR_MESSAGE = "用户登录失败:账号或密码错误！";
+	public final static String QUERY_LOGIN_USER_STATUS_MESSAGE = "1"; //登录状态：已登录
+	public final static String QUERY_LOGIN_USER_NOT_STATUS_MESSAGE = "0"; //登录状态：未登录
+
 	
 	//register模块  1003
 	public final static String QUERY_ADD_USER_ERROR_CODE = "10030001";

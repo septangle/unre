@@ -92,20 +92,19 @@ public class OrderImpl implements IOrderBiz {
 	public boolean updateOrderByBenacoId(OrderDto orderDto) throws BusinessException {
 		boolean flg = false;
 		try {
-			/*//1.先查出来
+			//1.先查出来
 			Order pScanParm = new Order();
-			pScanParm.setBenacoScanId(processDto.getBenacoScanId());
+			pScanParm.setBenacoScanId(orderDto.getBenacoScanId());
 			List<Order> pScanList = orderMapper.selectBySelective(pScanParm);
 			if (pScanList.size() == 0 || pScanList.size() > 1) {
 				throw new BusinessException(AppConstants.SCAN_BENACO_SCAN_ID_ERROR_CODE,
 						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
 			}
 			Order pScan = pScanList.get(0);
-			pScan.setStatus(AppConstants.SFILE_PROCESSING);*/
+			pScan.setStatus(AppConstants.SFILE_INIT);
 			
-			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
             //2.后更新scan状态
-			int i = orderMapper.updateOrderByBenacoId(order);
+			int i = orderMapper.updateOrderByBenacoId(pScan);
 			if (i != 1) { // i == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
@@ -173,7 +172,7 @@ public class OrderImpl implements IOrderBiz {
 
 	public void updateStatus() {
 		Order p = new Order();
-		List<Order> processList = orderMapper.selectUnclosedOrder();
+		List<Order> processList = orderMapper.selectProcessedOrder();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("key", "3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
 		JSONObject json = JSONObject.fromObject(params);
@@ -187,12 +186,12 @@ public class OrderImpl implements IOrderBiz {
 				String status = result.getString("status");
 				if ("failed".equals(status)) {
 					p.setBenacoScanId(processList.get(i).getBenacoScanId());
-                    p.setStatus("4");
-                    orderMapper.updateStatus(p);
+                    p.setStatus(AppConstants.SFILE_PROCESS_FAIL);
+                    orderMapper.updateOrderByBenacoId(p);
 				}else if ("completed".equals(status)) {
 					p.setBenacoScanId(processList.get(i).getBenacoScanId());
-					p.setStatus("5");
-					orderMapper.updateStatus(p);
+					p.setStatus(AppConstants.SCFILE_PROCESS_COMPLETE);
+					orderMapper.updateOrderByBenacoId(p);
 				}
 			}
 		}

@@ -92,7 +92,7 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		return panoramaEngineFacade.startProcessing(request);
 	}
 
-	@ApiImplicitParams({
+	/*@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaEngineDto.benacoScanId", value = "Benaco Scan Id", required = true, dataType = "string"), })
 	@RequestMapping(value = "/queryScanStatus.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse queryScanStatus(@RequestBody PanoramaEngineRequest request,
@@ -100,5 +100,5 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
 		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		return panoramaEngineFacade.queryScanStatus(request);
-	}
+	}*/
 }

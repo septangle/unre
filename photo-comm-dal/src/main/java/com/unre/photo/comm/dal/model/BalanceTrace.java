@@ -6,6 +6,8 @@ import java.util.Date;
 public class BalanceTrace {
     private Long id;
 
+    private Long memberId;
+
     private String transNo;
 
     private String transType;
@@ -28,14 +30,20 @@ public class BalanceTrace {
 
     private Date updateTime;
 
-    private String memberId;
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 
     public String getTransNo() {
@@ -124,13 +132,5 @@ public class BalanceTrace {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public String getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(String memberId) {
-        this.memberId = memberId == null ? null : memberId.trim();
     }
 }

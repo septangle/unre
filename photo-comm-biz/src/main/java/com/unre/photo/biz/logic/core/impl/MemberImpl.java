@@ -120,6 +120,10 @@ public class MemberImpl implements IMemberBiz {
 				throw new BusinessException(AppConstants.QUERY_LOGIN_USER_ERROR_CODE,
 						AppConstants.QUERY_LOGIN_USER_ERROR_MESSAGE);
 			}
+			Member ms = new Member();
+			ms.setId(member.getId());
+			ms.setStatus(AppConstants.QUERY_LOGIN_USER_STATUS_MESSAGE);
+			memberMapper.updateByPrimaryKeySelective(ms);
 			MemberDto = ModelUtil.modelToDto(member, MemberDto.class);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.QUERY_LOGIN_USER_ERROR_CODE, e);
@@ -131,8 +135,8 @@ public class MemberImpl implements IMemberBiz {
 
 	@Override
 	public void updateMember(MemberDto MemberDto) throws BusinessException {
-		// TODO Auto-generated method stub
-
+		Member members = ModelUtil.dtoToModel(MemberDto, Member.class);
+		memberMapper.updateByPrimaryKeySelective(members);
 	}
 
 	@Override

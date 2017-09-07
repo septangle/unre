@@ -287,22 +287,40 @@
 		a.member_id=#{memberId,jdbcType=BIGINT}
 	</select>
 
-	<!-- 根据beanonId查询订单 -->
+	<!--查询订单 -->
 	<select id="SelOrder" resultMap="BaseResultMap"
 		parameterType="com.unre.photo.comm.dal.model.Order">
 		select
 		<include refid="Base_Column_List" />
 		from tbl_order
-		where benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR}
+		where benaco_scan_id =
+		#{benacoScanId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 根据beanonId查询订单  返回list -->
+	<select id="selectBySelective" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Order">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_order
+		where benaco_scan_id =
+		#{benacoScanId,jdbcType=VARCHAR}
 	</select>
 
 	<!--根据beanonId更新status状态 -->
 	<update id="updateOrderByBenacoId" parameterType="com.unre.photo.comm.dal.model.Order">
 		update
 		tbl_order
-		set status = #{status,jdbcType=CHAR}
+		set status = #{status,jdbcType=CHAR},version = #{version,jdbcType=BIGINT}+1
 		where benaco_scan_id =
-		#{benacoScanId,jdbcType=VARCHAR}
+		#{benacoScanId,jdbcType=VARCHAR} and version = #{version,jdbcType=BIGINT}
 	</update>
+	<!-- 查询处理中order -->
+	<select id="selectProcessedOrder" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_order
+		where status = 3
+	</select>
 
 </mapper>

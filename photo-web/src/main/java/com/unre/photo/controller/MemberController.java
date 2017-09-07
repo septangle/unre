@@ -112,7 +112,17 @@ public class MemberController extends BaseController<MemberController> {
 		HttpSession session = request.getSession();
 		MemberDto phonto = (MemberDto) session.getAttribute("MemberDto");
 		if (phonto != null) {
-			session.removeAttribute("MemberDto");
+			MemberRequest rquest = new MemberRequest();
+			MemberDto memberDto = new MemberDto();
+			memberDto.setId(phonto.getId());
+			memberDto.setStatus(AppConstants.QUERY_LOGIN_USER_NOT_STATUS_MESSAGE);
+			rquest.setMemberDto(memberDto);
+			try {
+				memberFacade.updateMember(rquest);
+				session.removeAttribute("MemberDto");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			flag = true;
 		}
 		return flag;

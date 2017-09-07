@@ -23,7 +23,8 @@ public interface OrderMapper {
     
     List<Order> selectBySelective(Order record);
     
-    List<Order> selectUnclosedOrder();
+    //处理中的order
+    List<Order> selectProcessedOrder();
     
     int updateStatus(Order record);
     
