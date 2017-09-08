@@ -328,6 +328,6 @@
 		select
 		<include refid="Base_Column_List" />
 		from tbl_order
-		where status <> '1' and status <> '2'
+		where status != '1' and status != '2'
 	</select>
 </mapper>

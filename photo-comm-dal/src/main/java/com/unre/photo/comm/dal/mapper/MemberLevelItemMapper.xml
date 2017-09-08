@@ -146,7 +146,7 @@
         select
         <include refid="Base_Column_List" />
         from tbl_member_level_item
-        where annual_fee <= #{annual_fee,jdbcType=DECIMAL}
+        where annual_fee <![CDATA[<= #{annual_fee,jdbcType=DECIMAL}]]> 
        )
     UNION
        (
