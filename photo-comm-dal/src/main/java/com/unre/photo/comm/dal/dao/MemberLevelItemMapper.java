@@ -1,5 +1,7 @@
 package com.unre.photo.comm.dal.dao;
 
+import java.math.BigDecimal;
+
 import com.unre.photo.comm.dal.model.MemberLevelItem;
 
 public interface MemberLevelItemMapper {
@@ -15,6 +17,9 @@ public interface MemberLevelItemMapper {
 
     int updateByPrimaryKey(MemberLevelItem record);
     
-    //根据value取得MemberLevelItem信息
+    // 根据会员等级值取得会员等级定义信息
     MemberLevelItem selectByValue(String value);
+    
+    // 根据一年的充值金额取得应该设定的会员等级
+    MemberLevelItem selectByAmount(BigDecimal amount);
 }
