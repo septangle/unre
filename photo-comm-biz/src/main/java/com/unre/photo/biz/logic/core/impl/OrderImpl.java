@@ -170,35 +170,6 @@ public class OrderImpl implements IOrderBiz {
 		return flg;
 	}
 
-	public void updateStatus() {
-		Order p = new Order();
-		List<Order> processList = orderMapper.selectProcessedOrder();
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("key", "3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
-		JSONObject json = JSONObject.fromObject(params);
-		for (int i = 0; i < processList.size(); i++) {
-			String photoUrl = "https://beta.benaco.com/api/beta/scans/id/" + processList.get(i).getBenacoScanId()
-					+ "/status";
-			HttpClientResponse hcResponse = HttpClientUtil.doPost(photoUrl, json);
-			String httpRetCode = hcResponse.getCode();
-			if ("200".equals(httpRetCode)) {
-				String context = hcResponse.getContext();
-				JSONObject result = JSONObject.fromObject(context);
-				String status = result.getString("status");
-				if ("failed".equals(status)) {
-					p.setBenacoScanId(processList.get(i).getBenacoScanId());
-					p.setStatus(AppConstants.SFILE_PROCESS_FAIL);
-					orderMapper.updateOrderByBenacoId(p);
-				} else if ("completed".equals(status)) {
-					p.setBenacoScanId(processList.get(i).getBenacoScanId());
-					p.setStatus(AppConstants.SCFILE_PROCESS_COMPLETE);
-					orderMapper.updateOrderByBenacoId(p);
-				}
-			}
-		}
-
-	}
-
 	@Override
 	public List<OrderDto> querySelStatus(OrderDto orderDto) throws BusinessException {
 		List<OrderDto> orderDtoList = new ArrayList<OrderDto>();

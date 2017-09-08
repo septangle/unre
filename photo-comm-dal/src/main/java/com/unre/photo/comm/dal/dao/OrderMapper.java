@@ -33,4 +33,7 @@ public interface OrderMapper {
     
     //根据benonId查询订单
     Order SelOrder (Order record);
+    
+    // select unclosed orders 
+    List<Order> selectUnclosedOrder();
 }

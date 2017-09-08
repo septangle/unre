@@ -296,8 +296,8 @@
 		where benaco_scan_id =
 		#{benacoScanId,jdbcType=VARCHAR}
 	</select>
-	
-	<!-- 根据beanonId查询订单  返回list -->
+
+	<!-- 根据beanonId查询订单 返回list -->
 	<select id="selectBySelective" resultMap="BaseResultMap"
 		parameterType="com.unre.photo.comm.dal.model.Order">
 		select
@@ -311,9 +311,11 @@
 	<update id="updateOrderByBenacoId" parameterType="com.unre.photo.comm.dal.model.Order">
 		update
 		tbl_order
-		set status = #{status,jdbcType=CHAR},version = #{version,jdbcType=BIGINT}+1
+		set status = #{status,jdbcType=CHAR},version =
+		#{version,jdbcType=BIGINT}+1
 		where benaco_scan_id =
-		#{benacoScanId,jdbcType=VARCHAR} and version = #{version,jdbcType=BIGINT}
+		#{benacoScanId,jdbcType=VARCHAR} and version =
+		#{version,jdbcType=BIGINT}
 	</update>
 	<!-- 查询处理中order -->
 	<select id="selectProcessedOrder" resultMap="BaseResultMap">
@@ -322,5 +324,10 @@
 		from tbl_order
 		where status = 3
 	</select>
-
+	<select id="selectUnclosedOrder" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_order
+		where status <> '1' and status <> '2'
+	</select>
 </mapper>

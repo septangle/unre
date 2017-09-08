@@ -1,18 +1,17 @@
-package com.unre.photo.comm.dal.model;
+package com.unre.photo.biz.dto;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
-public class MemberLevelItem {
+public class MemberLevelDto {
     private Long id;
 
-    private String name;
+    private Long memberId;
 
-    private String value;
+    private Date beginTime;
 
-    private BigDecimal rebate;
+    private Date endTime;
 
-    private BigDecimal annualFee;
+    private Integer level;
 
     private Integer createBy;
 
@@ -30,36 +29,36 @@ public class MemberLevelItem {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Long getMemberId() {
+        return memberId;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 
-    public String getValue() {
-        return value;
+    public Date getBeginTime() {
+        return beginTime;
     }
 
-    public void setValue(String value) {
-        this.value = value == null ? null : value.trim();
+    public void setBeginTime(Date beginTime) {
+        this.beginTime = beginTime;
     }
 
-    public BigDecimal getRebate() {
-        return rebate;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setRebate(BigDecimal rebate) {
-        this.rebate = rebate;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
-    public BigDecimal getAnnualFee() {
-        return annualFee;
+    public Integer getLevel() {
+        return level;
     }
 
-    public void setAnnualFee(BigDecimal annualFee) {
-        this.annualFee = annualFee;
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public Integer getCreateBy() {

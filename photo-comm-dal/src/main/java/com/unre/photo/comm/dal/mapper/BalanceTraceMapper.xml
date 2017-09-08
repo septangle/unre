@@ -4,7 +4,8 @@
   <resultMap id="BaseResultMap" type="com.unre.photo.comm.dal.model.BalanceTrace" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="member_id" property="memberId" jdbcType="BIGINT" />
-    <result column="trans_no" property="transNo" jdbcType="VARCHAR" />
+    <result column="trans_no" property="transNo" jdbcType="BIGINT" />
+    <result column="trans_time" property="transTime" jdbcType="TIMESTAMP" />
     <result column="trans_type" property="transType" jdbcType="CHAR" />
     <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="balance" property="balance" jdbcType="DECIMAL" />
@@ -16,9 +17,12 @@
     <result column="update_by" property="updateBy" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+   <resultMap id="AmountResultMap" type="java.math.BigDecimal" >
+    <result column="amountsum" property="amountsum" jdbcType="DECIMAL" />
+  </resultMap>
   <sql id="Base_Column_List" >
-    id, member_id, trans_no, trans_type, amount, balance, status, remark, version, create_by, 
-    create_time, update_by, update_time
+    id, member_id, trans_no, trans_time, trans_type, amount, balance, status, remark, 
+    version, create_by, create_time, update_by, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -31,16 +35,16 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.unre.photo.comm.dal.model.BalanceTrace" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_balance_trace (member_id, trans_no, trans_type, 
-      amount, balance, status, 
-      remark, version, create_by, 
-      create_time, update_by, update_time
-      )
-    values (#{memberId,jdbcType=BIGINT}, #{transNo,jdbcType=VARCHAR}, #{transType,jdbcType=CHAR}, 
-      #{amount,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL}, #{status,jdbcType=CHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{version,jdbcType=BIGINT}, #{createBy,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    insert into tbl_balance_trace (member_id, trans_no, trans_time, 
+      trans_type, amount, balance, 
+      status, remark, version, 
+      create_by, create_time, update_by, 
+      update_time)
+    values (#{memberId,jdbcType=BIGINT}, #{transNo,jdbcType=BIGINT}, #{transTime,jdbcType=TIMESTAMP}, 
+      #{transType,jdbcType=CHAR}, #{amount,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL}, 
+      #{status,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, #{version,jdbcType=BIGINT}, 
+      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.BalanceTrace" useGeneratedKeys="true" keyProperty="id" >
     insert into tbl_balance_trace
@@ -50,6 +54,9 @@
       </if>
       <if test="transNo != null" >
         trans_no,
+      </if>
+      <if test="transTime != null" >
+        trans_time,
       </if>
       <if test="transType != null" >
         trans_type,
@@ -87,7 +94,10 @@
         #{memberId,jdbcType=BIGINT},
       </if>
       <if test="transNo != null" >
-        #{transNo,jdbcType=VARCHAR},
+        #{transNo,jdbcType=BIGINT},
+      </if>
+      <if test="transTime != null" >
+        #{transTime,jdbcType=TIMESTAMP},
       </if>
       <if test="transType != null" >
         #{transType,jdbcType=CHAR},
@@ -128,7 +138,10 @@
         member_id = #{memberId,jdbcType=BIGINT},
       </if>
       <if test="transNo != null" >
-        trans_no = #{transNo,jdbcType=VARCHAR},
+        trans_no = #{transNo,jdbcType=BIGINT},
+      </if>
+      <if test="transTime != null" >
+        trans_time = #{transTime,jdbcType=TIMESTAMP},
       </if>
       <if test="transType != null" >
         trans_type = #{transType,jdbcType=CHAR},
@@ -166,7 +179,8 @@
   <update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.BalanceTrace" >
     update tbl_balance_trace
     set member_id = #{memberId,jdbcType=BIGINT},
-      trans_no = #{transNo,jdbcType=VARCHAR},
+      trans_no = #{transNo,jdbcType=BIGINT},
+      trans_time = #{transTime,jdbcType=TIMESTAMP},
       trans_type = #{transType,jdbcType=CHAR},
       amount = #{amount,jdbcType=DECIMAL},
       balance = #{balance,jdbcType=DECIMAL},
@@ -179,4 +193,22 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectLastestRecordByMemberID" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_balance_trace
+    where member_id = #{member_id,jdbcType=BIGINT}
+    order by trans_time desc limit 1
+  </select>
+  
+  <select id="selectAmountSumByMemberID" resultMap="AmountResultMap" parameterType="java.lang.Long" >
+    select
+      sum(amount) amountsum
+    from tbl_balance_trace
+    where member_id = #{member_id,jdbcType=BIGINT}
+      and (trans_type = '1' or trans_type = '2')
+      and DATE_FORMAT(trans_time, '%Y') = DATE_FORMAT(NOW(),'%Y')
+    group by DATE_FORMAT(trans_time, '%Y')
+  </select>
 </mapper>

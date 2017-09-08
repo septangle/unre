@@ -1,35 +1,37 @@
 package com.unre.photo.quartz.bean;
 
-
 import java.util.TimerTask;
 
-import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.util.SpringContextUtil;
+import com.unre.photo.biz.logic.core.IOrderEngineBiz;
 
 //有一个新的任务调度  要实现JOB接口
 public class ScheduleJob extends TimerTask{
 	
 	public static final String PARAM_DATA = "jobParam";
 	
-	private IOrderBiz IProcessBiz;
-	
-	
+	private IOrderEngineBiz iorderEngineBiz;
 
-	public IOrderBiz getIProcessBiz() {
-		return IProcessBiz;
+	public IOrderEngineBiz getIorderEngineBiz() {
+		return iorderEngineBiz;
 	}
 
-	public void setIProcessBiz(IOrderBiz IProcessBiz) {
-		this.IProcessBiz = IProcessBiz;
+	public void setIorderEngineBiz(IOrderEngineBiz iorderEngineBiz) {
+		this.iorderEngineBiz = iorderEngineBiz;
+	}
+
+	public static String getParamData() {
+		return PARAM_DATA;
 	}
 
 	@Override
 	public void run() {
-		IProcessBiz = (IOrderBiz)SpringContextUtil.getBean("Process");
+		/*IProcessBiz = (IOrderBiz)SpringContextUtil.getBean("Process");
         System.err.println("ScheduleJob.execute() | 成功执行。。。       " + IProcessBiz);
-        IProcessBiz.updateStatus();
+        IProcessBiz.updateStatus();*/
+		
+		iorderEngineBiz = (IOrderEngineBiz)SpringContextUtil.getBean("Process");
+        System.err.println("ScheduleJob.execute() | 成功执行:  " + iorderEngineBiz);
+        iorderEngineBiz.updateOrderAndBalance();
 	}
-	
-	
-	
 }

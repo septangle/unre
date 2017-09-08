@@ -17,6 +17,44 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	//已删除
 	public final static String SET_DELETE = "1";
 
+	public final static String BENACO_PRIVATE_KEY = "3c7c6941-2204-4ee7-a4b5-0981e0e6e09c";
+    public final static String BENACO_HOST = "https://beta.benaco.com";
+    public final static String BENACO_BASEPATH = "/api/beta";
+    public final static String BENACO_NEW = "/scans/new";
+    public final static String BENACO_SCAN = "/scans/id";
+    public final static String BENACO_STATUS = "status";
+    public final static String BENACO_PROCESSPOINTS = "points";
+    
+    public final static String BENACO_STATUS_FAILED = "failed";
+    public final static String BENACO_STATUS_COMPLETED = "completed";
+    
+    public final static String HTTP_RETURN_CODE_200 = "200";
+
+    // 平面照片
+    public final static String ORDER_TYPE_PHOTO= "0";
+    // 全景照片
+    public final static String ORDER_TYPE_PANORAMA = "1";
+    // 线下消费
+    public final static String ORDER_TYPE_OFFLINE = "2";
+    
+    // 流水类型：充值
+    public final static String BALANCE_TRACE_TYPE_RECHARGE = "1";
+    // 流水类型：退钱
+    public final static String BALANCE_TRACE_TYPE_REFUNDS = "2";
+    // 流水类型：线上消费
+    public final static String BALANCE_TRACE_TYPE_ONLINE = "3";
+    // 流水类型：线下消费
+    public final static String BALANCE_TRACE_TYPE_OFFLINE = "4";
+    
+    public final static String ORDER_STATUS_PROCESSING = "0";
+    public final static String ORDER_STATUS_COMPLETED = "1";
+    public final static String ORDER_STATUS_FAILED = "2";
+    
+    // 系统自动设定会员级别（默认）
+    public final static String MEMBER_LEVEL_SET_TYPE_AUTOMATIC = "0";
+    // 手动设定会员级别
+    public final static String MEMBER_LEVEL_SET_TYPE_MANUAL = "1";
+	
 	//会员 1001
 	public final static String QUERY_LOGIN_USERID_ERROR_CODE = "10010001";
 	public final static String QUERY_LOGIN_USERID_ERROR_MESSAGE = "该用户不存在！";

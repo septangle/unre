@@ -8,7 +8,9 @@ public class BalanceTrace {
 
     private Long memberId;
 
-    private String transNo;
+    private Long transNo;
+
+    private Date transTime;
 
     private String transType;
 
@@ -46,12 +48,20 @@ public class BalanceTrace {
         this.memberId = memberId;
     }
 
-    public String getTransNo() {
+    public Long getTransNo() {
         return transNo;
     }
 
-    public void setTransNo(String transNo) {
-        this.transNo = transNo == null ? null : transNo.trim();
+    public void setTransNo(Long transNo) {
+        this.transNo = transNo;
+    }
+
+    public Date getTransTime() {
+        return transTime;
+    }
+
+    public void setTransTime(Date transTime) {
+        this.transTime = transTime;
     }
 
     public String getTransType() {

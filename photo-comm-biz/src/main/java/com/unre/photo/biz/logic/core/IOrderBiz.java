@@ -73,12 +73,6 @@ public interface IOrderBiz {
 	 */
 	public boolean saveUploadedImages(String benacoScanId,List<File> imageFiles) throws BusinessException;
 	
-
-	/**
-	 * 更新status信息
-	 * 
-	 */
-	public void updateStatus();
 	
 	/**
 	 * 查询当前用户场景
