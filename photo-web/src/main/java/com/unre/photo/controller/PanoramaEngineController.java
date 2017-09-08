@@ -29,12 +29,17 @@ import com.wordnik.swagger.annotations.ApiImplicitParams;
 public class PanoramaEngineController extends BaseController<PanoramaEngineController> {
 
 	@Autowired
-	private IPanoramaEngineFacade panoramaEngineFacade;
+	private IPanoramaEngineFacade panoramaEngineFacade;//photo upload
 
 	@Autowired
-	private PhotoUrl photoUrl;
+	private PhotoUrl photoUrl; //key、url
 
-	//新建场景（上传全景照片）
+
+	/**
+	 * 新建场景（上传全景照片）
+	 * @param request
+	 * @return resp
+	 */
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "panoramaEngineDto.files", value = "files", required = true, dataType = "List<File>") })
@@ -43,6 +48,7 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 			HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		Long id = (Long) session.getAttribute("ID");
+		//查询当前用户
 		if (id == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
@@ -70,10 +76,11 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 				if (!tempFile.getParentFile().exists()) {
 					tempFile.getParentFile().createNewFile();
 				}
-
+                //判断文件是否存在
 				if (!tempFile.exists()) {
 					tempFile.createNewFile();
 				}
+				//将文件添加到list集合
 				fileUrlList.add(tempFile);
 			}
 			request.getPanoramaEngineDto().setFiles(fileUrlList);
@@ -81,7 +88,11 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		return panoramaEngineFacade.addPhotos(request);
 	}
 
-	//生成场景（全景照片->3D场景）
+	/**
+	 * 处理照片
+	 * @param request
+	 * @return resp
+	 */
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaEngineDto.benacoScanId", value = "Benaco Scan Id", required = true, dataType = "string"), })
 	@RequestMapping(value = "/processPanoramas.do", method = RequestMethod.POST)

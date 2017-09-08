@@ -26,13 +26,18 @@ import com.wordnik.swagger.annotations.ApiOperation;
 public class MemberController extends BaseController<MemberController> {
 
 	@Autowired
-	private IMemberFacade memberFacade;
+	private IMemberFacade memberFacade; //会员
 
-	//查询当前会员
+	/**
+	 * 查询当前会员
+	 * @param ID
+	 * @return Member
+	 */
 	@ApiOperation(value = "查询当前会员", httpMethod = "GET", response = MemberResponse.class)
 	@RequestMapping(value = "/getCurrMember", method = RequestMethod.GET)
 	public @ResponseBody MemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
+		//根据缓存ID查询当前登录会员
 		Long id = (Long) session.getAttribute("ID");
 		if (id == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
@@ -41,10 +46,15 @@ public class MemberController extends BaseController<MemberController> {
 		MemberDto memberDto = new MemberDto();
 		memberDto.setId(id);
 		request.setMemberDto(memberDto);
+		//根据ID查询
 		return memberFacade.findMemberById(request);
 	}
 
-	//登录
+	/**
+	 * 登录
+	 * @param request
+	 * @return Member
+	 */
 	@ApiOperation(value = "登录", httpMethod = "POST", response = MemberResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "memberDto.tel", value = "联系电话", required = true, dataType = "string"),
@@ -55,13 +65,15 @@ public class MemberController extends BaseController<MemberController> {
 		MemberResponse MemberResponse = null;
 		HttpSession session = servletRequest.getSession();
 		MemberDto phonto = (MemberDto) session.getAttribute("MemberDto");
+		//判断会员是否登录
 		if (phonto != null) {
 			throw new BusinessException(AppConstants.QUERY_LOGIN_USERLOING_ERROR_CODE,
 					AppConstants.QUERY_LOGIN_USERLOING_ERROR_MESSAGE);
 		}
-		try {
+		try {//MD5加密
 			request.getMemberDto().setPassword(MD5Util.encodeMD5String(request.getMemberDto().getPassword()));
 			MemberResponse = memberFacade.login(request);
+			//判断对象是否为空，并放入session
 			if (MemberResponse != null && MemberResponse.getMemberDto() != null) {
 				servletRequest.getSession().setAttribute("MemberDto", MemberResponse.getMemberDto());
 				servletRequest.getSession().setAttribute("ID", MemberResponse.getMemberDto().getId());
@@ -73,7 +85,11 @@ public class MemberController extends BaseController<MemberController> {
 		return MemberResponse;
 	}
 
-	// 注册
+	/**
+	 * 登录
+	 * @param request
+	 * @return Member
+	 */
 	@ApiOperation(value = "注册", httpMethod = "POST", response = MemberResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "memberDto.memberName", value = "会员名称", required = true, dataType = "string"),
@@ -91,10 +107,16 @@ public class MemberController extends BaseController<MemberController> {
 	public @ResponseBody MemberResponse register(@RequestBody MemberRequest request, HttpServletRequest servletRequest)
 			throws Exception {
 		MemberResponse MemberResponse = null;
-		try {
+		try {//MD5加密
 			request.getMemberDto().setPassword(MD5Util.encodeMD5String(request.getMemberDto().getPassword()));
+			String type = request.getMemberDto().getSetType();
+			//设置用户操作类型：0--自动        1--手动 
+			if ((AppConstants.QUERY_ADD_AUTOMATICITY_TYPE).equals(type)) {
+				request.getMemberDto().setSetType(AppConstants.QUERY_ADD_SETTYPE);
+			} else if ((AppConstants.QUERY_ADD_MANUALOPERATION_TYPE).equals(type)) {
+				request.getMemberDto().setSetType(AppConstants.QUERY_ADD_SETTYPE_RATION);
+			}
 			MemberResponse = memberFacade.register(request);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -102,7 +124,11 @@ public class MemberController extends BaseController<MemberController> {
 
 	}
 
-	//注销
+	/**
+	 * 注销
+	 * @param requests
+	 * @return true or false
+	 */
 	@ApiOperation(value = "注销", httpMethod = "POST", response = MemberResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "memberDto.memberName", value = "memberName", required = false, dataType = "long"), })
@@ -114,11 +140,14 @@ public class MemberController extends BaseController<MemberController> {
 		if (phonto != null) {
 			MemberRequest rquest = new MemberRequest();
 			MemberDto memberDto = new MemberDto();
+			//从缓存中取得该对象
 			memberDto.setId(phonto.getId());
 			memberDto.setStatus(AppConstants.QUERY_LOGIN_USER_NOT_STATUS_MESSAGE);
 			rquest.setMemberDto(memberDto);
 			try {
+				//根据id修改登录状态
 				memberFacade.updateMember(rquest);
+				//清空缓存
 				session.removeAttribute("MemberDto");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -129,12 +158,17 @@ public class MemberController extends BaseController<MemberController> {
 
 	}
 
-	//查询当前login会员单价
+	/**
+	 * 取当前会员单价
+	 * @param ID
+	 * @return PriceDto
+	 */
 	@ApiOperation(value = "查询当前用户price", httpMethod = "GET", response = PriceRespnose.class)
 	@RequestMapping(value = "/getPrice.do", method = RequestMethod.GET)
 	public @ResponseBody PriceRespnose findCurrMemberPriceById(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		Long id = (Long) session.getAttribute("ID");
+		//判断用户是否登录
 		if (id == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);

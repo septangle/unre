@@ -145,12 +145,17 @@ public class MemberImpl implements IMemberBiz {
 
 	}
 
+	//查询当前会员单价
 	@Override
 	public PriceDto SelPriceById(MemberDto memberDto) throws BusinessException {
+		//根据Member表中level，查询MemberLevelItem表中折扣率
 		MemberLevelItem item=memberItemMapper.selectByValue(memberDto.getLevel());
+		//查询Goods表单价
     	Goods goods=goodMapper.selectByPrimaryKey(AppConstants.GOODS_ID_BENACO);
     	PriceDto p = new PriceDto();
+    	//单价=单价*折扣率
     	p.setPrice(item.getRebate().multiply(goods.getPrice()).doubleValue());
+    	//放入PriceDto中
     	return p ;
 	}
 

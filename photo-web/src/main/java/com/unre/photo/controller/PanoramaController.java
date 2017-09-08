@@ -20,20 +20,29 @@ import com.wordnik.swagger.annotations.ApiOperation;
 @RequestMapping("/Panorama")
 public class PanoramaController extends BaseController<OrderController>{
    @Autowired
-   private IPanoramaFacade ipanoramaFacade;
+   private IPanoramaFacade ipanoramaFacade;//3D照片(包含2D生成)
    
-   
-   //删除Panorama场景(做更新ID操作)
+  
+	/**
+	 * 删除Panorama场景(做更新ID操作)
+	 * @param ID
+	 * @return resp
+	 */
 	@ApiOperation(value = "删除Panorama", httpMethod = "POST", response = PanoramaResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaDto.id", value = "ID", required = true, dataType = "long")})
 	@RequestMapping(value = "/deletePanorama.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaResponse deleteProcess(@RequestBody PanoramaRequest request,
 			HttpServletRequest servletRequest) throws Exception {
+		//根据id进行更新操作
 		return ipanoramaFacade.updatePanorama(request);
 	}
 	
-    //根据场景ID取得场景信息
+	/**
+	 * 根据ID查询场景
+	 * @param ID
+	 * @return resp
+	 */
 	@ApiOperation(value = "查询Panorama", httpMethod = "POST", response = PanoramaResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaDto.id", value = "ID", required = true, dataType = "long")})

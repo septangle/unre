@@ -33,7 +33,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 	@Autowired
 	private IOrderBiz orderBizImpl;
-	
+
 	@Autowired
 	private IMemberBiz memberBizImpl;
 
@@ -62,19 +62,27 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			if (benacoScanId.endsWith("\""))
 				benacoScanId = benacoScanId.substring(0, benacoScanId.length() - 1);
 
-			//保存至Order表
-			MemberDto members=memberBizImpl.findMemberById(panoramaEngineDto.getUid());
+			//根据uid查询该会员信息
+			MemberDto members = memberBizImpl.findMemberById(panoramaEngineDto.getUid());
+			//取Member中level等级
 			PriceDto p = memberBizImpl.SelPriceById(members);
-			int fileSize=panoramaEngineDto.getFiles().size();
-			Double files=(double) fileSize;
-			Double price=p.getPrice();
-			Double money =files*price;
-			BigDecimal d1TobigDe = new BigDecimal(money);  
+			//算出点数(图片的数量)
+			int fileSize = panoramaEngineDto.getFiles().size();
+			//将fileSize转换为double类型
+			Double files = (double) fileSize;
+			//接收打折扣后单价
+			Double price = p.getPrice();
+			//点数*单价(折扣后单价)
+			Double money = files * price;
+			//计算出应付金额，BigDecimal类型
+			BigDecimal d1TobigDe = new BigDecimal(money);
 			OrderDto orderDto = new OrderDto();
 			orderDto.setBenacoScanId(benacoScanId);
 			orderDto.setMemberId(retPanEngineDto.getUid());
 			orderDto.setDescription(panoramaEngineDto.getTitle());
+			//应付金额，插入order表
 			orderDto.setTotalAmount(d1TobigDe);
+			//折扣后单价，插入order表
 			orderDto.setGoodsActualPrice(new BigDecimal(price));
 			orderBizImpl.addOrder(orderDto);
 
@@ -105,12 +113,8 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 			//2. TODO 需要增加文件上传服务器指定目录
 
-			//3. 更新scan状态，新增scan_item
-			OrderDto orderDto = new OrderDto();
-			orderDto.setBenacoScanId(benacoScanId);
-			OrderDto o=orderBizImpl.findOrder(orderDto);
-			orderBizImpl.saveUploadedImages(o.getId(), imageFiles);
-			orderBizImpl.updateOrderByBenacoId(orderDto);
+			//3. 更新状态，新增level_item
+			orderBizImpl.saveUploadedImages(benacoScanId, imageFiles);
 			retFlg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE, e);
@@ -139,7 +143,6 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			if ("200".equals(retCode)) {
 				OrderDto orderDto = new OrderDto();
 				orderDto.setBenacoScanId(benacoScanId);
-				orderDto.setStatus(AppConstants.SFILE_PROCESSING);
 				orderBizImpl.updateOrderByBenacoId(orderDto);
 
 				retFlg = true;
@@ -155,7 +158,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 	@Override
 	public PanoramaEngineDto queryScanStatus(PanoramaEngineDto panoramaEngineDto) throws Exception {
-		
+
 		PanoramaEngineDto PEngineDto = new PanoramaEngineDto();
 		try {
 			Map<String, Object> params = new HashMap<String, Object>();
@@ -165,9 +168,9 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 					+ "/status";
 			HttpClientResponse hcResponse = HttpClientUtil.doPost(addPhotosUrl, json);
 			String httpRetCode = hcResponse.getCode();
-			if("200".equals(httpRetCode)){
+			if ("200".equals(httpRetCode)) {
 				String context = hcResponse.getContext();
-				Map<String,Object> map = JsonUtil.toMap(context);
+				Map<String, Object> map = JsonUtil.toMap(context);
 				PEngineDto.setScanStatus(map.get("status").toString());
 			}
 		} catch (Exception e) {
@@ -193,6 +196,5 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 		return retPanEngineDto;
 	}
-    
 
 }

@@ -13,6 +13,9 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String SFILE_PROCESSING = "3"; //处理中
 	public final static String SFILE_PROCESS_FAIL = "4"; //处理失败
 	public final static String SCFILE_PROCESS_COMPLETE = "5"; //处理完成
+	
+	//已删除
+	public final static String SET_DELETE = "1";
 
 	//会员 1001
 	public final static String QUERY_LOGIN_USERID_ERROR_CODE = "10010001";
@@ -36,6 +39,11 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String QUERY_ADD_TEL_ERROR_MESSAGE = "手机号已存在！";
 	public final static String QUERY_ADD_MAIL_ERROR_CODE = "10030003";
 	public final static String QUERY_ADD_MAIL_ERROR_MESSAGE = "邮箱已存在！";
+	public final static String QUERY_ADD_AUTOMATICITY_TYPE = "自动";
+	public final static String QUERY_ADD_MANUALOPERATION_TYPE = "手动";
+	public final static String QUERY_ADD_SETTYPE = "0";
+	public final static String QUERY_ADD_SETTYPE_RATION = "1";
+
 
 	
 	//photo 10040000
