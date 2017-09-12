@@ -27,16 +27,21 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 	@Override
 	public PanoramaEngineResponse addPhotos(PanoramaEngineRequest request) throws Exception {
 		PanoramaEngineResponse retResponse = new PanoramaEngineResponse();
-		
+
 		// 1.创建scan id
 		PanoramaEngineDto panoramaEngineDto = panoramaEngineBiz.createScan(request.getPanoramaEngineDto());
 		String benacoScanId = panoramaEngineDto.getBenacoScanId();
 		// 2.上传照片
-		request.getPanoramaEngineDto().setBenacoScanId(benacoScanId);
-		boolean flg  = panoramaEngineBiz.addPhotos(request.getPanoramaEngineDto());
-		String code = flg? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
-		retResponse.setCode(code);
+		/*		boolean flg  = panoramaEngineBiz.addPhotos(request.getPanoramaEngineDto());
+		*/ PanoramaEngineDto EngineDto = panoramaEngineBiz.addPhotos(request.getPanoramaEngineDto());
+		Long orderId = EngineDto.getOrderId();
+		if (("").equals(EngineDto)) {
+			retResponse.setCode(AppConstants.FAIL_CODE);
+
+		}
+		retResponse.setCode(AppConstants.SUCCESS_CODE);
 		panoramaEngineDto.setBenacoScanId(benacoScanId);
+		panoramaEngineDto.setOrderId(orderId);
 		retResponse.setPanoramaEngineDto(panoramaEngineDto);
 		return retResponse;
 	}
@@ -45,7 +50,7 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 	public PanoramaEngineResponse startProcessing(PanoramaEngineRequest request) throws Exception {
 		PanoramaEngineResponse retResponse = new PanoramaEngineResponse();
 		boolean flg = panoramaEngineBiz.startProcessing(request.getPanoramaEngineDto());
-		String code = flg? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
+		String code = flg ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
 		retResponse.setCode(code);
 		return retResponse;
 	}
@@ -53,7 +58,7 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 	/*@Override
 	public PanoramaEngineResponse generateScan(PanoramaEngineRequest request) throws Exception {
 		PanoramaEngineResponse response = new PanoramaEngineResponse();
-
+	
 		// 1.创建scan id
 		PanoramaEngineDto panoramaEngineDto = panoramaEngineBiz.createScan(request.getPanoramaEngineDto());
 		String scanId = panoramaEngineDto.getBenacoScanId();

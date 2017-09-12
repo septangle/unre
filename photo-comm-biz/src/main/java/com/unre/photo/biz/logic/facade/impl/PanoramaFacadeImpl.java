@@ -32,7 +32,7 @@ public class PanoramaFacadeImpl implements IPanoramaFacade {
 		PanoramaDto processItemParm = request.getPanoramaDto();
 		if (processItemParm != null) {
 			PanoramaDto ProcessSourceDto = panoramaBiz.findProcessSourceById(processItemParm.getId());
-			response.setProcessSourceDto(ProcessSourceDto);
+			response.setPanoramaDto(ProcessSourceDto);
 		}
 		return response;
 	}

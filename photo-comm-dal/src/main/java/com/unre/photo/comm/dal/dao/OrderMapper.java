@@ -36,4 +36,11 @@ public interface OrderMapper {
     
     // select unclosed orders 
     List<Order> selectUnclosedOrder();
+    
+    //更新订单金额
+    int updateByAmount(Order record);
+    
+    //根据memberId查询订单
+    Order selMemberId(Long id);
+
 }

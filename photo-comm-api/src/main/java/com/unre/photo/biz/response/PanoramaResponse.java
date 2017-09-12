@@ -6,16 +6,18 @@ import com.unre.photo.biz.dto.PanoramaDto;
 
 @SuppressWarnings("serial")
 public class PanoramaResponse extends BaseResponse{
-	private PanoramaDto ProcessSourceDto;
+	private PanoramaDto panoramaDto;
 
 	private List<PanoramaDto> ProcessSourceDtoList;
 
-	public PanoramaDto getProcessSourceDto() {
-		return ProcessSourceDto;
+	
+
+	public PanoramaDto getPanoramaDto() {
+		return panoramaDto;
 	}
 
-	public void setProcessSourceDto(PanoramaDto ProcessSourceDto) {
-		this.ProcessSourceDto = ProcessSourceDto;
+	public void setPanoramaDto(PanoramaDto panoramaDto) {
+		this.panoramaDto = panoramaDto;
 	}
 
 	public List<PanoramaDto> getProcessSourceDtoList() {

@@ -26,11 +26,7 @@ public class ScheduleJob extends TimerTask{
 
 	@Override
 	public void run() {
-		/*IProcessBiz = (IOrderBiz)SpringContextUtil.getBean("Process");
-        System.err.println("ScheduleJob.execute() | 成功执行。。。       " + IProcessBiz);
-        IProcessBiz.updateStatus();*/
-		
-		iorderEngineBiz = (IOrderEngineBiz)SpringContextUtil.getBean("Process");
+		iorderEngineBiz = (IOrderEngineBiz)SpringContextUtil.getBean("OrderProcess");
         System.err.println("ScheduleJob.execute() | 成功执行:  " + iorderEngineBiz);
         iorderEngineBiz.updateOrderAndBalance();
 	}

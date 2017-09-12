@@ -22,7 +22,7 @@ public interface IPanoramaEngineBiz {
 	 * @return PanoramaEngineDto
 	 * @throws Exception
 	 */
-	public boolean addPhotos(PanoramaEngineDto panoramaEngineDto) throws Exception;
+	public PanoramaEngineDto addPhotos(PanoramaEngineDto panoramaEngineDto) throws Exception;
 
 	/**
 	 * 开始将3D照片制作成全景照片

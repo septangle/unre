@@ -40,7 +40,7 @@ public class ResettableStreamHttpServletRequest extends HttpServletRequestWrappe
 	@Override
 	public ServletInputStream getInputStream() throws IOException {
 		if (rawData == null) {
-			rawData = IOUtils.toByteArray(this.request.getReader(),Charset.forName("utf-8"));
+			rawData = IOUtils.toByteArray(this.request.getReader());
 			servletStream.stream = new ByteArrayInputStream(rawData);
 		}
 		return servletStream;

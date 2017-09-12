@@ -37,6 +37,10 @@
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" p:driverClass="${jdbc.driver}" p:jdbcUrl="${jdbc.url}" p:user="${jdbc.user}"
 		p:password="${jdbc.password}" p:acquireIncrement="${jdbc.acquireIncrement}" p:idleConnectionTestPeriod="${jdbc.idleConnectionTestPeriod}" p:maxPoolSize="${jdbc.maxPoolSize}"
 		p:minPoolSize="${jdbc.minPoolSize}" p:maxStatements="${jdbc.maxStatements}" />
+		
+	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"  
+        p:defaultEncoding="UTF-8"  
+        p:maxUploadSize="5400000000"/>  
 	
 </beans>
 	 

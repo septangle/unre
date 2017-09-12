@@ -29,7 +29,7 @@ import com.unre.photo.util.ModelUtil;
 
 import net.sf.json.JSONObject;
 
-@Service("Process")
+@Service("OrderProcess")
 public class OrderEngine implements IOrderEngineBiz {
 
 	@Autowired
@@ -198,7 +198,7 @@ public class OrderEngine implements IOrderEngineBiz {
 		}
 	}
 	
-	// Update order when online process started
+	// Update order when online process started  应付订单
 	private void UpdateOrder(Order order){
 		Member member = memberMapper.selectByPrimaryKey(order.getMemberId());
 		MemberLevelItem memberLevelItem = memberLevelItemMapper.selectByValue(member.getLevel());
@@ -225,12 +225,12 @@ public class OrderEngine implements IOrderEngineBiz {
 	}
 	
 	// Update order when process completed or failed
-	private void UpdateOrder(Order order, String status){
+	public boolean UpdateOrder(Order order, String status){
 		
 		Integer iProcessPoints = 0;
 		// set status
 		order.setStatus(status.equals(AppConstants.BENACO_STATUS_COMPLETED) ?
-				AppConstants.SCFILE_PROCESS_COMPLETE : AppConstants.SFILE_PROCESS_FAIL);
+				AppConstants.SFILE_PROCESS_COMPLETE : AppConstants.SFILE_PROCESS_FAIL);
 		// set number of processed points
 		iProcessPoints = GetProcessPointsByScanID(order.getBenacoScanId());
 		order.setGoodsNum(iProcessPoints);
@@ -238,10 +238,11 @@ public class OrderEngine implements IOrderEngineBiz {
 		order.setActualAmount(order.getGoodsActualPrice().multiply(new BigDecimal(iProcessPoints)));
 		
 		orderMapper.updateByPrimaryKeySelective(order);
+		return false;
 	}
 	
 	// Get process status by scanID
-	private String GetProcessStatusByScanID(String scanID) {
+	public String GetProcessStatusByScanID(String scanID) {
 		Map<String, Object> mpParams = new HashMap<String, Object>();
 		mpParams.put("key", AppConstants.BENACO_PRIVATE_KEY);
 		JSONObject jsParams = JSONObject.fromObject(mpParams);

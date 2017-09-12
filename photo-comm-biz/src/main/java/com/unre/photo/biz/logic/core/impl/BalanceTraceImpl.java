@@ -2,6 +2,7 @@ package com.unre.photo.biz.logic.core.impl;
 
 import java.math.BigDecimal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.logic.core.IBalanceTraceBiz;
@@ -20,6 +21,7 @@ import com.unre.photo.biz.dto.BalanceTraceDto;
 @Service
 public class BalanceTraceImpl implements IBalanceTraceBiz {
 
+	@Autowired
 	private BalanceMapper balanceMapper;
 	private BalanceTraceMapper balanceTraceMapper;
 	private MemberMapper memberMapper;
@@ -47,7 +49,7 @@ public class BalanceTraceImpl implements IBalanceTraceBiz {
 	}
 
 	// 更新余额表
-	private void updateBalance(BalanceTrace balanceTrace){
+	public void updateBalance(BalanceTrace balanceTrace){
 		Balance balance = balanceMapper.selectByMemberID(balanceTrace.getMemberId());
 		BigDecimal amount = balance.getAmount();
 		

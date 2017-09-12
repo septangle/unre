@@ -330,4 +330,26 @@
 		from tbl_order
 		where status != '1' and status != '2'
 	</select>
+
+
+	<update id="updateByAmount" parameterType="com.unre.photo.comm.dal.model.Order">
+		update tbl_order
+		set
+		total_amount =
+		#{totalAmount,jdbcType=DECIMAL},
+		actual_amount =
+		#{actualAmount,jdbcType=DECIMAL},
+		status =
+		#{status,jdbcType=CHAR},
+		goods_actual_price =
+		#{goodsActualPrice,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<select id="selMemberId" parameterType="java.lang.Long">
+	  select 
+	  <include refid="Base_Column_List" />
+		from tbl_order 
+	    where  member_id = #{memberId,jdbcType=BIGINT}
+	</select>
 </mapper>

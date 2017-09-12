@@ -1,7 +1,6 @@
 package com.unre.photo.biz.logic.core.impl;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.dto.PanoramaEngineDto;
-import com.unre.photo.biz.dto.PriceDto;
-import com.unre.photo.biz.dto.MemberDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
-import com.unre.photo.biz.logic.core.IMemberBiz;
-import com.unre.photo.biz.logic.core.IOrderBiz;
+/*import com.unre.photo.biz.logic.core.IMemberBiz;
+*/import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.HttpClientResponse;
 import com.unre.photo.util.HttpClientUtil;
@@ -34,8 +31,8 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	@Autowired
 	private IOrderBiz orderBizImpl;
 
-	@Autowired
-	private IMemberBiz memberBizImpl;
+
+	
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -61,31 +58,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				benacoScanId = benacoScanId.substring(1);
 			if (benacoScanId.endsWith("\""))
 				benacoScanId = benacoScanId.substring(0, benacoScanId.length() - 1);
-
-			//根据uid查询该会员信息
-			MemberDto members = memberBizImpl.findMemberById(panoramaEngineDto.getUid());
-			//取Member中level等级
-			PriceDto p = memberBizImpl.SelPriceById(members);
-			//算出点数(图片的数量)
-			int fileSize = panoramaEngineDto.getFiles().size();
-			//将fileSize转换为double类型
-			Double files = (double) fileSize;
-			//接收打折扣后单价
-			Double price = p.getPrice();
-			//点数*单价(折扣后单价)
-			Double money = files * price;
-			//计算出应付金额，BigDecimal类型
-			BigDecimal d1TobigDe = new BigDecimal(money);
-			OrderDto orderDto = new OrderDto();
-			orderDto.setBenacoScanId(benacoScanId);
-			orderDto.setMemberId(retPanEngineDto.getUid());
-			orderDto.setDescription(panoramaEngineDto.getTitle());
-			//应付金额，插入order表
-			orderDto.setTotalAmount(d1TobigDe);
-			//折扣后单价，插入order表
-			orderDto.setGoodsActualPrice(new BigDecimal(price));
-			orderBizImpl.addOrder(orderDto);
-
+		
 			//返回 benaco scan id
 			panoramaEngineDto.setBenacoScanId(benacoScanId);
 			retPanEngineDto.setBenacoScanId(benacoScanId);
@@ -99,9 +72,9 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 	@SuppressWarnings("unused")
 	@Override
-	public boolean addPhotos(PanoramaEngineDto panoramaEngineDto) throws Exception {
+	public PanoramaEngineDto addPhotos(PanoramaEngineDto panoramaEngineDto) throws Exception {
 
-		boolean retFlg = false;
+		PanoramaEngineDto retPanEngineDto = new PanoramaEngineDto();
 
 		try {
 			//1. 上传文件至benaco服务器
@@ -113,16 +86,22 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 			//2. TODO 需要增加文件上传服务器指定目录
 
-			//3. 更新状态，新增level_item
+			//3. 更新状态     创建订单
+			OrderDto orderDto = new OrderDto();
+			orderDto.setBenacoScanId(benacoScanId);
+			orderDto.setMemberId(panoramaEngineDto.getUid());
+			orderDto.setDescription(panoramaEngineDto.getTitle());
+			OrderDto order=orderBizImpl.addOrder(orderDto);
+			//添加图片路径
 			orderBizImpl.saveUploadedImages(benacoScanId, imageFiles);
-			retFlg = true;
+			retPanEngineDto.setOrderId(order.getId());
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE,
 					AppConstants.PENGINE_ADD_PHOTOS_ERROR_MESSAGE);
 		}
 
-		return retFlg;
+		return retPanEngineDto;
 	}
 
 	@Override
@@ -143,8 +122,9 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			if ("200".equals(retCode)) {
 				OrderDto orderDto = new OrderDto();
 				orderDto.setBenacoScanId(benacoScanId);
+				orderDto.setMemberId(panoramaEngineDto.getUid());
+				orderDto.setId(panoramaEngineDto.getOrderId());
 				orderBizImpl.updateOrderByBenacoId(orderDto);
-
 				retFlg = true;
 			}
 
