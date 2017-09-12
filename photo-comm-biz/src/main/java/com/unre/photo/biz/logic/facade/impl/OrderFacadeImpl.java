@@ -17,7 +17,7 @@ import com.unre.photo.comm.AppConstants;
  *
  */
 @Service
-public class IOrderFacadeImpl implements IOrderFacade {
+public class OrderFacadeImpl implements IOrderFacade {
 
 	@Autowired
 	private IOrderBiz processBiz;

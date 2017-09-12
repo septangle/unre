@@ -22,7 +22,19 @@ public class PanoramaEngineDto {
 	
 	private Long uid;
 	
+	private Long orderId;
 	
+	
+	
+	
+
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
 
 	public Long getId() {
 		return id;

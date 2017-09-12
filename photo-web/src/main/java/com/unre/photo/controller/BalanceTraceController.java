@@ -36,7 +36,7 @@ public class BalanceTraceController extends BaseController<BalanceTraceControlle
 			@ApiImplicitParam(name = "balanceTraceDto.memberId", value = "会员ID", required = true, dataType = "long"),
 			@ApiImplicitParam(name = "balanceTraceDto.amount", value = "充值金额", required = true, dataType = "long"),
 			@ApiImplicitParam(name = "balanceTraceDto.remark", value = "备注", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "balanceTraceDto.transType", value = "类型", required = false, dataType = "string")})
+			@ApiImplicitParam(name = "balanceTraceDto.transType", value = "类型", required = true, dataType = "string")})
 	@RequestMapping(value = "/recharge.do", method = RequestMethod.POST)
 	public @ResponseBody BalanceTraceResponse recharge(@RequestBody BalanceTraceRequest request,
 			HttpServletRequest servletRequest) throws Exception {

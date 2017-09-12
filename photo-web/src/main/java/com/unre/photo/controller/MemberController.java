@@ -86,7 +86,7 @@ public class MemberController extends BaseController<MemberController> {
 	}
 
 	/**
-	 * 登录
+	 * 注册
 	 * @param request
 	 * @return Member
 	 */
@@ -109,13 +109,6 @@ public class MemberController extends BaseController<MemberController> {
 		MemberResponse MemberResponse = null;
 		try {//MD5加密
 			request.getMemberDto().setPassword(MD5Util.encodeMD5String(request.getMemberDto().getPassword()));
-			String type = request.getMemberDto().getSetType();
-			//设置用户操作类型：0--自动        1--手动 
-			if ((AppConstants.QUERY_ADD_AUTOMATICITY_TYPE).equals(type)) {
-				request.getMemberDto().setSetType(AppConstants.QUERY_ADD_SETTYPE);
-			} else if ((AppConstants.QUERY_ADD_MANUALOPERATION_TYPE).equals(type)) {
-				request.getMemberDto().setSetType(AppConstants.QUERY_ADD_SETTYPE_RATION);
-			}
 			MemberResponse = memberFacade.register(request);
 		} catch (Exception e) {
 			e.printStackTrace();
