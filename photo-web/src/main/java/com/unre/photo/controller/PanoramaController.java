@@ -21,7 +21,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 public class PanoramaController extends BaseController<OrderController>{
    @Autowired
    private IPanoramaFacade ipanoramaFacade;//3D照片(包含2D生成)
-   
   
 	/**
 	 * 删除Panorama场景(做更新ID操作)
