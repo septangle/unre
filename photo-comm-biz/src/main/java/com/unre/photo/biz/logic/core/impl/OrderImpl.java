@@ -29,7 +29,6 @@ import com.unre.photo.comm.dal.model.Order;
 import com.unre.photo.comm.dal.model.Panorama;
 import com.unre.photo.util.ModelUtil;
 
-
 @Service("Process")
 public class OrderImpl implements IOrderBiz {
 
@@ -38,13 +37,13 @@ public class OrderImpl implements IOrderBiz {
 
 	@Autowired
 	private IPanoramaBiz panoramaBiz;
-	
+
 	@Autowired
 	private IMemberBiz memberBizImpl;
-	
+
 	@Autowired
 	private BalanceMapper balanceMapper;
-	
+
 	@Autowired
 	private PanoramaMapper panoramaMapper;
 
@@ -119,13 +118,13 @@ public class OrderImpl implements IOrderBiz {
 			//取Member中level等级  返回折扣后的单价
 			PriceDto p = memberBizImpl.SelPriceById(members);
 			//根据uid查询order表  查询出order_id
-			Order o=orderMapper.SelOrder(pScanParm);
+			Order o = orderMapper.SelOrder(pScanParm);
 			Panorama ps = new Panorama();
 			//将order_id 放入panorama表
 			ps.setOrderId(o.getId());
-			List<Panorama> plists=panoramaMapper.selectByPhotoCount(ps);
+			List<Panorama> plists = panoramaMapper.selectByPhotoCount(ps);
 			//算出点数
-			int fileSize =plists.size();
+			int fileSize = plists.size();
 			//接收打折扣后单价
 			Double price = p.getPrice();
 			//点数*单价(折扣后单价)
@@ -136,16 +135,16 @@ public class OrderImpl implements IOrderBiz {
 			pScan.setTotalAmount(d1TobigDe);
 			//折扣后单价，插入order表
 			pScan.setGoodsActualPrice(new BigDecimal(price));
-	        //2.后更新scan状态
+			//2.后更新scan状态
 			int i = orderMapper.updateByAmount(pScan);
 			if (i != 1) { // i == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 			}
 			//插入balance表  余额=余额-应付金额  冻结金额=冻结总额相加
-			Balance balance=balanceMapper.selectByMemberID(orderDto.getMemberId());
-			Balance bl= new Balance();
-			BigDecimal b=balance.getAmount().subtract(d1TobigDe);//相减后的余额
+			Balance balance = balanceMapper.selectByMemberID(orderDto.getMemberId());
+			Balance bl = new Balance();
+			BigDecimal b = balance.getAmount().subtract(d1TobigDe);//相减后的余额
 			bl.setMemberId(orderDto.getMemberId());//会员ID
 			bl.setAmount(b);//余额
 			bl.setFreezeAmount(d1TobigDe.add(balance.getFreezeAmount()));//冻结金额
@@ -155,7 +154,7 @@ public class OrderImpl implements IOrderBiz {
 			LOGGER.error(AppConstants.SCAN_UPDATE_ERROR_MESSAGE, e);
 			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE, AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 		}
-	
+
 		return flg;
 	}
 
@@ -181,28 +180,23 @@ public class OrderImpl implements IOrderBiz {
 		boolean flg = false;
 		try {
 			//1.更新scan状态
-			Order pScanParm = new Order();
-			pScanParm.setBenacoScanId(benacoScanId);
-			List<Order> pScanList = orderMapper.selectBySelective(pScanParm);
-			if (pScanList.size() == 0 || pScanList.size() > 1) {
+			Order orderParm = new Order();
+			orderParm.setBenacoScanId(benacoScanId);
+			List<Order> orderList = orderMapper.selectBySelective(orderParm);
+			if (orderList.size() == 0 || orderList.size() > 1) {
 				throw new BusinessException(AppConstants.SCAN_BENACO_SCAN_ID_ERROR_CODE,
 						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
 			}
-			Order pScan = pScanList.get(0);
-			pScan.setStatus(AppConstants.SFILE_INIT);
-			int i = orderMapper.updateOrderByBenacoId(pScan);
-			if (i == 1) {
-				//2. 新增scan item
-				for (File f : imageFiles) {
-					String imageFullPath = f.getPath() + f.getName();
-					PanoramaDto pScanItemDto = new PanoramaDto();
-					pScanItemDto.setOrderId(pScan.getId());
-					pScanItemDto.setImagePath(imageFullPath);
-					panoramaBiz.addProcessSource(pScanItemDto);
-				}
-				flg = true;
+			Order order = orderList.get(0);
+			//2. 新增scan item
+			for (File f : imageFiles) {
+				String imageFullPath = f.getPath();
+				PanoramaDto pScanItemDto = new PanoramaDto();
+				pScanItemDto.setOrderId(order.getId());
+				pScanItemDto.setImagePath(imageFullPath);
+				panoramaBiz.addProcessSource(pScanItemDto);
 			}
-
+			flg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_SAVE_IMAGE_ERROR_MESSAGE, e);
 			throw new BusinessException(AppConstants.SCAN_SAVE_IMAGE_ERROR_CODE,
@@ -244,7 +238,5 @@ public class OrderImpl implements IOrderBiz {
 		}
 		return orderDto;
 	}
-
-
 
 }
