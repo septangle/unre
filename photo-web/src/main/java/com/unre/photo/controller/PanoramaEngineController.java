@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IPanoramaEngineFacade;
 import com.unre.photo.biz.request.PanoramaEngineRequest;
@@ -44,32 +45,34 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	/*	@ApiImplicitParams({
 				@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string"),
 				@ApiImplicitParam(name = "panoramaEngineDto.files", value = "files", required = true, dataType = "List<File>") })*/
-	@RequestMapping(value = "/addPanoramas.do", method = RequestMethod.POST)
-	public @ResponseBody PanoramaEngineResponse addPhotos(@RequestParam MultipartFile[] files,
-			@RequestParam("title") String title, HttpServletRequest servletRequest) throws Exception {
+	@RequestMapping(value = "/addPhotos.do", method = RequestMethod.POST)
+	public @ResponseBody PanoramaEngineResponse addPhotos(
+			@RequestParam("title") String title,
+			@RequestParam MultipartFile[] files,
+			@RequestParam("number") String number,
+			HttpServletRequest servletRequest) throws Exception {
 		PanoramaEngineRequest request = new PanoramaEngineRequest();
+		PanoramaEngineDto peDto = new PanoramaEngineDto();
+		request.setPanoramaEngineDto(peDto);
 		HttpSession session = servletRequest.getSession();
 		Long id = (Long) session.getAttribute("ID");
 		//查询当前用户
 		if (id == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
-        request.getPanoramaEngineDto().setTitle(title);
-		request.getPanoramaEngineDto().setUid(id);
-		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
-		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
+		peDto.setTitle(title);
+		peDto.setUid(id);
+		peDto.setApiKey(photoUrl.getKey());
+		peDto.setApiBaseUrl(photoUrl.getUrl());
 		List<File> fileUrlList = new ArrayList<File>(); //用来保存文件路径，
-		  for(MultipartFile file : files){ 
-			  if(file.isEmpty()){  
-	                System.out.println("文件未上传");  
+		for(int i=0;i<files.length;i++) {
+			  if(files[i].isEmpty()){  
+	                System.out.println("上传文件["+i+"]为空");  
 	            }else{
-	            	  System.out.println("文件长度: " + file.getSize());  
-	                  System.out.println("文件类型: " + file.getContentType());  
-	                  System.out.println("文件名称: " + file.getName());  
-	                  System.out.println("文件原名: " + file.getOriginalFilename());
-	                  String path=photoUrl.getPath()+file.getOriginalFilename();
-	                  FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path, file.getOriginalFilename()));
-	                  File f= new File(path);
+	                  System.out.println("文件名称: " + files[i].getName() + "文件原名: " + files[i].getOriginalFilename() + "文件类型: " + files[i].getContentType() +"文件大小: " + files[i].getSize());  
+	                  String path=photoUrl.getPath();
+	                  FileUtils.copyInputStreamToFile(files[i].getInputStream(), new File(path, files[i].getOriginalFilename()));
+	                  File f= new File(path+files[i].getOriginalFilename());
 	                  fileUrlList.add(f);
 	            }
 		  }
