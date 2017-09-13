@@ -20,7 +20,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 
 @Controller
-@RequestMapping("/balance")
+@RequestMapping("/balancetrace")
 public class BalanceTraceController extends BaseController<BalanceTraceController> {
 
 	@Autowired
