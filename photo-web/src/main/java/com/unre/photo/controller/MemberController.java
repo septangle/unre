@@ -101,8 +101,7 @@ public class MemberController extends BaseController<MemberController> {
 			@ApiImplicitParam(name = "memberDto.adress", value = "地址", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "memberDto.industry", value = "行业", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "memberDto.contact", value = "联系人", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "memberDto.mail", value = "邮箱", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "memberDto.setType", value = "设置类型", required = true, dataType = "string") })
+			@ApiImplicitParam(name = "memberDto.mail", value = "邮箱", required = true, dataType = "string") })
 	@RequestMapping(value = "/register.do", method = RequestMethod.POST)
 	public @ResponseBody MemberResponse register(@RequestBody MemberRequest request, HttpServletRequest servletRequest)
 			throws Exception {
@@ -142,6 +141,7 @@ public class MemberController extends BaseController<MemberController> {
 				memberFacade.updateMember(rquest);
 				//清空缓存
 				session.removeAttribute("MemberDto");
+				session.removeAttribute("ID");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

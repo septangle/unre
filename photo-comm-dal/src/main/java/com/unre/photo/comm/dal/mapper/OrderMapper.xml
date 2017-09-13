@@ -30,6 +30,9 @@
 		<id property="id" column="id" />
 		<result column="member_id" property="memberId" jdbcType="BIGINT" />
 		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="benaco_scan_id" property="benacoScanId"
+			jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
 		<!-- 用collection标签 ,也是实体类属性要对应数据库字段 -->
 		<collection property="panorama"
 			ofType="com.unre.photo.comm.dal.model.Panorama">
