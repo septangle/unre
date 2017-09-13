@@ -192,58 +192,8 @@
 		</trim>
 	</insert>
 	<update id="updateByPrimaryKeySelective" parameterType="com.unre.photo.comm.dal.model.Order">
-		update tbl_order
-		<set>
-			<if test="memberId != null">
-				member_id = #{memberId,jdbcType=BIGINT},
-			</if>
-			<if test="totalAmount != null">
-				total_amount = #{totalAmount,jdbcType=DECIMAL},
-			</if>
-			<if test="actualAmount != null">
-				actual_amount = #{actualAmount,jdbcType=DECIMAL},
-			</if>
-			<if test="goodsId != null">
-				goods_id = #{goodsId,jdbcType=BIGINT},
-			</if>
-			<if test="goodsActualPrice != null">
-				goods_actual_price =
-				#{goodsActualPrice,jdbcType=DECIMAL},
-			</if>
-			<if test="goodsNum != null">
-				goods_num = #{goodsNum,jdbcType=INTEGER},
-			</if>
-			<if test="benacoScanId != null">
-				benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR},
-			</if>
-			<if test="description != null">
-				description = #{description,jdbcType=VARCHAR},
-			</if>
-			<if test="type != null">
-				type = #{type,jdbcType=CHAR},
-			</if>
-			<if test="status != null">
-				status = #{status,jdbcType=CHAR},
-			</if>
-			<if test="isDeleted != null">
-				is_deleted = #{isDeleted,jdbcType=CHAR},
-			</if>
-			<if test="version != null">
-				version = #{version,jdbcType=BIGINT},
-			</if>
-			<if test="createBy != null">
-				create_by = #{createBy,jdbcType=INTEGER},
-			</if>
-			<if test="createTime != null">
-				create_time = #{createTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="updateBy != null">
-				update_by = #{updateBy,jdbcType=INTEGER},
-			</if>
-			<if test="updateTime != null">
-				update_time = #{updateTime,jdbcType=TIMESTAMP},
-			</if>
-		</set>
+		update
+		tbl_order set is_deleted = #{isDeleted,jdbcType=CHAR} 
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Order">
@@ -346,13 +296,14 @@
 		#{status,jdbcType=CHAR},
 		goods_actual_price =
 		#{goodsActualPrice,jdbcType=DECIMAL}
-		where id = #{id,jdbcType=BIGINT}
+		where id =
+		#{id,jdbcType=BIGINT}
 	</update>
-	
+
 	<select id="selMemberId" parameterType="java.lang.Long">
-	  select 
-	  <include refid="Base_Column_List" />
-		from tbl_order 
-	    where  member_id = #{memberId,jdbcType=BIGINT}
+		select
+		<include refid="Base_Column_List" />
+		from tbl_order
+		where member_id = #{memberId,jdbcType=BIGINT}
 	</select>
 </mapper>

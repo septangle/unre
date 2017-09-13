@@ -10,6 +10,7 @@ import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.biz.logic.facade.IPanoramaFacade;
 import com.unre.photo.biz.request.OrderRequest;
 import com.unre.photo.biz.request.PanoramaRequest;
+import com.unre.photo.biz.response.OrderResponse;
 import com.unre.photo.biz.response.PanoramaResponse;
 import com.unre.photo.comm.AppConstants;
 
@@ -38,15 +39,16 @@ public class PanoramaFacadeImpl implements IPanoramaFacade {
 		return response;
 	}
 
-
 	@Override
-	public PanoramaResponse updatePanorama(OrderRequest request) throws Exception {
-		PanoramaResponse response = new PanoramaResponse();
+	public OrderResponse updatePanorama(OrderRequest request) throws Exception {
+		OrderResponse response = new OrderResponse();
 		boolean flag = panoramaBiz.updatePanorama(request.getOrderDto());
 		String code = flag ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
 		response.setCode(code);
 		return response;
-
 	}
+
+
+
 
 }

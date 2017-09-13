@@ -86,7 +86,9 @@ public class PanoramaImpl implements IPanoramaBiz {
 				throw new BusinessException(AppConstants.SCANITEM_UPDATE_ERROR_CODE,
 						AppConstants.SCANITEM_UPDATE_ERROR_MESSAGE);
 			}
+			flag=true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.error(AppConstants.SCANITEM_UPDATE_ERROR_MESSAGE, e);
 			throw new BusinessException(AppConstants.SCANITEM_UPDATE_ERROR_CODE,
 					AppConstants.SCANITEM_UPDATE_ERROR_MESSAGE);

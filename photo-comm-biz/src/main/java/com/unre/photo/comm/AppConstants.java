@@ -127,7 +127,7 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	
 	//Photo Scan Item
 	public final static String SCANITEM_UPDATE_ERROR_CODE = "10060004";
-	public final static String SCANITEM_UPDATE_ERROR_MESSAGE = "更新ScanItem失败!";
+	public final static String SCANITEM_UPDATE_ERROR_MESSAGE = "更新is_Deleted失败!";
 	
 	//Goods
 	public final static Long GOODS_ID_BENACO = (long) 1;

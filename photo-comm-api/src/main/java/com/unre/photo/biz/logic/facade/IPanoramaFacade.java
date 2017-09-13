@@ -2,6 +2,7 @@ package com.unre.photo.biz.logic.facade;
 
 import com.unre.photo.biz.request.OrderRequest;
 import com.unre.photo.biz.request.PanoramaRequest;
+import com.unre.photo.biz.response.OrderResponse;
 import com.unre.photo.biz.response.PanoramaResponse;
 
 public interface IPanoramaFacade {
@@ -28,5 +29,5 @@ public interface IPanoramaFacade {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public PanoramaResponse updatePanorama(OrderRequest request) throws Exception;
+	public OrderResponse updatePanorama(OrderRequest request) throws Exception;
 }
