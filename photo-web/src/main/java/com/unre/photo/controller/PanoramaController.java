@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.unre.photo.biz.logic.facade.IPanoramaFacade;
+import com.unre.photo.biz.request.OrderRequest;
 import com.unre.photo.biz.request.PanoramaRequest;
+import com.unre.photo.biz.response.OrderResponse;
 import com.unre.photo.biz.response.PanoramaResponse;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
@@ -27,11 +29,11 @@ public class PanoramaController extends BaseController<OrderController>{
 	 * @param ID
 	 * @return resp
 	 */
-	@ApiOperation(value = "删除Panorama", httpMethod = "POST", response = PanoramaResponse.class)
+	@ApiOperation(value = "删除order", httpMethod = "POST", response = OrderResponse.class)
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "panoramaDto.id", value = "ID", required = true, dataType = "long")})
+			@ApiImplicitParam(name = "orderDto.id", value = "ID", required = true, dataType = "long")})
 	@RequestMapping(value = "/deletePanorama.do", method = RequestMethod.POST)
-	public @ResponseBody PanoramaResponse deleteProcess(@RequestBody PanoramaRequest request,
+	public @ResponseBody PanoramaResponse deleteProcess(@RequestBody OrderRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		//根据id进行更新操作
 		return ipanoramaFacade.updatePanorama(request);

@@ -1,6 +1,8 @@
 package com.unre.photo.biz.logic.core;
 
 import java.util.List;
+
+import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
 import com.unre.photo.biz.exception.BusinessException;
 
@@ -48,6 +50,6 @@ public interface IPanoramaBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public boolean updatePanorama(PanoramaDto panoramaDto) throws BusinessException;
+	public boolean updatePanorama(OrderDto orderDto) throws BusinessException;
 	
 }

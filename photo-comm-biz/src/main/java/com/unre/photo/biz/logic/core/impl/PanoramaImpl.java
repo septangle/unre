@@ -9,11 +9,14 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.comm.AppConstants;
+import com.unre.photo.comm.dal.dao.OrderMapper;
 import com.unre.photo.comm.dal.dao.PanoramaMapper;
+import com.unre.photo.comm.dal.model.Order;
 import com.unre.photo.comm.dal.model.Panorama;
 import com.unre.photo.util.ModelUtil;
 
@@ -22,6 +25,9 @@ public class PanoramaImpl implements IPanoramaBiz {
 
 	@Autowired
 	private PanoramaMapper panoramaMapper;
+	
+	@Autowired 
+	private OrderMapper orderMapper;
 
 	private static final Log LOGGER = LogFactory.getLog(PanoramaImpl.class);
 
@@ -70,12 +76,12 @@ public class PanoramaImpl implements IPanoramaBiz {
 
 
 	@Override
-	public boolean updatePanorama(PanoramaDto panoramaDto) throws BusinessException {
+	public boolean updatePanorama(OrderDto orderDto) throws BusinessException {
 		boolean flag = false;
 		try {
-			panoramaDto.setIsDeleted("1");
-			Panorama panorama = ModelUtil.dtoToModel(panoramaDto, Panorama.class);
-			int a = panoramaMapper.updateByPrimaryKeySelective(panorama);
+			orderDto.setIsDeleted("1");
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+			int a = orderMapper.updateByPrimaryKeySelective(order);
 			if (1 != a) { // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCANITEM_UPDATE_ERROR_CODE,
 						AppConstants.SCANITEM_UPDATE_ERROR_MESSAGE);
