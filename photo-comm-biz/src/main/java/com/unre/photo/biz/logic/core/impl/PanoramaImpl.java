@@ -96,6 +96,24 @@ public class PanoramaImpl implements IPanoramaBiz {
 		return flag;
 	}
 
+	@Override
+	public List<PanoramaDto> selectByPhoto(PanoramaDto panoramaDto) throws BusinessException {
+		List<PanoramaDto> MemberDtoList = new ArrayList<PanoramaDto>();
+		try {
+			Panorama ProcessSource = ModelUtil.dtoToModel(panoramaDto, Panorama.class);
+			List<Panorama> ProcessSourceList = panoramaMapper.selectBySelective(ProcessSource);
+			if (!CollectionUtils.isEmpty(ProcessSourceList)) {
+				for (Panorama p : ProcessSourceList) {
+					MemberDtoList.add(ModelUtil.modelToDto(p, PanoramaDto.class));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return MemberDtoList;
+	}
+
 
 
 

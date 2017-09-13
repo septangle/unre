@@ -208,9 +208,10 @@ public class OrderEngine implements IOrderEngineBiz {
 		order.setGoodsActualPrice(actualPrice);
 		order.setTotalAmount(actualPrice.multiply(new BigDecimal(order.getGoodsNum())));
 		order.setActualAmount(order.getTotalAmount());
-		
+		order.setStatus(AppConstants.SFILE_PROCESSING);
+
 		// set status
-		switch(order.getType()){
+	/*	switch(order.getType()){
 		case AppConstants.ORDER_TYPE_PHOTO:
 			order.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
 			break;
@@ -219,7 +220,7 @@ public class OrderEngine implements IOrderEngineBiz {
 			break;
 		default:
 			order.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
-		}
+		}*/
 		
 		orderMapper.updateByPrimaryKeySelective(order);
 	}

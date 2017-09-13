@@ -52,4 +52,11 @@ public interface IPanoramaBiz {
 	 */
 	public boolean updatePanorama(OrderDto orderDto) throws BusinessException;
 	
+	/**
+	 * 根据order_id查询
+	 * @return list
+	 */
+	public List<PanoramaDto> selectByPhoto(PanoramaDto panoramaDto) throws BusinessException;
+
+	
 }

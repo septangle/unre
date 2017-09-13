@@ -14,10 +14,13 @@ import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.dto.OrderDto;
+import com.unre.photo.biz.dto.PanoramaDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
 /*import com.unre.photo.biz.logic.core.IMemberBiz;
 */import com.unre.photo.biz.logic.core.IOrderBiz;
+import com.unre.photo.biz.logic.core.IOrderEngineBiz;
+import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.HttpClientResponse;
 import com.unre.photo.util.HttpClientUtil;
@@ -31,8 +34,11 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	@Autowired
 	private IOrderBiz orderBizImpl;
 
+	@Autowired
+	private IOrderEngineBiz iorder;
 
-	
+	@Autowired
+	private IPanoramaBiz panoramaBiz;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -58,7 +64,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				benacoScanId = benacoScanId.substring(1);
 			if (benacoScanId.endsWith("\""))
 				benacoScanId = benacoScanId.substring(0, benacoScanId.length() - 1);
-		
+
 			//返回 benaco scan id
 			panoramaEngineDto.setBenacoScanId(benacoScanId);
 			retPanEngineDto.setBenacoScanId(benacoScanId);
@@ -70,29 +76,28 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 		return retPanEngineDto;
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public PanoramaEngineDto addPhotos(PanoramaEngineDto panoramaEngineDto) throws Exception {
 
 		PanoramaEngineDto retPanEngineDto = new PanoramaEngineDto();
 
 		try {
-			//1. 上传文件至benaco服务器
+
 			String benacoScanId = panoramaEngineDto.getBenacoScanId();
-			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
+			List<File> imageFiles = panoramaEngineDto.getFiles();
+			/*String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
 			List<File> imageFiles = panoramaEngineDto.getFiles();
 			HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,
-					panoramaEngineDto.getBenacoScanId(), imageFiles);
+					panoramaEngineDto.getBenacoScanId(), imageFiles);*/
 
-			//2. TODO 需要增加文件上传服务器指定目录
-
-			//3. 更新状态     创建订单
+			//2.  创建订单
 			OrderDto orderDto = new OrderDto();
 			orderDto.setBenacoScanId(benacoScanId);
 			orderDto.setMemberId(panoramaEngineDto.getUid());
 			orderDto.setDescription(panoramaEngineDto.getTitle());
-			OrderDto order=orderBizImpl.addOrder(orderDto);
-			//添加图片路径
+			//2.1 添加订单表
+			OrderDto order = orderBizImpl.addOrder(orderDto);
+			//2.2添加图片信息
 			orderBizImpl.saveUploadedImages(benacoScanId, imageFiles);
 			retPanEngineDto.setOrderId(order.getId());
 		} catch (Exception e) {
@@ -104,6 +109,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 		return retPanEngineDto;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public boolean startProcessing(PanoramaEngineDto panoramaEngineDto) throws Exception {
 		boolean retFlg = false;
@@ -113,18 +119,36 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			params.put("key", panoramaEngineDto.getApiKey());
 			JSONObject json = JSONObject.fromObject(params);
 			String benacoScanId = panoramaEngineDto.getBenacoScanId();
-			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/start-processing";
-			HttpClientResponse hcResponse = HttpClientUtil.doPost(addPhotosUrl, json);
+
+			List<File> imageFiles = null;
+
+			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
+			PanoramaDto pt = new PanoramaDto();
+			pt.setOrderId(panoramaEngineDto.getOrderId());
+			//根据id查询图片
+			List<PanoramaDto> pto = panoramaBiz.selectByPhoto(pt);
+			for (PanoramaDto panoramaDto : pto) {
+				File f = new File(panoramaDto.getImagePath());
+				imageFiles.add(f);
+			}
+			//上传图片至benonco
+			HttpClientResponse hcResponses = HttpClientUtil.doPostMultipart(addPhotosUrl,
+					panoramaEngineDto.getBenacoScanId(), imageFiles);
+
+			//处理
+			String addPhotoProcessUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/start-processing";
+			HttpClientResponse hcResponse = HttpClientUtil.doPost(addPhotoProcessUrl, json);
 
 			String retCode = hcResponse.getCode();
+			
 			//2. 更新scan表中scanid对应记录的状态
-
 			if ("200".equals(retCode)) {
 				OrderDto orderDto = new OrderDto();
 				orderDto.setBenacoScanId(benacoScanId);
 				orderDto.setMemberId(panoramaEngineDto.getUid());
 				orderDto.setId(panoramaEngineDto.getOrderId());
 				orderBizImpl.updateOrderByBenacoId(orderDto);
+				 /*iorder.updateOrderAndBalance(orderDto);*/
 				retFlg = true;
 			}
 
