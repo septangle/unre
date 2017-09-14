@@ -50,6 +50,11 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
     public final static String ORDER_STATUS_COMPLETED = "1";
     public final static String ORDER_STATUS_FAILED = "2";
     
+    public final static String PANORAMA_UNSTITCH = "0";
+    public final static String PANORAMA_STITCHING = "1";
+    public final static String PANORAMA_STITCHED = "2";
+    public final static String PANORAMA_STITCH_FAIL = "3";
+    
     // 系统自动设定会员级别（默认）
     public final static String MEMBER_LEVEL_SET_TYPE_AUTOMATIC = "0";
     // 手动设定会员级别
@@ -95,10 +100,16 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String PENGINE_START_PROCESS_ERROR_CODE = "10040003";
 	public final static String PENGINE_START_PROCESS_ERROR_MESSAGE = "SCAN开始处理失败！";
 	
-	public final static String PENGINE_QUERY_SCAN_STATUS_ERROR_CODE = "10040004";
+	public final static String PENGINE_START_PHOTO_PROCESS_ERROR_CODE = "10040004";
+	public final static String PENGINE_START_PHOTO_PROCESS_ERROR_MESSAGE = "2D照片处理失败！";
+	
+	public final static String PENGINE_START_PANORAMA_PROCESS_ERROR_CODE = "10040005";
+	public final static String PENGINE_START_PANORAMA_PROCESS_ERROR_MESSAGE = "全景照片处理失败！";
+	
+	public final static String PENGINE_QUERY_SCAN_STATUS_ERROR_CODE = "10040006";
 	public final static String PENGINE_QUERY_SCAN_STATUS_ERROR_MESSAGE = "查询SCAN状态失败！";
 	
-	public final static String PENGINE_PREVIEW_SCAN_STATUS_ERROR_CODE = "10040005";
+	public final static String PENGINE_PREVIEW_SCAN_STATUS_ERROR_CODE = "10040007";
 	public final static String PENGINE_PREVIEW_SCAN_STATUS_ERROR_MESSAGE = "生程SCAN PRVIEW URL失败！";
 	
 	
