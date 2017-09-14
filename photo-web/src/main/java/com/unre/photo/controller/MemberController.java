@@ -172,4 +172,14 @@ public class MemberController extends BaseController<MemberController> {
 		return memberFacade.SelPrice(request);
 	}
 
+	/**
+	 * 
+	 * @param ID
+	 * @return 
+	 */
+	@ApiOperation(value = "查询ALL用户", httpMethod = "GET", response = PriceRespnose.class)
+	@RequestMapping(value = "/getAllMember.do", method = RequestMethod.GET)
+	public @ResponseBody MemberResponse findAllMember(HttpServletRequest servletRequest) throws Exception {
+		return memberFacade.queryAllMember(new MemberRequest());
+	}
 }

@@ -75,4 +75,14 @@ public interface IMemberBiz {
 	 * 查询当前用户单价
 	 */
 	public PriceDto SelPriceById(MemberDto memberDto) throws BusinessException;
+	
+	/**
+	 * 
+	 * 
+	 * @param
+	 * @return List
+	 * 
+	 * @throws BusinessException
+	 */
+	public List<MemberDto> queryAllMember() throws BusinessException;
 }

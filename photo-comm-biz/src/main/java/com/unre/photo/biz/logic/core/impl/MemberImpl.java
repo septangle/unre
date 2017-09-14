@@ -158,5 +158,21 @@ public class MemberImpl implements IMemberBiz {
     	//放入PriceDto中
     	return p ;
 	}
+	
+	// query all member
+	@Override
+	public List<MemberDto> queryAllMember() throws BusinessException {
+		
+		List<MemberDto> memberDtoList = new ArrayList<MemberDto>();
+		List<Member> memberList = memberMapper.queryAllMember();
+		
+		if (memberList != null) {
+			for (Member member : memberList) {
+				memberDtoList.add(ModelUtil.modelToDto(member, MemberDto.class));
+			}
+		}
+
+		return memberDtoList;
+	}
 
 }

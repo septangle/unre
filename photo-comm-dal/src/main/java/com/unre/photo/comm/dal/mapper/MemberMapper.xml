@@ -298,5 +298,11 @@
 			or mail = #{mail,jdbcType=VARCHAR}
 		</if>
 	</select>
+	<!-- get all member list  -->
+	<select id="queryAllMember" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_member
+	</select>
 
 </mapper>

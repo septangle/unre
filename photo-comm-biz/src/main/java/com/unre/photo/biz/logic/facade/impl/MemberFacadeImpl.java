@@ -81,6 +81,12 @@ public class MemberFacadeImpl implements IMemberFacade {
 		return priceRespnose;
 	}
 
-	
+	@Override
+	public MemberResponse queryAllMember(MemberRequest request) throws Exception {
+		List<MemberDto> memberList = memberBiz.queryAllMember();
+		MemberResponse response = new MemberResponse();
+		response.setMemberDtoList(memberList);
+		return response;
+	}
 
 }
