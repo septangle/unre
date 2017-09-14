@@ -18,12 +18,11 @@ import com.unre.photo.biz.response.PanoramaEngineResponse;
 
 @ContextConfiguration(locations = { "classpath:spring/photo_web_spring_test.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager")
-//public class PanoramaEngineFacadeImplTest extends AbstractTransactionalJUnit4SpringContextTests {
 public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTests{
 	@Autowired
 	private IPanoramaEngineFacade panoramaEngineFacade;
     
-	@Test@Rollback(false)
+	//@Test@Rollback(false)
 	public void testGenScanStepByStep() {
 		try {
 			PanoramaEngineRequest request = new PanoramaEngineRequest();
@@ -59,32 +58,16 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 		}
 	}
 	
-	//@Test
-	/*@SuppressWarnings("unused")
-	public void testGenerateScan() {
+	@Test@Rollback(false)
+	public void testStartPanoramaProcess() {
 		try {
 			PanoramaEngineRequest request = new PanoramaEngineRequest();
-			PanoramaEngineDto peDto = new PanoramaEngineDto();
-			//peDto.setApiUrl("https://beta.benaco.com/api/beta/scans/new");
-			peDto.setApiBaseUrl("https://beta.benaco.com/api/beta/scans/");
-			peDto.setApiKey("3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
-			peDto.setTitle("test-01");
-			File f = new File("D:/11.jpg");
-			List<File> files = new ArrayList<File>();
-			files.add(f);
-			peDto.setFiles(files);
-			request.setPanoramaEngineDto(peDto);
-			PanoramaEngineResponse response = panoramaEngineFacade.generateScan(request);
-
+			request.setPanoramaEngineDto(new PanoramaEngineDto());
+			PanoramaEngineResponse response = panoramaEngineFacade.startPanoramaProcess(request);
 			Assert.assertNotNull(response);
-
-			PanoramaEngineResponse response1 = panoramaEngineFacade.queryScanStatus(request);
-
-			Assert.assertNotNull(response);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 
 }

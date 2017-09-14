@@ -29,7 +29,7 @@ public class PanoramaController extends BaseController<OrderController>{
 	 * @param ID
 	 * @return resp
 	 */
-	@ApiOperation(value = "删除order", httpMethod = "POST", response = OrderResponse.class)
+	/*@ApiOperation(value = "删除order", httpMethod = "POST", response = OrderResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "orderDto.id", value = "ID", required = true, dataType = "long")})
 	@RequestMapping(value = "/deletePanorama.do", method = RequestMethod.POST)
@@ -37,7 +37,7 @@ public class PanoramaController extends BaseController<OrderController>{
 			HttpServletRequest servletRequest) throws Exception {
 		//根据id进行更新操作
 		return ipanoramaFacade.updatePanorama(request);
-	}
+	}*/
 	
 /*	*//**
 	 * 根据ID查询场景

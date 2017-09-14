@@ -80,12 +80,13 @@ public class OrderImpl implements IOrderBiz {
 	}
 
 	@Override
-	public boolean updateOrder(OrderDto processDto) throws BusinessException {
+	public boolean updateOrder(OrderDto orderDto) throws BusinessException {
 		boolean flg = false;
 		try {
-			processDto.setIsDeleted(AppConstants.SET_DELETE);
-			Order Process = ModelUtil.dtoToModel(processDto, Order.class);
-			int number = orderMapper.updateBySelective(Process);
+			//orderDto.setIsDeleted(AppConstants.SET_DELETE);
+			
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+			int number = orderMapper.updateBySelective(order);
 			if (number == 0) { // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
@@ -237,6 +238,25 @@ public class OrderImpl implements IOrderBiz {
 			throw new BusinessException(AppConstants.SCAN_FIND_ERROR_CODE, AppConstants.SCAN_FIND_ERROR_MESSAGE);
 		}
 		return orderDto;
+	}
+
+	@Override
+	public List<OrderDto> queryOrder(OrderDto orderDto) throws BusinessException {
+		List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
+		try {
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+			List<Order> orderList = orderMapper.selectBySelective(order);
+			if (!CollectionUtils.isEmpty(orderList)) {
+				for (Order p : orderList) {
+					orderDtoList.add(ModelUtil.modelToDto(p, OrderDto.class));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(AppConstants.SCAN_QUERY_ERROR_CODE, e);
+			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
+		}
+		return orderDtoList;
 	}
 
 }

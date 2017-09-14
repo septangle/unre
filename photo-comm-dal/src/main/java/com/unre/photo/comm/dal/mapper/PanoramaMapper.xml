@@ -105,7 +105,91 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.unre.photo.comm.dal.model.Panorama" >
+  
+  <update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Panorama" >
+    update tbl_panorama
+    set order_id = #{orderId,jdbcType=BIGINT},
+      image_path = #{imagePath,jdbcType=VARCHAR},
+      thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR},
+      stitch_status = #{stitchStatus,jdbcType=CHAR},
+      type = #{type,jdbcType=CHAR},
+      is_deleted = #{isDeleted,jdbcType=CHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  	<!-- ===============扩展SQL================= -->
+  	<!-- 根据order_id查询全景照片数量,返回list -->
+	<select id="selectByPhotoCount" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Panorama">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_panorama
+		where order_id =
+		#{orderId,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 查寻待处理3D照片(Panorama)记录 -->
+	<select id="selectPendingProcessPanorama" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Panorama">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_order o ,tbl_panorama p 
+        where o.id = p.order_id 
+        and o.status = '0' 
+        and p.stitch_status = '0' 
+        <if test="orderId != null" >
+          and p.order_id = #{orderId,jdbcType=BIGINT}
+        </if>
+        <if test="stitchStatus != null" >
+          and stitch_status = #{stitchStatus,jdbcType=CHAR}
+      </if>
+	 </select>
+	 
+	<select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.unre.photo.comm.dal.model.Panorama" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_panorama
+    where 1=1 
+      <if test="id != null" >
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="orderId != null" >
+        and order_id = #{orderId,jdbcType=BIGINT}
+      </if>
+      <if test="imagePath != null" >
+        and image_path = #{imagePath,jdbcType=VARCHAR}
+      </if>
+      <if test="thumbImagePath != null" >
+        and thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR}
+      </if>
+      <if test="stitchStatus != null" >
+        and stitch_status = #{stitchStatus,jdbcType=CHAR}
+      </if>
+      <if test="type != null" >
+        and type = #{type,jdbcType=CHAR}
+      </if>
+      <if test="isDeleted != null" >
+        and is_deleted = #{isDeleted,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null" >
+        and create_by = #{createBy,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null" >
+        and update_by = #{updateBy,jdbcType=INTEGER}
+      </if>
+      <if test="updateTime != null" >
+        and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+  </select>
+  
+  <update id="updateBySelective" parameterType="com.unre.photo.comm.dal.model.Panorama" >
     update tbl_panorama
     <set >
       <if test="orderId != null" >
@@ -141,29 +225,5 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Panorama" >
-    update tbl_panorama
-    set order_id = #{orderId,jdbcType=BIGINT},
-      image_path = #{imagePath,jdbcType=VARCHAR},
-      thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR},
-      stitch_status = #{stitchStatus,jdbcType=CHAR},
-      type = #{type,jdbcType=CHAR},
-      is_deleted = #{isDeleted,jdbcType=CHAR},
-      create_by = #{createBy,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_by = #{updateBy,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  	
-  	<!-- 根据order_id查询全景照片数量,返回list -->
-	<select id="selectByPhotoCount" resultMap="BaseResultMap"
-		parameterType="com.unre.photo.comm.dal.model.Panorama">
-		select
-		<include refid="Base_Column_List" />
-		from tbl_panorama
-		where order_id =
-		#{orderId,jdbcType=VARCHAR}
-	</select>
-
+    
 </mapper>

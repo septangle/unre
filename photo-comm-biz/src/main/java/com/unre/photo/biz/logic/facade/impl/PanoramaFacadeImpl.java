@@ -40,9 +40,9 @@ public class PanoramaFacadeImpl implements IPanoramaFacade {
 	}
 
 	@Override
-	public OrderResponse updatePanorama(OrderRequest request) throws Exception {
-		OrderResponse response = new OrderResponse();
-		boolean flag = panoramaBiz.updatePanorama(request.getOrderDto());
+	public PanoramaResponse updatePanorama(PanoramaRequest request) throws Exception {
+		PanoramaResponse response = new PanoramaResponse();
+		boolean flag = panoramaBiz.updatePanorama(request.getPanoramaDto());
 		String code = flag ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
 		response.setCode(code);
 		return response;

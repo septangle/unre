@@ -49,27 +49,20 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 	@Override
 	public PanoramaEngineResponse startProcessing(PanoramaEngineRequest request) throws Exception {
 		PanoramaEngineResponse retResponse = new PanoramaEngineResponse();
-		boolean flg = panoramaEngineBiz.startProcessing(request.getPanoramaEngineDto());
+		boolean flg = panoramaEngineBiz.startBenacoProcess(request.getPanoramaEngineDto());
 		String code = flg ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
 		retResponse.setCode(code);
 		return retResponse;
 	}
-
-	/*@Override
-	public PanoramaEngineResponse generateScan(PanoramaEngineRequest request) throws Exception {
-		PanoramaEngineResponse response = new PanoramaEngineResponse();
 	
-		// 1.创建scan id
-		PanoramaEngineDto panoramaEngineDto = panoramaEngineBiz.createScan(request.getPanoramaEngineDto());
-		String scanId = panoramaEngineDto.getBenacoScanId();
-		// 2.上传照片
-		panoramaEngineBiz.addPhotos(panoramaEngineDto);
-		// 3.开始处理
-		boolean flg = panoramaEngineBiz.startProcessing(panoramaEngineDto);
-		String code = flg? AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;
-		response.setCode(code);
-		return response;
-	}*/
+	@Override
+	public PanoramaEngineResponse startPanoramaProcess(PanoramaEngineRequest request) throws Exception {
+		PanoramaEngineResponse retResponse = new PanoramaEngineResponse();
+		boolean flg = panoramaEngineBiz.startPanoramaProcess(request.getPanoramaEngineDto());
+		String code = flg ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
+		retResponse.setCode(code);
+		return retResponse;
+	}
 
 	@Override
 	public PanoramaEngineResponse queryScanStatus(PanoramaEngineRequest request) throws Exception {

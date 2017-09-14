@@ -13,12 +13,16 @@ public interface PanoramaMapper {
 
     Panorama selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(Panorama record);
-
     int updateByPrimaryKey(Panorama record);
-        
+  
+    //-----------------------------------------------
+    
+    int updateBySelective(Panorama record);
+    
     List<Panorama> selectBySelective(Panorama record);
     
     List<Panorama> selectByPhotoCount(Panorama record);
+    
+    List<Panorama> selectPendingProcessPanorama(Panorama record);
 
 }

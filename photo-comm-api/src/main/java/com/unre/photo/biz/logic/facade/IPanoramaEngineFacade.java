@@ -36,16 +36,6 @@ public interface IPanoramaEngineFacade {
 	PanoramaEngineResponse startProcessing(PanoramaEngineRequest request) throws Exception;
 
 	/**
-	 * 新增benaco scan
-	 * 
-	 * @param request.MemberDto 
-	 *  
-	 * @return PanoramaEngineResponse.scanId
-	 * @throws Exception
-	 */
-	//PanoramaEngineResponse generateScan(PanoramaEngineRequest request) throws Exception;
-
-	/**
 	 * 查询 scan
 	 * 
 	 * @param MemberDto 
@@ -54,5 +44,15 @@ public interface IPanoramaEngineFacade {
 	 * @throws Exception
 	 */
 	PanoramaEngineResponse queryScanStatus(PanoramaEngineRequest request) throws Exception;
+	
+	/**
+	 * 新增benaco scan
+	 * 
+	 * @param request.MemberDto 
+	 *  
+	 * @return PanoramaEngineResponse.scanId
+	 * @throws Exception
+	 */
+	PanoramaEngineResponse startPanoramaProcess(PanoramaEngineRequest request) throws Exception;
 
 }

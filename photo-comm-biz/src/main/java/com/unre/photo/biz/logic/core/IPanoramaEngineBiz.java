@@ -25,14 +25,34 @@ public interface IPanoramaEngineBiz {
 	public PanoramaEngineDto addPhotos(PanoramaEngineDto panoramaEngineDto) throws Exception;
 
 	/**
-	 * 开始将3D照片制作成全景照片
+	 * 调用Benaco Process API开始将3D照片制作成全景照片
 	 * 
 	 * @param MemberDto 
 	 *  
 	 * @return boolean
 	 * @throws Exception
 	 */
-	public boolean startProcessing(PanoramaEngineDto panoramaEngineDto) throws Exception;
+	public boolean startBenacoProcess(PanoramaEngineDto panoramaEngineDto) throws Exception;
+	
+	/**
+	 * 开始将2D照片制作成全景照片
+	 * 
+	 * @param pEngineDto 
+	 *  
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public boolean startPhotoProcess(PanoramaEngineDto pEngineDto) throws Exception;
+	
+	/**
+	 * 开始将3D照片制作成场景照片
+	 * 
+	 * @param pEngineDto 
+	 *  
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public boolean startPanoramaProcess(PanoramaEngineDto pEngineDto) throws Exception;
 	
 	/**
 	 * 查询Scan状态

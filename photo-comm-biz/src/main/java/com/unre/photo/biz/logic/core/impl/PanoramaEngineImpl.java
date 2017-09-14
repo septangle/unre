@@ -1,27 +1,29 @@
 package com.unre.photo.biz.logic.core.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.dto.OrderDto;
+import com.unre.photo.biz.dto.PanoramaDto;
+import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.exception.BusinessException;
+import com.unre.photo.biz.logic.core.IOrderBiz;
+import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
-/*import com.unre.photo.biz.logic.core.IMemberBiz;
-*/import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.HttpClientResponse;
 import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.JsonUtil;
+
+import net.sf.json.JSONObject;
 
 @Service
 public class PanoramaEngineImpl implements IPanoramaEngineBiz {
@@ -30,9 +32,8 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 	@Autowired
 	private IOrderBiz orderBizImpl;
-
-
-	
+	@Autowired
+	private IPanoramaBiz panoramaBizImpl;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -103,9 +104,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	}
 
 	@Override
-	public boolean startProcessing(PanoramaEngineDto panoramaEngineDto) throws Exception {
+	public boolean startBenacoProcess(PanoramaEngineDto panoramaEngineDto) throws Exception {
 		boolean retFlg = false;
 		try {
+			
 			//1.调用benaco处理接口
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("key", panoramaEngineDto.getApiKey());
@@ -130,6 +132,82 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			LOGGER.error(AppConstants.PENGINE_START_PROCESS_ERROR_MESSAGE, e);
 			throw new BusinessException(AppConstants.PENGINE_START_PROCESS_ERROR_CODE,
 					AppConstants.PENGINE_START_PROCESS_ERROR_MESSAGE);
+		}
+		return retFlg;
+	}
+
+	@Override
+	public boolean startPhotoProcess(PanoramaEngineDto pEngineDto) throws Exception {
+		boolean retFlg = false;
+		try {
+			//1.查询全景表中未进行2D照片拼接的记录
+			PanoramaDto panDtoParm = new PanoramaDto();
+			panDtoParm.setOrderId(pEngineDto.getOrderId());
+			List<PanoramaDto> PanDtoList = panoramaBizImpl.queryUnStitchProcessSource(panDtoParm);
+			//2.调用2D照片拼接插件
+			for(PanoramaDto panDto : PanDtoList) {
+				
+			}
+			//3.更新PanoramaDto表记录状态
+			
+			retFlg = true;
+		} catch (Exception e) {
+			LOGGER.error(AppConstants.PENGINE_START_PHOTO_PROCESS_ERROR_MESSAGE, e);
+			throw new BusinessException(AppConstants.PENGINE_START_PHOTO_PROCESS_ERROR_CODE,
+					AppConstants.PENGINE_START_PHOTO_PROCESS_ERROR_MESSAGE);
+		}
+		return retFlg;
+	}
+
+	@Override
+	public boolean startPanoramaProcess(PanoramaEngineDto pEngineDto) throws Exception {
+		boolean retFlg = false;
+		try {
+
+			List<OrderDto> orderList = orderBizImpl.queryOrder(null);
+			for (OrderDto order : orderList) {
+				String benacoScanId = order.getBenacoScanId();
+				//2.查询全景表中 2D照片拼接完成的 + 订单状态为：未处理 的记录
+				PanoramaDto panDtoParm = new PanoramaDto();
+				panDtoParm.setOrderId(pEngineDto.getOrderId());
+				List<PanoramaDto> panDtoList = panoramaBizImpl.queryUnStitchProcessSource(panDtoParm);
+
+				if (panDtoList == null || panDtoList.size() == 0) {
+					return true;
+				}
+
+				//3.生成 imageFiles
+				List<File> imageFiles = new ArrayList<File>();
+				for (PanoramaDto panDto : panDtoList) {
+					File f = new File(panDto.getImagePath());
+					imageFiles.add(f);
+				}
+
+				//4.调用Benaco 3D照片上传接口
+				String addPhotosUrl = pEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
+				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,
+						pEngineDto.getBenacoScanId(), imageFiles);
+
+				if (!"200".equals(hcResponse.getCode())) {
+					return false;
+				}
+				//5.更新订单状态为 "处理中"
+				OrderDto orderParm = new OrderDto();
+				orderParm.setId(pEngineDto.getOrderId());
+				orderParm.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
+				orderBizImpl.updateOrder(orderParm);
+
+				//6.调用Benaco process接口
+				this.startBenacoProcess(pEngineDto);
+
+				//7.更新PanoramaDto表记录状态+订单状态
+				panoramaBizImpl.updateAfterBenacoProcess(pEngineDto.getOrderId());
+			}
+			retFlg = true;
+		} catch (Exception e) {
+			LOGGER.error(AppConstants.PENGINE_START_PANORAMA_PROCESS_ERROR_MESSAGE, e);
+			throw new BusinessException(AppConstants.PENGINE_START_PANORAMA_PROCESS_ERROR_CODE,
+					AppConstants.PENGINE_START_PANORAMA_PROCESS_ERROR_MESSAGE);
 		}
 		return retFlg;
 	}

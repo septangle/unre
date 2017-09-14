@@ -92,6 +92,7 @@ public interface IOrderBiz {
 	 * @throws BusinessException
 	 */
 	public OrderDto findOrder(OrderDto orderDto) throws BusinessException;
-
-
+	
+	public List<OrderDto> queryOrder(OrderDto orderDto) throws BusinessException;
+	
 }

@@ -22,12 +22,12 @@ public interface IPanoramaFacade {
 
 	
 	/**
-	 * 更新ProcessSource
+	 * 更新Panorama
 	 * 
 	 * @param request
 	 * 
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public OrderResponse updatePanorama(OrderRequest request) throws Exception;
+	public PanoramaResponse updatePanorama(PanoramaRequest request) throws Exception;
 }
