@@ -77,7 +77,6 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 		return retPanEngineDto;
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public PanoramaEngineDto addPhotos(PanoramaEngineDto panoramaEngineDto) throws Exception {
 
@@ -122,12 +121,9 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 						photo.setOrderId(order.getId());
 						photo.setThumbImagePath(imageFiles.get(i * numberOfOnepoint + j).getPath());
 						photoMapper.insertSelective(photo);
-
 					}
 				}
-
 			}
-
 			//调用updateOrderAndBalance 更新order信息  
 			orderEngine.updateOrderAndBalance(order);
 			retPanEngineDto.setOrderId(order.getId());
@@ -253,8 +249,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("key", panoramaEngineDto.getApiKey());
 			JSONObject json = JSONObject.fromObject(params);
-			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + panoramaEngineDto.getBenacoScanId()
-					+ "/status";
+			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + panoramaEngineDto.getBenacoScanId()+ "/status";
 			HttpClientResponse hcResponse = HttpClientUtil.doPost(addPhotosUrl, json);
 			String httpRetCode = hcResponse.getCode();
 			if ("200".equals(httpRetCode)) {

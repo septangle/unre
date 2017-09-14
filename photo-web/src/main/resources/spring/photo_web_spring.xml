@@ -78,13 +78,10 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/*" /> <mvc:mapping 
-		path="/**" /> <bean id="defaultIntecetor" class="com.unre.photo.inteceptor.DefaultInteceptor" 
-		/> </mvc:interceptor> </mvc:interceptors> -->
-
 	<import resource="classpath:spring/dao_spring.xml" />
 	<import resource="classpath*:spring/photo_biz_spring.xml" />
-
+    <import resource="classpath:spring/photo_job.xml" />
+    
 	<bean id="scheduleJob" class="com.unre.photo.quartz.bean.ScheduleJob" />
 	
 	<bean id="myTimeTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
@@ -94,8 +91,8 @@
         </property>  
         <property name="concurrent">  
             <value>false</value>  
-        </property>  
-    </bean> 
+        </property> 
+    </bean>
     
     <bean id="myTimeTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean" >  
         <property name="jobDetail">  
@@ -103,9 +100,7 @@
         </property>  
         <property name="cronExpression" value="${photo.checkCron}" />
     </bean>   
-	
-	
-	
+
 	<bean id="scheduler" lazy-init="false" autowire="no"  
         class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
         <property name="triggers">  

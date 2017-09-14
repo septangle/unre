@@ -22,7 +22,7 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 	@Autowired
 	private IPanoramaEngineFacade panoramaEngineFacade;
     
-	//@Test@Rollback(false)
+	@Test@Rollback(false)
 	public void testGenScanStepByStep() {
 		try {
 			PanoramaEngineRequest request = new PanoramaEngineRequest();
@@ -38,9 +38,10 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 				files.add(f);
 			}
 			peDto.setFiles(files);
-			
+			peDto.setBenacoScanId("da1ea8c7-05a7-4f1e-954a-50c5ceaea97a");
 			request.setPanoramaEngineDto(peDto);
 			
+			/*
 			PanoramaEngineResponse createResponse = panoramaEngineFacade.createScan(request);
 			Assert.assertNotNull(createResponse);
 			
@@ -49,7 +50,7 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 			
 			PanoramaEngineResponse startProcessResponse = panoramaEngineFacade.startProcessing(request);
 			Assert.assertNotNull(startProcessResponse);
-			
+			*/
 			PanoramaEngineResponse queryStatusResponse = panoramaEngineFacade.queryScanStatus(request);
 			Assert.assertNotNull(queryStatusResponse);
 
@@ -58,7 +59,7 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 		}
 	}
 	
-	@Test@Rollback(false)
+	//@Test@Rollback(false)
 	public void testStartPanoramaProcess() {
 		try {
 			PanoramaEngineRequest request = new PanoramaEngineRequest();
