@@ -157,11 +157,6 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			//2. 更新scan表中scanid对应记录的状态
 
 			if ("200".equals(retCode)) {
-				OrderDto orderDto = new OrderDto();
-				orderDto.setBenacoScanId(benacoScanId);
-				orderDto.setMemberId(panoramaEngineDto.getUid());
-				orderDto.setId(panoramaEngineDto.getOrderId());
-				orderBizImpl.updateOrderByBenacoId(orderDto);
 				retFlg = true;
 			}
 
@@ -222,19 +217,20 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 				//4.调用Benaco 3D照片上传接口
 				String addPhotosUrl = pEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
-				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,
-						pEngineDto.getBenacoScanId(), imageFiles);
+				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,pEngineDto.getBenacoScanId(), imageFiles);
 
 				if (!"200".equals(hcResponse.getCode())) {
 					return false;
 				}
 				//5.更新订单状态为 "处理中"
 				OrderDto orderParm = new OrderDto();
-				orderParm.setId(pEngineDto.getOrderId());
+				orderParm.setId(order.getId());
 				orderParm.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
+				orderParm.setVersion(order.getVersion());
 				orderBizImpl.updateOrder(orderParm);
 
 				//6.调用Benaco process接口
+				pEngineDto.setBenacoScanId(order.getBenacoScanId());
 				this.startBenacoProcess(pEngineDto);
 
 				//7.更新PanoramaDto表记录状态+订单状态

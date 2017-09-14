@@ -122,6 +122,12 @@
   </update>
   
   	<!-- ===============扩展SQL================= -->
+  	
+  	<sql id="Order_And_Panorama_Column_List" >
+      p.id, p.order_id, p.image_path, p.thumb_image_path, p.stitch_status, p.type, p.is_deleted, 
+      p.create_by, p.create_time, p.update_by, p.update_time
+    </sql>
+  
   	<!-- 根据order_id查询全景照片数量,返回list -->
 	<select id="selectByPhotoCount" resultMap="BaseResultMap"
 		parameterType="com.unre.photo.comm.dal.model.Panorama">
@@ -136,7 +142,7 @@
 	<select id="selectPendingProcessPanorama" resultMap="BaseResultMap"
 		parameterType="com.unre.photo.comm.dal.model.Panorama">
 		select
-		<include refid="Base_Column_List" />
+		<include refid="Order_And_Panorama_Column_List" />
 		from tbl_order o ,tbl_panorama p 
         where o.id = p.order_id 
         and o.status = '0' 
@@ -145,7 +151,7 @@
           and p.order_id = #{orderId,jdbcType=BIGINT}
         </if>
         <if test="stitchStatus != null" >
-          and stitch_status = #{stitchStatus,jdbcType=CHAR}
+          and p.stitch_status = #{stitchStatus,jdbcType=CHAR}
       </if>
 	 </select>
 	 

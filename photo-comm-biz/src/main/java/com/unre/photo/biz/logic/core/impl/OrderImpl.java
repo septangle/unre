@@ -82,9 +82,7 @@ public class OrderImpl implements IOrderBiz {
 	@Override
 	public boolean updateOrder(OrderDto orderDto) throws BusinessException {
 		boolean flg = false;
-		try {
-			//orderDto.setIsDeleted(AppConstants.SET_DELETE);
-			
+		try {	
 			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
 			int number = orderMapper.updateBySelective(order);
 			if (number == 0) { // flag == 1 操作成功,否则操作失败

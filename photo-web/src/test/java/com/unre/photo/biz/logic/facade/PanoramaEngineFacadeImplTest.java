@@ -62,7 +62,10 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 	public void testStartPanoramaProcess() {
 		try {
 			PanoramaEngineRequest request = new PanoramaEngineRequest();
-			request.setPanoramaEngineDto(new PanoramaEngineDto());
+			PanoramaEngineDto peDto = new PanoramaEngineDto();
+			peDto.setApiBaseUrl("https://beta.benaco.com/api/beta/scans/");
+			peDto.setApiKey("3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
+			request.setPanoramaEngineDto(peDto);
 			PanoramaEngineResponse response = panoramaEngineFacade.startPanoramaProcess(request);
 			Assert.assertNotNull(response);
 		} catch (Exception e) {
