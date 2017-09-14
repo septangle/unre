@@ -46,10 +46,8 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 				@ApiImplicitParam(name = "panoramaEngineDto.title", value = "scan名称", required = true, dataType = "string"),
 				@ApiImplicitParam(name = "panoramaEngineDto.files", value = "files", required = true, dataType = "List<File>") })*/
 	@RequestMapping(value = "/addPhotos.do", method = RequestMethod.POST)
-	public @ResponseBody PanoramaEngineResponse addPhotos(
-			@RequestParam("title") String title,
-			@RequestParam MultipartFile[] files,
-			@RequestParam("number") String number,
+	public @ResponseBody PanoramaEngineResponse addPhotos(@RequestParam("title") String title,
+			@RequestParam MultipartFile[] files, @RequestParam("number") String number,
 			HttpServletRequest servletRequest) throws Exception {
 		PanoramaEngineRequest request = new PanoramaEngineRequest();
 		PanoramaEngineDto peDto = new PanoramaEngineDto();
@@ -65,19 +63,31 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		peDto.setApiKey(photoUrl.getKey());
 		peDto.setApiBaseUrl(photoUrl.getUrl());
 		List<File> fileUrlList = new ArrayList<File>(); //用来保存文件路径，
-		for(int i=0;i<files.length;i++) {
-			  if(files[i].isEmpty()){  
-	                System.out.println("上传文件["+i+"]为空");  
-	            }else{
-	                  System.out.println("文件名称: " + files[i].getName() + "文件原名: " + files[i].getOriginalFilename() + "文件类型: " + files[i].getContentType() +"文件大小: " + files[i].getSize());  
-	                  String path=photoUrl.getPath();
-	                  FileUtils.copyInputStreamToFile(files[i].getInputStream(), new File(path, files[i].getOriginalFilename()));
-	                  File f= new File(path+files[i].getOriginalFilename());
-	                  fileUrlList.add(f);
-	            }
-		  }
-          request.getPanoramaEngineDto().setFiles(fileUrlList);
-          return panoramaEngineFacade.addPhotos(request);
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].isEmpty()) {
+				System.out.println("上传文件[" + i + "]为空");
+			} else {
+				System.out.println("文件名称: " + files[i].getName() + "文件原名: " + files[i].getOriginalFilename() + "文件类型: "
+						+ files[i].getContentType() + "文件大小: " + files[i].getSize());
+				String path = photoUrl.getPath();
+				String paramopath = photoUrl.getParamopath();
+				if (("1").equals(number)) {
+					FileUtils.copyInputStreamToFile(files[i].getInputStream(),
+							new File(path, files[i].getOriginalFilename()));
+				}else{
+					FileUtils.copyInputStreamToFile(files[i].getInputStream(),
+							new File(paramopath, files[i].getOriginalFilename()));
+				}
+				File f = new File(path + files[i].getOriginalFilename());
+				fileUrlList.add(f);
+			}
+		}
+		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
+		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
+		request.getPanoramaEngineDto().setTitle(title);
+		request.getPanoramaEngineDto().setFiles(fileUrlList);
+		request.getPanoramaEngineDto().setNumber(number);
+		return panoramaEngineFacade.addPhotos(request);
 	}
 
 	/**
@@ -112,5 +122,5 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		return panoramaEngineFacade.queryScanStatus(request);
 	}*/
-	
+
 }

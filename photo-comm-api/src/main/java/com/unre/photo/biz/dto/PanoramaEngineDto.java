@@ -24,6 +24,8 @@ public class PanoramaEngineDto {
 	
 	private Long orderId;
 	
+	private String number;
+	
 	
 	
 	
@@ -107,5 +109,15 @@ public class PanoramaEngineDto {
 	public void setUid(Long uid) {
 		this.uid = uid;
 	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	
 
 }

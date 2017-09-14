@@ -22,6 +22,8 @@ public class Photo {
     private Integer updateBy;
 
     private Date updateTime;
+    
+    private Panorama panorama;
 
     public Long getId() {
         return id;
@@ -102,4 +104,14 @@ public class Photo {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public Panorama getPanorama() {
+		return panorama;
+	}
+
+	public void setPanorama(Panorama panorama) {
+		this.panorama = panorama;
+	}
+    
+    
 }

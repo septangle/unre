@@ -19,6 +19,8 @@ import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
 import com.unre.photo.comm.AppConstants;
+import com.unre.photo.comm.dal.dao.PhotoMapper;
+import com.unre.photo.comm.dal.model.Photo;
 import com.unre.photo.util.HttpClientResponse;
 import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.JsonUtil;
@@ -34,6 +36,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	private IOrderBiz orderBizImpl;
 	@Autowired
 	private IPanoramaBiz panoramaBizImpl;
+	@Autowired
+	private OrderEngine orderEngine;
+	@Autowired
+	private PhotoMapper photoMapper;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -78,21 +84,52 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 		PanoramaEngineDto retPanEngineDto = new PanoramaEngineDto();
 
 		try {
-			//1. 上传文件至benaco服务器
+			//1. 取得参数benocoId、imageFiles、number
 			String benacoScanId = panoramaEngineDto.getBenacoScanId();
-			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
 			List<File> imageFiles = panoramaEngineDto.getFiles();
-			HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,
-					panoramaEngineDto.getBenacoScanId(), imageFiles);
-
+			String number = panoramaEngineDto.getNumber();
+			int panoramanumber = imageFiles.size() / Integer.parseInt(number);//panorama照片数量
 			//2. 更新状态     创建订单
 			OrderDto orderDto = new OrderDto();
 			orderDto.setBenacoScanId(benacoScanId);
 			orderDto.setMemberId(panoramaEngineDto.getUid());
 			orderDto.setDescription(panoramaEngineDto.getTitle());
-			OrderDto order=orderBizImpl.addOrder(orderDto);
-			//3.添加图片路径
-			orderBizImpl.saveUploadedImages(benacoScanId, imageFiles);
+			orderDto.setGoodsNum(panoramanumber);//图片数量除以点数
+			orderDto.setGoodsId(AppConstants.GOODS_ID_BENACO);//商品id
+			OrderDto order = orderBizImpl.addOrder(orderDto);
+
+			//3.添加图片
+			if ((AppConstants.NUMBER_MESSAGE_3D).equals(number)) {//3D
+				orderBizImpl.saveUploadedImages(benacoScanId, imageFiles);
+			} else {//2D
+				int numberOfOnepoint = Integer.parseInt(number);//点数
+				if (imageFiles.size() % numberOfOnepoint != 0) {
+					throw new BusinessException(AppConstants.ADD_PHOTOS_MESSAGE_OCDE, AppConstants.ADD_PHOTOS_MESSAGE);
+				}
+
+				PanoramaDto panoramaDto = new PanoramaDto();
+				panoramaDto.setOrderId(order.getId());
+				panoramaDto.setStitchStatus(AppConstants.PANORAMA_STITCH_INIT);
+				for (int i = 0; i < panoramanumber; i++) {
+					// insert panorama table
+					PanoramaDto pDto = panoramaBizImpl.addProcessSource(panoramaDto);
+
+					for (int j = 0; j < numberOfOnepoint; j++) {
+						// insert photo table
+						Photo photo = new Photo();
+						photo.setPanoramaId(pDto.getId());
+						photo.setImagePath(imageFiles.get(i * numberOfOnepoint + j).getPath());
+						photo.setOrderId(order.getId());
+						photo.setThumbImagePath(imageFiles.get(i * numberOfOnepoint + j).getPath());
+						photoMapper.insertSelective(photo);
+
+					}
+				}
+
+			}
+
+			//调用updateOrderAndBalance 更新order信息  
+			orderEngine.updateOrderAndBalance(order);
 			retPanEngineDto.setOrderId(order.getId());
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_ADD_PHOTOS_ERROR_CODE, e);

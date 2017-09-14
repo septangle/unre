@@ -14,6 +14,9 @@ public  class PhotoUrl {
 	
 	@Value("${photo.path}")
 	private String path;
+	
+	@Value("${photo.paramopath}")
+	private String paramopath;
     
 	public String getKey() {
 		return key;
@@ -32,6 +35,12 @@ public  class PhotoUrl {
 	}
 	public void setPath(String path) {
 		this.path = path;
+	}
+	public String getParamopath() {
+		return paramopath;
+	}
+	public void setParamopath(String paramopath) {
+		this.paramopath = paramopath;
 	}
     
     

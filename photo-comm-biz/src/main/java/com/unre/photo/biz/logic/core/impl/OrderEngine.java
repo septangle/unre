@@ -8,9 +8,11 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.unre.photo.biz.logic.core.IOrderEngineBiz;
 import com.unre.photo.biz.dto.OrderDto;
+import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.comm.dal.dao.OrderMapper;
 import com.unre.photo.comm.dal.dao.GoodsMapper;
@@ -62,19 +64,25 @@ public class OrderEngine implements IOrderEngineBiz {
 					|| strStatus.equals(AppConstants.BENACO_STATUS_FAILED)) {
 					
 					Balance balance = balanceMapper.selectByMemberID(processList.get(i).getMemberId());
-					// update order status and actual amount
-					UpdateOrder(processList.get(i), strStatus);
-					// insert new balance trace if the process is completed
-					InsertBalanceTrace(processList.get(i), balance, strStatus);
-					// update member's balance if the process is completed
-					UpdateBalance(processList.get(i), balance, strStatus);
+					updateOrderAndBalance(processList.get(i), balance, strStatus);
 				}
 			}
 		}
 	}
 	
+	//
+	@Transactional(rollbackFor = BusinessException.class)
+	private void updateOrderAndBalance(Order order, Balance balance, String status){
+		UpdateOrder(order, status);
+		// insert new balance trace if the process is completed
+		InsertBalanceTrace(order, balance, status);
+		// update member's balance if the process is completed
+		UpdateBalance(order, balance, status);
+	}
+	
 	// when process is beginning, update order;update balance;
 	@Override
+	@Transactional(rollbackFor = BusinessException.class)
 	public void updateOrderAndBalance(OrderDto orderDto) {
 		Order order = ModelUtil.dtoToModel(orderDto, Order.class);
 		
@@ -198,7 +206,7 @@ public class OrderEngine implements IOrderEngineBiz {
 		}
 	}
 	
-	// Update order when online process started  应付订单
+	// Update order when online process started
 	private void UpdateOrder(Order order){
 		Member member = memberMapper.selectByPrimaryKey(order.getMemberId());
 		MemberLevelItem memberLevelItem = memberLevelItemMapper.selectByValue(member.getLevel());
@@ -207,26 +215,34 @@ public class OrderEngine implements IOrderEngineBiz {
 		
 		order.setGoodsActualPrice(actualPrice);
 		order.setTotalAmount(actualPrice.multiply(new BigDecimal(order.getGoodsNum())));
+		System.out.println(order.getTotalAmount());
 		order.setActualAmount(order.getTotalAmount());
-		order.setStatus(AppConstants.SFILE_PROCESSING);
-
+		order.setStatus(AppConstants.ORDER_STATUS_INIT);
+		
+		/*
 		// set status
-	/*	switch(order.getType()){
+		switch(order.getType()){
 		case AppConstants.ORDER_TYPE_PHOTO:
-			order.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
+			order.setStatus(AppConstants.ORDER_STATUS_INIT);
 			break;
 		case AppConstants.ORDER_TYPE_PANORAMA:
-			order.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
+			order.setStatus(AppConstants.ORDER_STATUS_INIT);
 			break;
 		default:
-			order.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
-		}*/
+			order.setStatus(AppConstants.ORDER_STATUS_INIT);
+		}
+		*/
 		
-		orderMapper.updateByPrimaryKeySelective(order);
+		try {
+			orderMapper.updateBySelective(order);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	// Update order when process completed or failed
-	public boolean UpdateOrder(Order order, String status){
+	private boolean UpdateOrder(Order order, String status){
 		
 		Integer iProcessPoints = 0;
 		// set status
@@ -243,7 +259,7 @@ public class OrderEngine implements IOrderEngineBiz {
 	}
 	
 	// Get process status by scanID
-	public String GetProcessStatusByScanID(String scanID) {
+	private String GetProcessStatusByScanID(String scanID) {
 		Map<String, Object> mpParams = new HashMap<String, Object>();
 		mpParams.put("key", AppConstants.BENACO_PRIVATE_KEY);
 		JSONObject jsParams = JSONObject.fromObject(mpParams);

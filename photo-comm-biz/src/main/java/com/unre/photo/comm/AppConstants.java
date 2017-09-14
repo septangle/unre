@@ -46,9 +46,10 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
     // 流水类型：线下消费
     public final static String BALANCE_TRACE_TYPE_OFFLINE = "4";
     
-    public final static String ORDER_STATUS_PROCESSING = "0";
-    public final static String ORDER_STATUS_COMPLETED = "1";
-    public final static String ORDER_STATUS_FAILED = "2";
+    public final static String ORDER_STATUS_INIT = "0";
+    public final static String ORDER_STATUS_PROCESSING = "1";
+    public final static String ORDER_STATUS_COMPLETED = "2";
+    public final static String ORDER_STATUS_FAILED = "3";
     
     public final static String PANORAMA_UNSTITCH = "0";
     public final static String PANORAMA_STITCHING = "1";
@@ -144,6 +145,18 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static Long GOODS_ID_BENACO = (long) 1;
 	public final static String FINDGOODSBYID_ERROR_CODE = "1007001";
 	public final static String FINDGOODSBYID_ERROR_MESSAGE = "该商品ID不存在";
+	
+	//Panorama  panorama_type
+	public final static String PANORAMA_STITCH_INIT = "0";
+	public final static String PANORAMA_STITCH_STATUS_COMPLETED = "1";
+	public final static String PANORAMA_STITCH_STATUS_FAILED = "2";
+	
+	
+	public final static String ADD_PHOTOS_MESSAGE_OCDE="1007005";
+	public final static String ADD_PHOTOS_MESSAGE="点数与传入照片数量不匹配";
+	
+	public final static String NUMBER_MESSAGE_3D="1";
+
 
 
 
