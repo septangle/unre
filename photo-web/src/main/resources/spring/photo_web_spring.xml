@@ -27,7 +27,6 @@
 			<list>
 				<value>classpath:spring/photo_web_spring.properties</value>
 				<value>classpath:spring/jdbc.properties</value>
-				<value>classpath:panoramaEngineURL.properties</value>
 			</list>
 		</property>
 	</bean>
