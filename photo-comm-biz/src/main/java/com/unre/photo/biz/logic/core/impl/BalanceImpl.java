@@ -1,5 +1,6 @@
 package com.unre.photo.biz.logic.core.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.logic.core.IBalanceBiz;
@@ -11,6 +12,7 @@ import com.unre.photo.biz.dto.BalanceDto;
 @Service
 public class BalanceImpl implements IBalanceBiz {
 
+	@Autowired
 	private BalanceMapper balanceMapper;
 	
 	//
@@ -18,6 +20,7 @@ public class BalanceImpl implements IBalanceBiz {
 	//
 	@Override
 	public BalanceDto selectBalance(BalanceDto balanceDto) {
+		
 		Balance balance = balanceMapper.selectByMemberID(balanceDto.getMemberId());
 		
 		return ModelUtil.modelToDto(balance, BalanceDto.class);

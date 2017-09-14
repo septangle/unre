@@ -232,13 +232,8 @@ public class OrderEngine implements IOrderEngineBiz {
 			order.setStatus(AppConstants.ORDER_STATUS_INIT);
 		}
 		*/
-		
-		try {
-			orderMapper.updateBySelective(order);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+
+		orderMapper.updateBySelective(order);
 	}
 	
 	// Update order when process completed or failed
@@ -249,8 +244,8 @@ public class OrderEngine implements IOrderEngineBiz {
 		order.setStatus(status.equals(AppConstants.BENACO_STATUS_COMPLETED) ?
 				AppConstants.SFILE_PROCESS_COMPLETE : AppConstants.SFILE_PROCESS_FAIL);
 		// set number of processed points
-		iProcessPoints = GetProcessPointsByScanID(order.getBenacoScanId());
-		order.setGoodsNum(iProcessPoints);
+		// iProcessPoints = GetProcessPointsByScanID(order.getBenacoScanId());
+		// order.setGoodsNum(iProcessPoints);
 		// set actual amount after the process completed or failed
 		order.setActualAmount(order.getGoodsActualPrice().multiply(new BigDecimal(iProcessPoints)));
 		
