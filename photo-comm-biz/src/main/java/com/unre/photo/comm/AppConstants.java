@@ -50,7 +50,6 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
     public final static String ORDER_STATUS_PROCESSING = "1";
     public final static String ORDER_STATUS_COMPLETED = "2";
     public final static String ORDER_STATUS_FAILED = "3";
-    
     public final static String PANORAMA_UNSTITCH = "0";
     public final static String PANORAMA_STITCHING = "1";
     public final static String PANORAMA_STITCHED = "2";
