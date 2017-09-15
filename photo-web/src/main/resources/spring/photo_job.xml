@@ -17,9 +17,9 @@
 	<task:annotation-driven />
 	<task:scheduled-tasks>
 		<!-- 3D照片处理  -->
-		<task:scheduled ref="photoScanTask" method="startPanoramaProcessTask" cron="0 0/2 * * * ?" />
+		<task:scheduled ref="photoScanTask" method="startPanoramaProcessTask" cron="0 0/1 * * * ?" />
 		<!-- 同步Benaco状态  -->
-		<task:scheduled ref="photoScanTask" method="updateOrderAndBalanceTask" cron="0 0/5 * * * ?" />
+		<task:scheduled ref="photoScanTask" method="updateOrderAndBalanceTask" cron="0 0/2 * * * ?" />
 	</task:scheduled-tasks>
 
 </beans>
