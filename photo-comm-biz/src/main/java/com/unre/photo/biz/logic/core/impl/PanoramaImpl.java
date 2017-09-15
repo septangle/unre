@@ -14,7 +14,6 @@ import com.unre.photo.biz.dto.PanoramaDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.comm.AppConstants;
-import com.unre.photo.comm.dal.dao.OrderMapper;
 import com.unre.photo.comm.dal.dao.PanoramaMapper;
 import com.unre.photo.comm.dal.model.Panorama;
 import com.unre.photo.util.ModelUtil;
@@ -24,12 +23,8 @@ public class PanoramaImpl implements IPanoramaBiz {
 
 	@Autowired
 	private PanoramaMapper panoramaMapper;
-	
-	@Autowired 
-	private OrderMapper orderMapper;
 
 	private static final Log LOGGER = LogFactory.getLog(PanoramaImpl.class);
-
 
 	@Override
 	public PanoramaDto findProcessSourceById(Long processSourceId) throws BusinessException {

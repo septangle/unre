@@ -38,7 +38,7 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 				files.add(f);
 			}
 			peDto.setFiles(files);
-			peDto.setBenacoScanId("da1ea8c7-05a7-4f1e-954a-50c5ceaea97a");
+			peDto.setBenacoScanId("2d6daf7e-38ff-437d-a562-6a1c9396901c");
 			request.setPanoramaEngineDto(peDto);
 			
 			/*

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.logic.core.IOrderEngineBiz;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
+import com.unre.photo.comm.AppConstants;
 
 @Component("photoScanTask")
 public class PhotoScanTask {
@@ -24,7 +25,10 @@ public class PhotoScanTask {
 
         logger.info("处理Panorama任务开始...");
         try {
-        	panoramaEngineBiz.startPanoramaProcess(new PanoramaEngineDto());
+        	PanoramaEngineDto peDto = new PanoramaEngineDto();
+        	peDto.setApiBaseUrl(AppConstants.BENACO_HOST + AppConstants.BENACO_BASEPATH + "/");
+			peDto.setApiKey(AppConstants.BENACO_PRIVATE_KEY);
+        	panoramaEngineBiz.startPanoramaProcess(peDto);
         } catch (Exception e) {
             logger.error("处理Panorama任务失败", e);
         }

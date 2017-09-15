@@ -50,11 +50,11 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		PanoramaEngineDto peDto = new PanoramaEngineDto();
 		request.setPanoramaEngineDto(peDto);
 		HttpSession session = servletRequest.getSession();
-		Long id = (Long) session.getAttribute("ID");
+		Long id = 2L;//(Long) session.getAttribute("ID");
 		//查询当前用户
-		if (id == null)
+		/*if (id == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
-					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);*/
 		peDto.setTitle(title);
 		peDto.setUid(id);
 		peDto.setApiKey(photoUrl.getKey());
@@ -66,16 +66,10 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 			} else {
 				System.out.println("文件名称: " + files[i].getName() + "文件原名: " + files[i].getOriginalFilename() + "文件类型: "
 						+ files[i].getContentType() + "文件大小: " + files[i].getSize());
-				String path = photoUrl.getPath();
-				String paramopath = photoUrl.getParamopath();
-				if (("1").equals(number)) {
-					FileUtils.copyInputStreamToFile(files[i].getInputStream(),
-							new File(paramopath, files[i].getOriginalFilename()));
-				}else{
-					FileUtils.copyInputStreamToFile(files[i].getInputStream(),
-							new File(path, files[i].getOriginalFilename()));
-				}
-				File f = new File(path + files[i].getOriginalFilename());
+				
+				String strFilePath = ("1").equals(number) ? photoUrl.getParamoPath(): photoUrl.getPhotoPath();
+				FileUtils.copyInputStreamToFile(files[i].getInputStream(),new File(strFilePath, files[i].getOriginalFilename()));
+				File f = new File(strFilePath + files[i].getOriginalFilename());
 				fileUrlList.add(f);
 			}
 		}

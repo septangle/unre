@@ -145,8 +145,7 @@
 		<include refid="Order_And_Panorama_Column_List" />
 		from tbl_order o ,tbl_panorama p 
         where o.id = p.order_id 
-        and o.status = '0' 
-        and p.stitch_status = '0' 
+        and o.status = '0'
         <if test="orderId != null" >
           and p.order_id = #{orderId,jdbcType=BIGINT}
         </if>

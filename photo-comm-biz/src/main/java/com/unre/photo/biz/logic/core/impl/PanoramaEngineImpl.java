@@ -198,11 +198,19 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				//2.查询全景表中 2D照片拼接完成的 + 订单状态为：未处理 的记录
 				PanoramaDto panDtoParm = new PanoramaDto();
 				panDtoParm.setOrderId(pEngineDto.getOrderId());
-				List<PanoramaDto> panDtoList = panoramaBizImpl.queryUnStitchProcessSource(panDtoParm);
-
+				List<PanoramaDto> panDtoList = panoramaBizImpl.queryStitchedProcessSource(panDtoParm);
+                
 				if (panDtoList == null || panDtoList.size() == 0) {
 					return true;
 				}
+				
+				boolean ignore = false;
+				for(PanoramaDto panDto : panDtoList ) {//order下面的Panorama全部是拼接成功则上传Benaco服务器
+					if(!AppConstants.PANORAMA_STITCHED.equals(panDto.getStitchStatus())) {
+						ignore = true;
+					}
+				}
+				if(ignore) continue;
 
 				//3.生成 imageFiles
 				List<File> imageFiles = new ArrayList<File>();
@@ -210,20 +218,21 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 					File f = new File(panDto.getImagePath());
 					imageFiles.add(f);
 				}
+				
+				//4.更新订单状态为 "处理中"
+				OrderDto orderParm = new OrderDto();
+				orderParm.setId(order.getId());
+				orderParm.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
+				orderParm.setVersion(order.getVersion());
+				orderBizImpl.updateOrder(orderParm);
 
-				//4.调用Benaco 3D照片上传接口
+				//5.调用Benaco 3D照片上传接口
 				String addPhotosUrl = pEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
 				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,pEngineDto.getBenacoScanId(), imageFiles);
 
 				if (!"200".equals(hcResponse.getCode())) {
 					return false;
 				}
-				//5.更新订单状态为 "处理中"
-				OrderDto orderParm = new OrderDto();
-				orderParm.setId(order.getId());
-				orderParm.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
-				orderParm.setVersion(order.getVersion());
-				orderBizImpl.updateOrder(orderParm);
 
 				//6.调用Benaco process接口
 				pEngineDto.setBenacoScanId(order.getBenacoScanId());

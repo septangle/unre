@@ -73,7 +73,6 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String QUERY_LOGIN_USER_ERROR_MESSAGE = "用户登录失败:账号或密码错误！";
 	public final static String QUERY_LOGIN_USER_STATUS_MESSAGE = "1"; //登录状态：已登录
 	public final static String QUERY_LOGIN_USER_NOT_STATUS_MESSAGE = "0"; //登录状态：未登录
-
 	
 	//register模块  1003
 	public final static String QUERY_ADD_USER_ERROR_CODE = "10030001";
@@ -87,8 +86,6 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String QUERY_ADD_SETTYPE = "0";
 	public final static String QUERY_ADD_SETTYPE_RATION = "1";
 
-
-	
 	//photo 10040000
 	//Panorama Engine 
 	public final static String PENGINE_CREATE_SCAN_ERROR_CODE = "10040001";
@@ -111,8 +108,7 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	
 	public final static String PENGINE_PREVIEW_SCAN_STATUS_ERROR_CODE = "10040007";
 	public final static String PENGINE_PREVIEW_SCAN_STATUS_ERROR_MESSAGE = "生程SCAN PRVIEW URL失败！";
-	
-	
+
 	//Photo Scan 10050000
 	public final static String SCAN_FIND_ERROR_CODE = "10050001";
 	public final static String SCAN_FIND_ERROR_MESSAGE = "根据ID查询Scan失败!";
@@ -134,8 +130,7 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	
 	public final static String SCAN__DELETE_SCAN_ID_ERROR_CODE = "10050007";
 	public final static String SCAN__DELETE_SCAN_ID_ERROR_MESSAGE = "scan id 异常!";
-	
-	
+
 	//Photo Scan Item
 	public final static String SCANITEM_UPDATE_ERROR_CODE = "10060004";
 	public final static String SCANITEM_UPDATE_ERROR_MESSAGE = "更新is_Deleted失败!";
@@ -149,8 +144,7 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String PANORAMA_STITCH_INIT = "0";
 	public final static String PANORAMA_STITCH_STATUS_COMPLETED = "1";
 	public final static String PANORAMA_STITCH_STATUS_FAILED = "2";
-	
-	
+
 	public final static String ADD_PHOTOS_MESSAGE_OCDE="1007005";
 	public final static String ADD_PHOTOS_MESSAGE="点数与传入照片数量不匹配";
 	
@@ -158,9 +152,6 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	
 	//自动设置会员级别
 	public final static String MEMBER_LEVEL_DEFAULT="3";
-
-
-
 
 	
 }
