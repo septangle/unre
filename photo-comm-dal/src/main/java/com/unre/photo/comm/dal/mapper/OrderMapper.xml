@@ -230,7 +230,8 @@
 		#{updateTime,jdbcType=TIMESTAMP}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
-
+    
+    <!-- ===============扩展SQL================= -->
 	<!-- 查询当前用户所有场景 -->
 	<select id="SelStatus" parameterType="com.unre.photo.comm.dal.model.Order"
 		resultMap="slist">
@@ -250,7 +251,6 @@
 		#{benacoScanId,jdbcType=VARCHAR}
 	</select>
 
-	<!-- 根据beanonId查询订单 返回list -->
 	<select id="selectBySelective" resultMap="BaseResultMap"
 		parameterType="com.unre.photo.comm.dal.model.Order">
 		select
@@ -261,52 +261,52 @@
 			and id = #{id,jdbcType=BIGINT}
 		</if>
 		<if test="memberId != null">
-			member_id = #{memberId,jdbcType=BIGINT}
+			and member_id = #{memberId,jdbcType=BIGINT}
 		</if>
 		<if test="totalAmount != null">
-			total_amount = #{totalAmount,jdbcType=DECIMAL}
+			and total_amount = #{totalAmount,jdbcType=DECIMAL}
 		</if>
 		<if test="actualAmount != null">
-			actual_amount = #{actualAmount,jdbcType=DECIMAL}
+			and actual_amount = #{actualAmount,jdbcType=DECIMAL}
 		</if>
 		<if test="goodsId != null">
-			goods_id = #{goodsId,jdbcType=BIGINT}
+			and goods_id = #{goodsId,jdbcType=BIGINT}
 		</if>
 		<if test="goodsActualPrice != null">
-			goods_actual_price = #{goodsActualPrice,jdbcType=DECIMAL}
+			and goods_actual_price = #{goodsActualPrice,jdbcType=DECIMAL}
 		</if>
 		<if test="goodsNum != null">
-			goods_num = #{goodsNum,jdbcType=INTEGER}
+			and goods_num = #{goodsNum,jdbcType=INTEGER}
 		</if>
 		<if test="benacoScanId != null">
-			benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR}
+			and benaco_scan_id = #{benacoScanId,jdbcType=VARCHAR}
 		</if>
 		<if test="description != null">
-			description = #{description,jdbcType=VARCHAR}
+			and description = #{description,jdbcType=VARCHAR}
 		</if>
 		<if test="type != null">
-			type = #{type,jdbcType=CHAR}
+			and type = #{type,jdbcType=CHAR}
 		</if>
 		<if test="status != null">
-			status = #{status,jdbcType=CHAR}
+			and status = #{status,jdbcType=CHAR}
 		</if>
 		<if test="isDeleted != null">
-			is_deleted = #{isDeleted,jdbcType=CHAR}
+			and is_deleted = #{isDeleted,jdbcType=CHAR}
 		</if>
 		<if test="version != null">
-			version = #{version,jdbcType=BIGINT}
+			and version = #{version,jdbcType=BIGINT}
 		</if>
 		<if test="createBy != null">
-			create_by = #{createBy,jdbcType=INTEGER}
+			and create_by = #{createBy,jdbcType=INTEGER}
 		</if>
 		<if test="createTime != null">
-			create_time = #{createTime,jdbcType=TIMESTAMP}
+			and create_time = #{createTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="updateBy != null">
-			update_by = #{updateBy,jdbcType=INTEGER}
+			and update_by = #{updateBy,jdbcType=INTEGER}
 		</if>
 		<if test="updateTime != null">
-			update_time = #{updateTime,jdbcType=TIMESTAMP}
+			and update_time = #{updateTime,jdbcType=TIMESTAMP}
 		</if>
 	</select>
 

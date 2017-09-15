@@ -13,14 +13,13 @@
             http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 
 	<context:component-scan base-package="com.unre.photo" />
-    <!--使用注解方式启动task -->
-	<task:annotation-driven /> 
-		<task:scheduled-tasks>
- 	    <!-- 3D照片处理 -->
-		<task:scheduled ref="photoScanTask" method="startPanoramaProcessTask" cron="0 0/5 * * * ?" />
+	<!--使用注解方式启动task -->
+	<task:annotation-driven />
+	<task:scheduled-tasks>
+		<!-- 3D照片处理  -->
+		<task:scheduled ref="photoScanTask" method="startPanoramaProcessTask" cron="0 0/2 * * * ?" />
 		<!-- 同步Benaco状态  -->
-		<task:scheduled ref="photoScanTask" method="updateOrderAndBalanceTask" cron="0 0/10 * * * ?" />
-		
-    </task:scheduled-tasks>
-    
+		<task:scheduled ref="photoScanTask" method="updateOrderAndBalanceTask" cron="0 0/5 * * * ?" />
+	</task:scheduled-tasks>
+
 </beans>
