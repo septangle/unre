@@ -31,10 +31,10 @@ public class BalanceController extends BaseController<BalanceController> {
 	 * @param request
 	 * @return 
 	 */
-	@ApiOperation(value = "取得余额信息", httpMethod = "GET", response = BalanceResponse.class)
+	@ApiOperation(value = "取得余额信息", httpMethod = "POST", response = BalanceResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "balanceDto.memberId", value = "会员ID", required = true, dataType = "long")})
-	@RequestMapping(value = "/balance.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/balance.do", method = RequestMethod.POST)
 	public @ResponseBody BalanceResponse recharge(@RequestBody BalanceRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		

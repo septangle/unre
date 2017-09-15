@@ -93,6 +93,8 @@ public class MemberImpl implements IMemberBiz {
 			}
 		}
 		try {
+			//系统自动设置会员级别
+			memberDto.setLevel(AppConstants.MEMBER_LEVEL_DEFAULT);
 			Member members = ModelUtil.dtoToModel(memberDto, Member.class);
 			memberMapper.insertSelective(members);
 			Long id = members.getId();

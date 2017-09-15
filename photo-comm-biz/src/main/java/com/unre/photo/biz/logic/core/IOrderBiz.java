@@ -42,15 +42,7 @@ public interface IOrderBiz {
 	 */
 	public boolean updateOrder(OrderDto orderDto) throws BusinessException;
 
-	/**
-	 * 更新Process
-	 * 
-	 * @param ProcessDto --要更新的ProcessDto
-	 * 
-	 * @return boolean
-	 * @throws BusinessException
-	 */
-	public boolean updateOrderByBenacoId(OrderDto ProcessDto) throws BusinessException;
+
 	
 	/**
 	 * 删除Process

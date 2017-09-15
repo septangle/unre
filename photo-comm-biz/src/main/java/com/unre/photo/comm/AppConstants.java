@@ -155,6 +155,9 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String ADD_PHOTOS_MESSAGE="点数与传入照片数量不匹配";
 	
 	public final static String NUMBER_MESSAGE_3D="1";
+	
+	//自动设置会员级别
+	public final static String MEMBER_LEVEL_DEFAULT="3";
 
 
 

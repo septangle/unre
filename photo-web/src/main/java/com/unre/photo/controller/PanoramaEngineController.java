@@ -70,10 +70,10 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 				String paramopath = photoUrl.getParamopath();
 				if (("1").equals(number)) {
 					FileUtils.copyInputStreamToFile(files[i].getInputStream(),
-							new File(path, files[i].getOriginalFilename()));
+							new File(paramopath, files[i].getOriginalFilename()));
 				}else{
 					FileUtils.copyInputStreamToFile(files[i].getInputStream(),
-							new File(paramopath, files[i].getOriginalFilename()));
+							new File(path, files[i].getOriginalFilename()));
 				}
 				File f = new File(path + files[i].getOriginalFilename());
 				fileUrlList.add(f);

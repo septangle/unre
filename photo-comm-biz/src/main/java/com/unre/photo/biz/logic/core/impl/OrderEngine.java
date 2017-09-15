@@ -233,7 +233,12 @@ public class OrderEngine implements IOrderEngineBiz {
 		}
 		*/
 
-		orderMapper.updateBySelective(order);
+		try {
+			int i= orderMapper.updateBySelective(order);
+			System.out.println(i);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Update order when process completed or failed

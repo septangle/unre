@@ -12,21 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unre.photo.biz.dto.MemberDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
-import com.unre.photo.biz.dto.PriceDto;
 import com.unre.photo.biz.exception.BusinessException;
-import com.unre.photo.biz.logic.core.IMemberBiz;
 import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.comm.AppConstants;
-import com.unre.photo.comm.dal.dao.BalanceMapper;
 import com.unre.photo.comm.dal.dao.OrderMapper;
 import com.unre.photo.comm.dal.dao.PanoramaMapper;
-import com.unre.photo.comm.dal.model.Balance;
 import com.unre.photo.comm.dal.model.Order;
-import com.unre.photo.comm.dal.model.Panorama;
 import com.unre.photo.util.ModelUtil;
 
 @Service("Process")
@@ -38,11 +32,7 @@ public class OrderImpl implements IOrderBiz {
 	@Autowired
 	private IPanoramaBiz panoramaBiz;
 
-	@Autowired
-	private IMemberBiz memberBizImpl;
 
-	@Autowired
-	private BalanceMapper balanceMapper;
 
 	@Autowired
 	private PanoramaMapper panoramaMapper;
@@ -97,66 +87,7 @@ public class OrderImpl implements IOrderBiz {
 		return flg;
 	}
 
-	@Override
-	public boolean updateOrderByBenacoId(OrderDto orderDto) throws BusinessException {
-		boolean flg = false;//uid    benoncaid
-
-		try {
-			//1.先查出来
-			Order pScanParm = new Order();
-			pScanParm.setBenacoScanId(orderDto.getBenacoScanId());
-			List<Order> pScanList = orderMapper.selectBySelective(pScanParm);
-			if (pScanList.size() == 0 || pScanList.size() > 1) {
-				throw new BusinessException(AppConstants.SCAN_BENACO_SCAN_ID_ERROR_CODE,
-						AppConstants.SCAN_BENACO_SCAN_ID_ERROR_MESSAGE);
-			}
-			Order pScan = pScanList.get(0);
-			pScan.setStatus(AppConstants.SFILE_PROCESSING);
-			//根据uid查询该会员信息
-			MemberDto members = memberBizImpl.findMemberById(orderDto.getMemberId());
-			//取Member中level等级  返回折扣后的单价
-			PriceDto p = memberBizImpl.SelPriceById(members);
-			//根据uid查询order表  查询出order_id
-			Order o = orderMapper.SelOrder(pScanParm);
-			Panorama ps = new Panorama();
-			//将order_id 放入panorama表
-			ps.setOrderId(o.getId());
-			List<Panorama> plists = panoramaMapper.selectByPhotoCount(ps);
-			//算出点数
-			int fileSize = plists.size();
-			//接收打折扣后单价
-			Double price = p.getPrice();
-			//点数*单价(折扣后单价)
-			Double money = fileSize * price;
-			//计算出应付金额，BigDecimal类型
-			BigDecimal d1TobigDe = new BigDecimal(money);
-			//应付金额，插入order表
-			pScan.setTotalAmount(d1TobigDe);
-			//折扣后单价，插入order表
-			pScan.setGoodsActualPrice(new BigDecimal(price));
-			//2.后更新scan状态
-			int i = orderMapper.updateByAmount(pScan);
-			if (i != 1) { // i == 1 操作成功,否则操作失败
-				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
-						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
-			}
-			//插入balance表  余额=余额-应付金额  冻结金额=冻结总额相加
-			Balance balance = balanceMapper.selectByMemberID(orderDto.getMemberId());
-			Balance bl = new Balance();
-			BigDecimal b = balance.getAmount().subtract(d1TobigDe);//相减后的余额
-			bl.setMemberId(orderDto.getMemberId());//会员ID
-			bl.setAmount(b);//余额
-			bl.setFreezeAmount(d1TobigDe.add(balance.getFreezeAmount()));//冻结金额
-			balanceMapper.updateByPrimaryKeySelective(bl);
-			flg = true;
-		} catch (Exception e) {
-			LOGGER.error(AppConstants.SCAN_UPDATE_ERROR_MESSAGE, e);
-			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE, AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
-		}
-
-		return flg;
-	}
-
+	
 	@Override
 	public boolean deleteProcess(Long id) throws BusinessException {
 		boolean flg = false;
