@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.lang.RandomStringUtils;
 
 import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.exception.BusinessException;
@@ -50,16 +53,22 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		PanoramaEngineDto peDto = new PanoramaEngineDto();
 		request.setPanoramaEngineDto(peDto);
 		HttpSession session = servletRequest.getSession();
-		Long id = 2L;//(Long) session.getAttribute("ID");
 		//查询当前用户
-		/*if (id == null)
+		Long merberId = 2L;
+		/*Long merberId = (Long) session.getAttribute("ID");
+		if (merberId == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);*/
 		peDto.setTitle(title);
-		peDto.setUid(id);
+		peDto.setUid(merberId);
 		peDto.setApiKey(photoUrl.getKey());
 		peDto.setApiBaseUrl(photoUrl.getUrl());
 		List<File> fileUrlList = new ArrayList<File>(); //用来保存文件路径，
+		
+		String strFilePath = ("1").equals(number) ? photoUrl.getParamoPath(): photoUrl.getPhotoPath();
+		String strNowTime = new SimpleDateFormat("yyyyMMddhhmmssSSS").format(new Date());
+		strFilePath =  strFilePath + merberId.toString() + File.separator + strNowTime;
+		
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].isEmpty()) {
 				System.out.println("上传文件[" + i + "]为空");
@@ -67,9 +76,8 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 				System.out.println("文件名称: " + files[i].getName() + "文件原名: " + files[i].getOriginalFilename() + "文件类型: "
 						+ files[i].getContentType() + "文件大小: " + files[i].getSize());
 				
-				String strFilePath = ("1").equals(number) ? photoUrl.getParamoPath(): photoUrl.getPhotoPath();
 				FileUtils.copyInputStreamToFile(files[i].getInputStream(),new File(strFilePath, files[i].getOriginalFilename()));
-				File f = new File(strFilePath + files[i].getOriginalFilename());
+				File f = new File(strFilePath + File.separator +files[i].getOriginalFilename());
 				fileUrlList.add(f);
 			}
 		}

@@ -16,7 +16,7 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	
 	//已删除
 	public final static String SET_DELETE = "1";
-
+	//public final static String BENACO_PRIVATE_KEY = "\"3c7c6941-2204-4ee7-a4b5-0981e0e6e09c\"";
 	public final static String BENACO_PRIVATE_KEY = "3c7c6941-2204-4ee7-a4b5-0981e0e6e09c";
     public final static String BENACO_HOST = "https://beta.benaco.com";
     public final static String BENACO_BASEPATH = "/api/beta";

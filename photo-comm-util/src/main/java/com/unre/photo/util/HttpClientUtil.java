@@ -174,17 +174,18 @@ public class HttpClientUtil {
 		return hcResponse;
 	}
 
-	public static HttpClientResponse doPostMultipart(String apiUrl, String scanId, List<File> fileList)
+	public static HttpClientResponse doPostMultipart(String apiUrl, String apiKey, List<File> fileList)
 			throws Exception {
-		// InputStream inStream = null;
 		HttpClientResponse hcResponse = new HttpClientResponse();
 		try {
 			CloseableHttpClient httpClient = HttpClients.createDefault();
 			HttpPost httpPost = new HttpPost(apiUrl);
 			httpPost.setHeader("accept", "application/json");
 			MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-			multipartEntityBuilder.addTextBody("key", "\"3c7c6941-2204-4ee7-a4b5-0981e0e6e09c\"",
-					ContentType.create("text/plain", Charset.forName("utf-8")));
+			//multipartEntityBuilder.addTextBody("key", "\"3c7c6941-2204-4ee7-a4b5-0981e0e6e09c\"",ContentType.create("text/plain", Charset.forName("utf-8")));
+			//TODO benaco 有个小bug 这边的key需要加上单引号
+			apiKey = "\"" + apiKey + "\"";  
+			multipartEntityBuilder.addTextBody("key", apiKey ,ContentType.create("text/plain", Charset.forName("utf-8")));
 			if (fileList != null) {
 				for (int i = 0; i < fileList.size(); i++) {
 					multipartEntityBuilder.addBinaryBody("photo" + (i + 1), fileList.get(i));

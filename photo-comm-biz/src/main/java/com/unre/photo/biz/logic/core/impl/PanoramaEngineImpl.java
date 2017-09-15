@@ -65,7 +65,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				benacoScanId = benacoScanId.substring(1);
 			if (benacoScanId.endsWith("\""))
 				benacoScanId = benacoScanId.substring(0, benacoScanId.length() - 1);
-		
+
 			//返回 benaco scan id
 			panoramaEngineDto.setBenacoScanId(benacoScanId);
 			retPanEngineDto.setBenacoScanId(benacoScanId);
@@ -140,7 +140,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	public boolean startBenacoProcess(PanoramaEngineDto panoramaEngineDto) throws Exception {
 		boolean retFlg = false;
 		try {
-			
+
 			//1.调用benaco处理接口
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("key", panoramaEngineDto.getApiKey());
@@ -173,11 +173,11 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			panDtoParm.setOrderId(pEngineDto.getOrderId());
 			List<PanoramaDto> PanDtoList = panoramaBizImpl.queryUnStitchProcessSource(panDtoParm);
 			//2.调用2D照片拼接插件
-			for(PanoramaDto panDto : PanDtoList) {
-				
+			for (PanoramaDto panDto : PanDtoList) {
+
 			}
 			//3.更新PanoramaDto表记录状态
-			
+
 			retFlg = true;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.PENGINE_START_PHOTO_PROCESS_ERROR_MESSAGE, e);
@@ -199,18 +199,19 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				PanoramaDto panDtoParm = new PanoramaDto();
 				panDtoParm.setOrderId(pEngineDto.getOrderId());
 				List<PanoramaDto> panDtoList = panoramaBizImpl.queryStitchedProcessSource(panDtoParm);
-                
+
 				if (panDtoList == null || panDtoList.size() == 0) {
-					return true;
+					continue;
 				}
-				
+
 				boolean ignore = false;
-				for(PanoramaDto panDto : panDtoList ) {//order下面的Panorama全部是拼接成功则上传Benaco服务器
-					if(!AppConstants.PANORAMA_STITCHED.equals(panDto.getStitchStatus())) {
+				for (PanoramaDto panDto : panDtoList) {//order下面的Panorama全部是拼接成功则上传Benaco服务器
+					if (!AppConstants.PANORAMA_STITCHED.equals(panDto.getStitchStatus())) {
 						ignore = true;
 					}
 				}
-				if(ignore) continue;
+				if (ignore)
+					continue;
 
 				//3.生成 imageFiles
 				List<File> imageFiles = new ArrayList<File>();
@@ -218,7 +219,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 					File f = new File(panDto.getImagePath());
 					imageFiles.add(f);
 				}
-				
+
 				//4.更新订单状态为 "处理中"
 				OrderDto orderParm = new OrderDto();
 				orderParm.setId(order.getId());
@@ -228,7 +229,8 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 				//5.调用Benaco 3D照片上传接口
 				String addPhotosUrl = pEngineDto.getApiBaseUrl() + benacoScanId + "/add-photos";
-				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,pEngineDto.getBenacoScanId(), imageFiles);
+				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl, pEngineDto.getApiKey(),
+						imageFiles);
 
 				if (!"200".equals(hcResponse.getCode())) {
 					return false;
@@ -258,7 +260,8 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("key", panoramaEngineDto.getApiKey());
 			JSONObject json = JSONObject.fromObject(params);
-			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + panoramaEngineDto.getBenacoScanId()+ "/status";
+			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + panoramaEngineDto.getBenacoScanId()
+					+ "/status";
 			HttpClientResponse hcResponse = HttpClientUtil.doPost(addPhotosUrl, json);
 			String httpRetCode = hcResponse.getCode();
 			if ("200".equals(httpRetCode)) {
