@@ -30,7 +30,7 @@ public class OrderFacadeImpl implements IOrderFacade {
 		OrderDto ProcessParm = request.getOrderDto();
 		if (ProcessParm != null) {
 			OrderDto ProcessDto = processBiz.findOrderById(ProcessParm.getId());
-			response.setProcessDto(ProcessDto);
+			response.setOrderDto(ProcessDto);
 		}
 		return response;
 	}
@@ -38,7 +38,7 @@ public class OrderFacadeImpl implements IOrderFacade {
 
 
 	@Override
-	public OrderResponse updateProcess(OrderRequest request) throws Exception {
+	public OrderResponse updateOrder(OrderRequest request) throws Exception {
 		OrderResponse response = new OrderResponse();
 		OrderDto orderDto = request.getOrderDto();
 		boolean flag = processBiz.updateOrder(orderDto);

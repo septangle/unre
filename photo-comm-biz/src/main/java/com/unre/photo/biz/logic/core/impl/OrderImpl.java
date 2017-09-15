@@ -1,7 +1,6 @@
 package com.unre.photo.biz.logic.core.impl;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.comm.dal.dao.OrderMapper;
-import com.unre.photo.comm.dal.dao.PanoramaMapper;
 import com.unre.photo.comm.dal.model.Order;
 import com.unre.photo.util.ModelUtil;
 
@@ -32,10 +30,6 @@ public class OrderImpl implements IOrderBiz {
 	@Autowired
 	private IPanoramaBiz panoramaBiz;
 
-
-
-	@Autowired
-	private PanoramaMapper panoramaMapper;
 
 	private static final Log LOGGER = LogFactory.getLog(OrderImpl.class);
 
@@ -73,6 +67,7 @@ public class OrderImpl implements IOrderBiz {
 	public boolean updateOrder(OrderDto orderDto) throws BusinessException {
 		boolean flg = false;
 		try {	
+			orderDto.setIsDeleted(AppConstants.SET_DELETE);
 			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
 			int number = orderMapper.updateBySelective(order);
 			if (number == 0) { // flag == 1 操作成功,否则操作失败
@@ -81,6 +76,7 @@ public class OrderImpl implements IOrderBiz {
 			}
 			flg = true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.error(AppConstants.SCAN_UPDATE_ERROR_MESSAGE, e);
 			throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE, AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
 		}
@@ -124,6 +120,7 @@ public class OrderImpl implements IOrderBiz {
 				PanoramaDto pScanItemDto = new PanoramaDto();
 				pScanItemDto.setOrderId(order.getId());
 				pScanItemDto.setImagePath(imageFullPath);
+				pScanItemDto.setStitchStatus(AppConstants.PANORAMA_STITCH_STATUS_COMPLETED);
 				panoramaBiz.addProcessSource(pScanItemDto);
 			}
 			flg = true;

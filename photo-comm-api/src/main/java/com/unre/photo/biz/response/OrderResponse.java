@@ -7,18 +7,17 @@ import com.unre.photo.biz.dto.OrderDto;
 @SuppressWarnings("serial")
 public class OrderResponse extends BaseResponse {
 
-	private OrderDto processDto;
+	private OrderDto orderDto;
 
 	private List<OrderDto> processDtoList;
+	
 
-
-
-	public OrderDto getProcessDto() {
-		return processDto;
+	public OrderDto getOrderDto() {
+		return orderDto;
 	}
 
-	public void setProcessDto(OrderDto processDto) {
-		this.processDto = processDto;
+	public void setOrderDto(OrderDto orderDto) {
+		this.orderDto = orderDto;
 	}
 
 	public List<OrderDto> getProcessDtoList() {

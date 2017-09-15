@@ -22,7 +22,7 @@ public interface IOrderFacade {
 	 * @return ProcessResponse
 	 * @throws BusinessException
 	 */
-	public OrderResponse updateProcess(OrderRequest request) throws Exception;
+	public OrderResponse updateOrder(OrderRequest request) throws Exception;
 	
 	/**
 	 * 查询当前用户场景
