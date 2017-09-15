@@ -26,7 +26,8 @@ public class PhotoScanTask {
         logger.info("处理Panorama任务开始...");
         try {
         	PanoramaEngineDto peDto = new PanoramaEngineDto();
-        	peDto.setApiBaseUrl(AppConstants.BENACO_HOST + AppConstants.BENACO_BASEPATH + "/");
+        	String apiBaseUrl = AppConstants.BENACO_HOST + AppConstants.BENACO_BASEPATH + AppConstants.BENACO_SCAN + "/";
+        	peDto.setApiBaseUrl(apiBaseUrl);
 			peDto.setApiKey(AppConstants.BENACO_PRIVATE_KEY);
         	panoramaEngineBiz.startPanoramaProcess(peDto);
         } catch (Exception e) {

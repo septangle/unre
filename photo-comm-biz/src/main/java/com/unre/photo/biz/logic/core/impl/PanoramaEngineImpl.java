@@ -227,7 +227,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				orderBizImpl.updateOrder(orderParm);
 
 				//5.调用Benaco 3D照片上传接口
-				String addPhotosUrl = pEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/add-photos";
+				String addPhotosUrl = pEngineDto.getApiBaseUrl() + benacoScanId + "/add-photos";
 				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl,pEngineDto.getBenacoScanId(), imageFiles);
 
 				if (!"200".equals(hcResponse.getCode())) {

@@ -19,6 +19,7 @@
 		<!-- 3D照片处理  -->
 		<task:scheduled ref="photoScanTask" method="startPanoramaProcessTask" cron="0 0/1 * * * ?" />
 		<!-- 同步Benaco状态  -->
+		
 	</task:scheduled-tasks>
 
 </beans>
