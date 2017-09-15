@@ -81,33 +81,6 @@
 	<import resource="classpath*:spring/photo_biz_spring.xml" />
     <import resource="classpath:spring/photo_job.xml" />
     
-	<bean id="scheduleJob" class="com.unre.photo.quartz.bean.ScheduleJob" />
-	
-	<bean id="myTimeTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
-        <property name="targetObject" ref="scheduleJob" />  
-        <property name="targetMethod">  
-            <value>run</value>  
-        </property>  
-        <property name="concurrent">  
-            <value>false</value>  
-        </property> 
-    </bean>
-    
-    <bean id="myTimeTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean" >  
-        <property name="jobDetail">  
-           	<ref bean="myTimeTaskJobDetail" />  
-        </property>  
-        <property name="cronExpression" value="${photo.checkCron}" />
-    </bean>   
 
-	<bean id="scheduler" lazy-init="false" autowire="no"  
-        class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
-        <property name="triggers">  
-            <list>  
-                <!-- 触发器列表    -->  
-                <ref bean="myTimeTaskTrigger" />
-            </list>  
-        </property>  
-    </bean>
 	
 </beans>

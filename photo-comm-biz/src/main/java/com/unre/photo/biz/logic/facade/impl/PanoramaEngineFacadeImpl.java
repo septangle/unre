@@ -31,14 +31,9 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 		// 1.创建scan id
 		PanoramaEngineDto panoramaEngineDto = panoramaEngineBiz.createScan(request.getPanoramaEngineDto());
 		String benacoScanId = panoramaEngineDto.getBenacoScanId();
-		// 2.创建订单
-		/*		boolean flg  = panoramaEngineBiz.addPhotos(request.getPanoramaEngineDto());
-		*/ PanoramaEngineDto EngineDto = panoramaEngineBiz.addPhotos(request.getPanoramaEngineDto());
+		// 2.上传图片到server
+	    PanoramaEngineDto EngineDto = panoramaEngineBiz.addPhotos(request.getPanoramaEngineDto());
 		Long orderId = EngineDto.getOrderId();
-		if (("").equals(EngineDto)) {
-			retResponse.setCode(AppConstants.FAIL_CODE);
-
-		}
 		retResponse.setCode(AppConstants.SUCCESS_CODE);
 		panoramaEngineDto.setBenacoScanId(benacoScanId);
 		panoramaEngineDto.setOrderId(orderId);
