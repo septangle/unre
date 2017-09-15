@@ -229,13 +229,18 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 				//5.调用Benaco 3D照片上传接口
 				String addPhotosUrl = pEngineDto.getApiBaseUrl() + benacoScanId + "/add-photos";
+				long start = System.currentTimeMillis();
 				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl, pEngineDto.getApiKey(),
 						imageFiles);
-
+				long end = System.currentTimeMillis();
+				System.out.println("调用Benaco add-photos 耗时=="+ (end - start)/1000 + " 秒");
 				if (!"200".equals(hcResponse.getCode())) {
 					return false;
 				}
-
+                
+				//TODO Benaco 处理上传图片需要一点时间，下面的运行早了会导致失败
+				Thread.sleep(2*60*1000);
+				
 				//6.调用Benaco process接口
 				pEngineDto.setBenacoScanId(order.getBenacoScanId());
 				this.startBenacoProcess(pEngineDto);
