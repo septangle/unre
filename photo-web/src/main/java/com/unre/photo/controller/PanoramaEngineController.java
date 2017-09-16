@@ -53,11 +53,11 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		request.setPanoramaEngineDto(peDto);
 		HttpSession session = servletRequest.getSession();
 		//查询当前用户
-		Long merberId = 2L;
-		/*Long merberId = (Long) session.getAttribute("ID");
+		//Long merberId = 2L;
+		Long merberId = (Long) session.getAttribute("ID");
 		if (merberId == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
-					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);*/
+					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		peDto.setTitle(title);
 		peDto.setUid(merberId);
 		peDto.setApiKey(photoUrl.getKey());
