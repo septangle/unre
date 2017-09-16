@@ -1,7 +1,7 @@
 package com.unre.photo.biz.logic.core.impl;
 
 import java.math.BigDecimal;
-
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,6 +182,7 @@ public class OrderEngine implements IOrderEngineBiz {
 
 			balanceTrace.setMemberId(order.getMemberId());
 			balanceTrace.setTransNo(order.getId());
+			balanceTrace.setTransTime(new Date());
 			switch (order.getType()) {
 			case AppConstants.ORDER_TYPE_PHOTO:
 			case AppConstants.ORDER_TYPE_PANORAMA:
@@ -194,11 +195,11 @@ public class OrderEngine implements IOrderEngineBiz {
 				balanceTrace.setTransType(AppConstants.BALANCE_TRACE_TYPE_OFFLINE);
 			}
 			balanceTrace.setAmount(order.getActualAmount());
-			// balance trace's balance = balance's amount + balance's freeze amount
-			balanceTrace.setBalance(balance.getAmount().add(balance.getFreezeAmount()));
+			// balance trace's balance = balance's amount + balance's freeze amount - ordre's actual amount
+			balanceTrace.setBalance(balance.getAmount().add(balance.getFreezeAmount().subtract(order.getActualAmount())));
 			balanceTrace.setRemark(order.getDescription());
 
-			balanceTraceMapper.insert(balanceTrace);
+			balanceTraceMapper.insertSelective(balanceTrace);
 		}
 	}
 

@@ -18,13 +18,13 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-	<listener>
+	<!-- <listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring/photo_web_spring.xml</param-value>
-	</context-param>
+	</context-param> -->
 
 	<filter>
 		<filter-name>requestBodyCachedFilter</filter-name>
