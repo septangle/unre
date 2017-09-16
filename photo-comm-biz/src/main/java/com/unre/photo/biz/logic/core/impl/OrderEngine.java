@@ -242,7 +242,7 @@ public class OrderEngine implements IOrderEngineBiz {
 	}
 
 	// Update order when process completed or failed
-	private boolean UpdateOrder(Order order, String status) {
+	private void UpdateOrder(Order order, String status) {
 
 		Integer iProcessPoints = 0;
 		// set status
@@ -254,8 +254,7 @@ public class OrderEngine implements IOrderEngineBiz {
 		// set actual amount after the process completed or failed
 		order.setActualAmount(order.getGoodsActualPrice().multiply(new BigDecimal(iProcessPoints)));
 
-		orderMapper.updateByPrimaryKeySelective(order);
-		return false;
+		orderMapper.updateByPrimaryKey(order);
 	}
 
 	// Get process status by scanID
