@@ -53,19 +53,19 @@ public class OrderEngine implements IOrderEngineBiz {
 	@Override
 	public void updateOrderAndBalance() {
 
-		List<Order> processList = orderMapper.selectUnclosedOrder();
+		List<Order> orderList = orderMapper.selectUnclosedOrder();
 
-		for (int i = 0; i < processList.size(); i++) {
+		for (Order order : orderList) {
 
-			String strStatus = GetProcessStatusByScanID(processList.get(i).getBenacoScanId());
+			String strStatus = GetProcessStatusByScanID(order.getBenacoScanId());
 
 			if (!strStatus.isEmpty()) {
 
 				if (strStatus.equals(AppConstants.BENACO_STATUS_COMPLETED)
 						|| strStatus.equals(AppConstants.BENACO_STATUS_FAILED)) {
 
-					Balance balance = balanceMapper.selectByMemberID(processList.get(i).getMemberId());
-					updateOrderAndBalance(processList.get(i), balance, strStatus);
+					Balance balance = balanceMapper.selectByMemberID(order.getMemberId());
+					updateOrderAndBalance(order, balance, strStatus);
 				}
 			}
 		}
@@ -91,6 +91,7 @@ public class OrderEngine implements IOrderEngineBiz {
 		UpdateBalance(order);
 	}
 
+	
 	// offline trade
 	// when trade is open,insert order,update balance and freeze
 	// when trade is closed, update order,update balance,insert trace
@@ -111,10 +112,11 @@ public class OrderEngine implements IOrderEngineBiz {
 			//
 			UpdateOrderByOfflineTrade(order);
 			UpdateBalanceByOfflineTrade(order);
-			InsertBalanceTraceByOfflineTrade(order);
+			// InsertBalanceTraceByOfflineTrade(order);
 		}
 	}
 
+	
 	// Update order when offline process is completed or failed
 	private void UpdateBalanceByOfflineTrade(Order order) {
 		//
@@ -133,12 +135,12 @@ public class OrderEngine implements IOrderEngineBiz {
 
 		orderMapper.updateByPrimaryKeySelective(order);
 	}
-
+/*
 	// 
 	private void InsertBalanceTraceByOfflineTrade(Order order) {
 
 	}
-
+*/
 	// Update balance when process started
 	private void UpdateBalance(Order order) {
 		Balance balance = balanceMapper.selectByMemberID(order.getMemberId());
@@ -154,29 +156,23 @@ public class OrderEngine implements IOrderEngineBiz {
 
 	// update member's balance if the process is completed or failed
 	private void UpdateBalance(Order order, Balance balance, String status) {
-		BigDecimal amount = balance.getAmount();
-		BigDecimal freezeAmount = balance.getFreezeAmount();
-
 		if (status.equalsIgnoreCase(AppConstants.BENACO_STATUS_COMPLETED)
 				|| status.equalsIgnoreCase(AppConstants.BENACO_STATUS_FAILED)) {
 
+			BigDecimal amount = balance.getAmount();
+			BigDecimal freezeAmount = balance.getFreezeAmount();
+			
 			// if status is completed or failed
 			// amount = amount + freeze - actual
 			amount = amount.add(order.getTotalAmount()).subtract(order.getActualAmount());
 			// freeze = freeze amount - odder's freeze
 			freezeAmount = freezeAmount.subtract(order.getTotalAmount());
-		} else {
-			// when start processing
-			// amount = amount - order's freeze amount
-			amount = amount.subtract(order.getTotalAmount());
-			// freeze amount plus
-			freezeAmount = freezeAmount.add(order.getTotalAmount());
+			
+			balance.setAmount(amount);
+			balance.setFreezeAmount(freezeAmount);
+
+			balanceMapper.updateByPrimaryKeySelective(balance);
 		}
-
-		balance.setAmount(amount);
-		balance.setFreezeAmount(freezeAmount);
-
-		balanceMapper.updateByPrimaryKeySelective(balance);
 	}
 
 	// insert new balance trace if the process is completed
@@ -244,15 +240,18 @@ public class OrderEngine implements IOrderEngineBiz {
 	// Update order when process completed or failed
 	private void UpdateOrder(Order order, String status) {
 
-		Integer iProcessPoints = 0;
+		// Integer iProcessPoints = 0;
 		// set status
 		order.setStatus(status.equals(AppConstants.BENACO_STATUS_COMPLETED) ? AppConstants.ORDER_STATUS_COMPLETED
 				: AppConstants.ORDER_STATUS_FAILED);
-		// set number of processed points
+		// set number of processed pointsstatus.equals(AppConstants.BENACO_STATUS_COMPLETED)
 		// iProcessPoints = GetProcessPointsByScanID(order.getBenacoScanId());
 		// order.setGoodsNum(iProcessPoints);
 		// set actual amount after the process completed or failed
-		order.setActualAmount(order.getGoodsActualPrice().multiply(new BigDecimal(iProcessPoints)));
+		// order.setActualAmount(order.getGoodsActualPrice().multiply(new BigDecimal(iProcessPoints)));
+		if (status.equals(AppConstants.BENACO_STATUS_FAILED)){
+			order.setActualAmount(BigDecimal.ZERO);
+		}
 
 		orderMapper.updateByPrimaryKey(order);
 	}
