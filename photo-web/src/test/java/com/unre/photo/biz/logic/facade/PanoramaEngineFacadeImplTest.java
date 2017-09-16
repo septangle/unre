@@ -31,16 +31,15 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 			peDto.setApiKey("3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
 			peDto.setTitle("test-001");
 	
-			String jpgsPath = "D:/jpgs/";
+			String jpgsPath = "C:/jpgs/";
 			List<File> files = new ArrayList<File>();
 			for(int i=1;i<=5;i++){
 				File f = new File(jpgsPath + i +".jpg");
 				files.add(f);
 			}
 			peDto.setFiles(files);
-			peDto.setBenacoScanId("2d6daf7e-38ff-437d-a562-6a1c9396901c");
+			peDto.setBenacoScanId("6a079061-680e-4cf6-a2f6-62df9bd53a6a");
 			request.setPanoramaEngineDto(peDto);
-			
 			/*
 			PanoramaEngineResponse createResponse = panoramaEngineFacade.createScan(request);
 			Assert.assertNotNull(createResponse);
@@ -50,7 +49,11 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 			
 			PanoramaEngineResponse startProcessResponse = panoramaEngineFacade.startProcessing(request);
 			Assert.assertNotNull(startProcessResponse);
-			*/
+            */
+			
+			//PanoramaEngineResponse startProcessResponse = panoramaEngineFacade.startPanoramaProcess();
+			//Assert.assertNotNull(startProcessResponse);
+			
 			PanoramaEngineResponse queryStatusResponse = panoramaEngineFacade.queryScanStatus(request);
 			Assert.assertNotNull(queryStatusResponse);
 
@@ -67,7 +70,7 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 			peDto.setApiBaseUrl("https://beta.benaco.com/api/beta/scans/");
 			peDto.setApiKey("3c7c6941-2204-4ee7-a4b5-0981e0e6e09c");
 			request.setPanoramaEngineDto(peDto);
-			PanoramaEngineResponse response = panoramaEngineFacade.startPanoramaProcess(request);
+			PanoramaEngineResponse response = panoramaEngineFacade.startPanoramaProcess();
 			Assert.assertNotNull(response);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -146,7 +146,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			params.put("key", panoramaEngineDto.getApiKey());
 			JSONObject json = JSONObject.fromObject(params);
 			String benacoScanId = panoramaEngineDto.getBenacoScanId();
-			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + "id/" + benacoScanId + "/start-processing";
+			String addPhotosUrl = panoramaEngineDto.getApiBaseUrl() + benacoScanId + "/start-processing";
 			HttpClientResponse hcResponse = HttpClientUtil.doPost(addPhotosUrl, json);
 
 			String retCode = hcResponse.getCode();
@@ -239,7 +239,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				}
                 
 				//TODO Benaco 处理上传图片需要一点时间，下面的运行早了会导致失败
-				Thread.sleep(4*60*1000);
+				//Thread.sleep(4*60*1000);
 				
 				//6.调用Benaco process接口
 				pEngineDto.setBenacoScanId(order.getBenacoScanId());
