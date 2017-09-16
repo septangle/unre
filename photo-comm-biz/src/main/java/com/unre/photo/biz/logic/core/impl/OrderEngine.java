@@ -246,8 +246,8 @@ public class OrderEngine implements IOrderEngineBiz {
 
 		Integer iProcessPoints = 0;
 		// set status
-		order.setStatus(status.equals(AppConstants.BENACO_STATUS_COMPLETED) ? AppConstants.SFILE_PROCESS_COMPLETE
-				: AppConstants.SFILE_PROCESS_FAIL);
+		order.setStatus(status.equals(AppConstants.BENACO_STATUS_COMPLETED) ? AppConstants.ORDER_STATUS_COMPLETED
+				: AppConstants.ORDER_STATUS_FAILED);
 		// set number of processed points
 		// iProcessPoints = GetProcessPointsByScanID(order.getBenacoScanId());
 		// order.setGoodsNum(iProcessPoints);

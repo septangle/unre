@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.logic.core.IOrderEngineBiz;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
+import com.unre.photo.biz.logic.facade.IPanoramaEngineFacade;
 import com.unre.photo.comm.AppConstants;
 
 @Component("photoScanTask")
@@ -16,7 +17,7 @@ public class PhotoScanTask {
 	Log logger = LogFactory.getLog(PhotoScanTask.class);
 	
 	@Autowired
-	IPanoramaEngineBiz panoramaEngineBiz;
+	IPanoramaEngineFacade panoramaEngineFacade;
 	
 	@Autowired 
 	IOrderEngineBiz orderEngineBiz;
@@ -25,11 +26,7 @@ public class PhotoScanTask {
 
         logger.info("处理Panorama任务开始...");
         try {
-        	PanoramaEngineDto peDto = new PanoramaEngineDto();
-        	String apiBaseUrl = AppConstants.BENACO_HOST + AppConstants.BENACO_BASEPATH + AppConstants.BENACO_SCAN + "/";
-        	peDto.setApiBaseUrl(apiBaseUrl);
-			peDto.setApiKey(AppConstants.BENACO_PRIVATE_KEY);
-        	panoramaEngineBiz.startPanoramaProcess(peDto);
+        	panoramaEngineFacade.startPanoramaProcess();
         } catch (Exception e) {
             logger.error("处理Panorama任务失败", e);
         }

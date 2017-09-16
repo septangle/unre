@@ -123,6 +123,7 @@
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
 			</if>
 		</set>
+		where id = #{id,jdbcType=BIGINT}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Balance">
 		update tbl_balance

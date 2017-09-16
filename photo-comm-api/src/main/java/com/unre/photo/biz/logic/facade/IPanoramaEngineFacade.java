@@ -46,13 +46,11 @@ public interface IPanoramaEngineFacade {
 	PanoramaEngineResponse queryScanStatus(PanoramaEngineRequest request) throws Exception;
 	
 	/**
-	 * 新增benaco scan
-	 * 
-	 * @param request.MemberDto 
-	 *  
+	 * 执行3D图处理
+	 *   
 	 * @return PanoramaEngineResponse.scanId
 	 * @throws Exception
 	 */
-	PanoramaEngineResponse startPanoramaProcess(PanoramaEngineRequest request) throws Exception;
+	PanoramaEngineResponse startPanoramaProcess() throws Exception;
 
 }

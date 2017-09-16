@@ -67,13 +67,13 @@ public class OrderImpl implements IOrderBiz {
 	public boolean updateOrder(OrderDto orderDto) throws BusinessException {
 		boolean flg = false;
 		try {	
-			orderDto.setIsDeleted(AppConstants.SET_DELETE);
+			//orderDto.setIsDeleted(AppConstants.SET_DELETE);
 			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
 			int number = orderMapper.updateBySelective(order);
-			if (number == 0) { // flag == 1 操作成功,否则操作失败
+			/*if (number == 0) { // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
-			}
+			}*/
 			flg = true;
 		} catch (Exception e) {
 			e.printStackTrace();

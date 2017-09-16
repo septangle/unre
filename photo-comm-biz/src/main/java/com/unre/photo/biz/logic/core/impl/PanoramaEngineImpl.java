@@ -239,7 +239,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				}
                 
 				//TODO Benaco 处理上传图片需要一点时间，下面的运行早了会导致失败
-				Thread.sleep(2*60*1000);
+				Thread.sleep(4*60*1000);
 				
 				//6.调用Benaco process接口
 				pEngineDto.setBenacoScanId(order.getBenacoScanId());

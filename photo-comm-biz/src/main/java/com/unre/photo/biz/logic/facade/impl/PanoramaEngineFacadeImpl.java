@@ -51,9 +51,15 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 	}
 	
 	@Override
-	public PanoramaEngineResponse startPanoramaProcess(PanoramaEngineRequest request) throws Exception {
+	public PanoramaEngineResponse startPanoramaProcess() throws Exception {
 		PanoramaEngineResponse retResponse = new PanoramaEngineResponse();
-		boolean flg = panoramaEngineBiz.startPanoramaProcess(request.getPanoramaEngineDto());
+
+    	PanoramaEngineDto peDto = new PanoramaEngineDto();
+    	String apiBaseUrl = AppConstants.BENACO_HOST + AppConstants.BENACO_BASEPATH + AppConstants.BENACO_SCAN + "/";
+    	peDto.setApiBaseUrl(apiBaseUrl);
+		peDto.setApiKey(AppConstants.BENACO_PRIVATE_KEY);
+		
+		boolean flg = panoramaEngineBiz.startPanoramaProcess(peDto);
 		String code = flg ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
 		retResponse.setCode(code);
 		return retResponse;
