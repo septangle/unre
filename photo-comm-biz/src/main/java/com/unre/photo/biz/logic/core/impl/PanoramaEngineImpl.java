@@ -191,8 +191,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	public boolean startPanoramaProcess(PanoramaEngineDto pEngineDto) throws Exception {
 		boolean retFlg = false;
 		try {
-
-			List<OrderDto> orderList = orderBizImpl.queryOrder(null);
+            
+			OrderDto orderParm = new OrderDto();
+			orderParm.setStatus(AppConstants.ORDER_STATUS_INIT);
+			List<OrderDto> orderList = orderBizImpl.queryOrder(orderParm);
 			for (OrderDto order : orderList) {
 				String benacoScanId = order.getBenacoScanId();
 				//2.查询全景表中 2D照片拼接完成的 + 订单状态为：未处理 的记录
@@ -221,7 +223,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				}
 
 				//4.更新订单状态为 "处理中"
-				OrderDto orderParm = new OrderDto();
+				orderParm = new OrderDto();
 				orderParm.setId(order.getId());
 				orderParm.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
 				orderParm.setVersion(order.getVersion());
