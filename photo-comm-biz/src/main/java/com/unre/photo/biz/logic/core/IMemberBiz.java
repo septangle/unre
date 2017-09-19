@@ -69,12 +69,12 @@ public interface IMemberBiz {
 	 * @return MemberDto -Dto
 	 * @throws BusinessException
 	 */
-	public MemberDto queryLoginUsers(MemberDto memberDto) throws BusinessException;
+	public MemberDto queryLoginUser(MemberDto memberDto) throws BusinessException;
 
 	/**
 	 * 查询当前用户单价
 	 */
-	public PriceDto SelPriceById(MemberDto memberDto) throws BusinessException;
+	public PriceDto calculateMerberPrice(MemberDto memberDto) throws BusinessException;
 	
 	/**
 	 * 

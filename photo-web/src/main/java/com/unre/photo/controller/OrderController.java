@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.unre.photo.biz.dto.OrderDto;
+import com.unre.photo.biz.dto.CompleteOrderDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IOrderFacade;
 import com.unre.photo.biz.request.OrderRequest;
@@ -34,17 +34,17 @@ public class OrderController extends BaseController<OrderController> {
 	 */
 	@ApiOperation(value = "查询当前用户panorama", httpMethod = "GET", response = OrderResponse.class)
 	@RequestMapping(value = "/getCurrMemberScan.do", method = RequestMethod.GET)
-	public @ResponseBody OrderResponse findCurrMemberProcessById(HttpServletRequest servletRequest) throws Exception {
+	public @ResponseBody OrderResponse findCurrMemberPanorama(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
-		Long id = (Long) session.getAttribute("ID");
-		if (id == null)
+		Long memberId = (Long) session.getAttribute("MemberID");
+		if (memberId == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		OrderRequest request = new OrderRequest();
-		OrderDto orderDto = new OrderDto();
-		orderDto.setMemberId(id);
-		request.setOrderDto(orderDto);
-		return orderFacade.queryStatus(request);
+		CompleteOrderDto completeOrderDto= new CompleteOrderDto();
+		completeOrderDto.setMemberId(memberId);
+		request.setCompleteOrderDto(completeOrderDto);
+		return orderFacade.findCurrMemberPanorama(request);
 	}
 
 	/**
@@ -52,12 +52,12 @@ public class OrderController extends BaseController<OrderController> {
 	 * @param ID
 	 * @return resp
 	 */
-	@ApiOperation(value = "删除场景", httpMethod = "POST", response = OrderResponse.class)
+	@ApiOperation(value = "删除订单", httpMethod = "POST", response = OrderResponse.class)
 	@ApiImplicitParams({ @ApiImplicitParam(name = "orderDto.id", value = "ID", required = true, dataType = "long") })
 	@RequestMapping(value = "/deleteOrderById.do", method = RequestMethod.POST)
-	public @ResponseBody OrderResponse deleteOrderById(@RequestBody OrderRequest request,
+	public @ResponseBody OrderResponse removeOrderById(@RequestBody OrderRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		return orderFacade.updateOrder(request);
+		return orderFacade.removeOrderById(request);
 	}
 
 }

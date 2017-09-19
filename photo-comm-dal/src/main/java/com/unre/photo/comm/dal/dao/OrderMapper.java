@@ -19,6 +19,8 @@ public interface OrderMapper {
     
     int updateBySelective(Order record);
     
+    
+   /***************************************/
     int updateOrderByBenacoId(Order record);
     
     List<Order> selectBySelective(Order record);
@@ -28,19 +30,14 @@ public interface OrderMapper {
     
     int updateStatus(Order record);
     
-    //查询当前用户场景
-    List<Order> SelStatus(Order record);
+    //查询当前用户所有完成场景
+    List<Order> selectGetMemberScene(Order record);
     
     //根据benonId查询订单
-    Order SelOrder (Order record);
+    Order selectOrder (Order record);
     
     // select unclosed orders 
     List<Order> selectUnclosedOrder();
-    
-    //更新订单金额
-    int updateByAmount(Order record);
-    
-    //根据memberId查询订单
-    Order selMemberId(Long id);
+
 
 }

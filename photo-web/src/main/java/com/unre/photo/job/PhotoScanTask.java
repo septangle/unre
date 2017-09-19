@@ -5,11 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.logic.core.IOrderEngineBiz;
-import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
 import com.unre.photo.biz.logic.facade.IPanoramaEngineFacade;
-import com.unre.photo.comm.AppConstants;
 
 @Component("photoScanTask")
 public class PhotoScanTask {

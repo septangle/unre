@@ -40,7 +40,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	private OrderEngine orderEngine;
 	@Autowired
 	private PhotoMapper photoMapper;
-
+	
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
 
@@ -103,7 +103,8 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			} else {//2D
 				int numberOfOnepoint = Integer.parseInt(number);//点数
 				if (imageFiles.size() % numberOfOnepoint != 0) {
-					throw new BusinessException(AppConstants.ADD_PHOTOS_MESSAGE_OCDE, AppConstants.ADD_PHOTOS_MESSAGE);
+					throw new BusinessException(AppConstants.ADD_PHOTOS_ERROR_CODE,
+							AppConstants.ADD_PHOTOS_ERROR_MESSAGE);
 				}
 
 				PanoramaDto panoramaDto = new PanoramaDto();
@@ -164,6 +165,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 		return retFlg;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public boolean startPhotoProcess(PanoramaEngineDto pEngineDto) throws Exception {
 		boolean retFlg = false;
@@ -191,7 +193,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	public boolean startPanoramaProcess(PanoramaEngineDto pEngineDto) throws Exception {
 		boolean retFlg = false;
 		try {
-            
+
 			OrderDto orderParm = new OrderDto();
 			orderParm.setStatus(AppConstants.ORDER_STATUS_INIT);
 			List<OrderDto> orderList = orderBizImpl.queryOrder(orderParm);
@@ -235,14 +237,14 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl, pEngineDto.getApiKey(),
 						imageFiles);
 				long end = System.currentTimeMillis();
-				System.out.println("调用Benaco add-photos 耗时=="+ (end - start)/1000 + " 秒");
+				System.out.println("调用Benaco add-photos 耗时==" + (end - start) / 1000 + " 秒");
 				if (!"200".equals(hcResponse.getCode())) {
 					return false;
 				}
-                
+
 				//TODO Benaco 处理上传图片需要一点时间，下面的运行早了会导致失败
 				//Thread.sleep(4*60*1000);
-				
+
 				//6.调用Benaco process接口
 				pEngineDto.setBenacoScanId(order.getBenacoScanId());
 				this.startBenacoProcess(pEngineDto);
@@ -299,5 +301,6 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 		return retPanEngineDto;
 	}
+
 
 }

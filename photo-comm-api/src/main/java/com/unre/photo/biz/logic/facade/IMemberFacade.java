@@ -61,7 +61,7 @@ public interface IMemberFacade {
 	 * @return
 	 * @throws Exception
 	 */
-	public PriceRespnose SelPrice(MemberRequest request) throws Exception;
+	public PriceRespnose findCurrMemberPrice(MemberRequest request) throws Exception;
 	
 	// select all member
 	public MemberResponse queryAllMember(MemberRequest request) throws Exception;

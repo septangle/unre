@@ -30,7 +30,14 @@ public interface IOrderFacade {
 	 * 
 	 * @return list
 	 */
-	public OrderResponse queryStatus(OrderRequest request) throws Exception;
+	public OrderResponse findCurrMemberPanorama(OrderRequest request) throws Exception;
+	/**
+	 * 更新Order_isDeleted
+	 * 
+	 * @param request
+	 * @return OrderRespnose
+	 */
+	public OrderResponse removeOrderById(OrderRequest request) throws Exception;
 	
 
 }

@@ -3,6 +3,7 @@ package com.unre.photo.comm;
 public class AppConstants {
 
 public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
+public final static String SYSTEM_ERROR_MESSAGE = "系统异常";
 	
 	public final static String SUCCESS_CODE = "1"; //成功标记
 	public final static String FAIL_CODE = "-1"; //失败标记
@@ -16,6 +17,8 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	
 	//已删除
 	public final static String SET_DELETE = "1";
+	public final static String SUCCESS_MESSAGE="删除成功";
+	public final static String FAIL_MESSAGE="删除失败";
 	public final static String BENACO_PRIVATE_KEY = "3c7c6941-2204-4ee7-a4b5-0981e0e6e09c";
     public final static String BENACO_HOST = "https://beta.benaco.com";
     public final static String BENACO_BASEPATH = "/api/beta";
@@ -71,8 +74,6 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	//login模块 1002
 	public final static String QUERY_LOGIN_USER_ERROR_CODE = "10020001";
 	public final static String QUERY_LOGIN_USER_ERROR_MESSAGE = "用户登录失败:账号或密码错误！";
-	public final static String QUERY_LOGIN_USER_STATUS_MESSAGE = "1"; //登录状态：已登录
-	public final static String QUERY_LOGIN_USER_NOT_STATUS_MESSAGE = "0"; //登录状态：未登录
 	
 	//register模块  1003
 	public final static String QUERY_ADD_USER_ERROR_CODE = "10030001";
@@ -146,13 +147,17 @@ public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
 	public final static String PANORAMA_STITCH_STATUS_COMPLETED = "2";
 	public final static String PANORAMA_STITCH_STATUS_FAILED = "3";
 
-	public final static String ADD_PHOTOS_MESSAGE_OCDE="1007005";
-	public final static String ADD_PHOTOS_MESSAGE="点数与传入照片数量不匹配";
+	public final static String ADD_PHOTOS_ERROR_CODE="1007005";
+	public final static String ADD_PHOTOS_ERROR_MESSAGE="点数与传入照片数量不匹配";
 	
 	public final static String NUMBER_MESSAGE_3D="1";
 	
 	//自动设置会员级别
 	public final static String MEMBER_LEVEL_DEFAULT="3";
+	
+	//order
+	public final static String UPDATE_IS_DELETED_ERROR_CODE = "10080001";
+	public final static String UPDATE_IS_DELETED_ERROR_MESSAGE= "删除订单失败!";
 
 	
 }

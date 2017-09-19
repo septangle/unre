@@ -38,13 +38,13 @@ public class MemberController extends BaseController<MemberController> {
 	public @ResponseBody MemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		//根据缓存ID查询当前登录会员
-		Long id = (Long) session.getAttribute("ID");
-		if (id == null)
+		Long memberId = (Long) session.getAttribute("MemberID");
+		if (memberId == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		MemberRequest request = new MemberRequest();
 		MemberDto memberDto = new MemberDto();
-		memberDto.setId(id);
+		memberDto.setId(memberId);
 		request.setMemberDto(memberDto);
 		//根据ID查询
 		return memberFacade.findMemberById(request);
@@ -60,29 +60,24 @@ public class MemberController extends BaseController<MemberController> {
 			@ApiImplicitParam(name = "memberDto.tel", value = "联系电话", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "memberDto.password", value = "密码", required = true, dataType = "string") })
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
-	public @ResponseBody MemberResponse queryLoginUsers(@RequestBody MemberRequest request,
-			HttpServletRequest servletRequest) throws BusinessException {
-		MemberResponse MemberResponse = null;
+	public @ResponseBody MemberResponse queryLoginUser(@RequestBody MemberRequest request,
+			HttpServletRequest servletRequest) throws Exception {
+		MemberResponse memberResponse = null;
 		HttpSession session = servletRequest.getSession();
-		MemberDto phonto = (MemberDto) session.getAttribute("MemberDto");
+		MemberDto member = (MemberDto) session.getAttribute("MemberDto");
 		//判断会员是否登录
-		if (phonto != null) {
+		if (member != null) {
 			throw new BusinessException(AppConstants.QUERY_LOGIN_USERLOING_ERROR_CODE,
 					AppConstants.QUERY_LOGIN_USERLOING_ERROR_MESSAGE);
 		}
-		try {//MD5加密
-			request.getMemberDto().setPassword(MD5Util.encodeMD5String(request.getMemberDto().getPassword()));
-			MemberResponse = memberFacade.login(request);
-			//判断对象是否为空，并放入session
-			if (MemberResponse != null && MemberResponse.getMemberDto() != null) {
-				servletRequest.getSession().setAttribute("MemberDto", MemberResponse.getMemberDto());
-				servletRequest.getSession().setAttribute("ID", MemberResponse.getMemberDto().getId());
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		request.getMemberDto().setPassword(MD5Util.encodeMD5String(request.getMemberDto().getPassword()));
+		memberResponse = memberFacade.login(request);
+		//判断对象是否为空，并放入session
+		if (memberResponse != null && memberResponse.getMemberDto() != null) {
+			servletRequest.getSession().setAttribute("MemberDto", memberResponse.getMemberDto());
+			servletRequest.getSession().setAttribute("MemberID", memberResponse.getMemberDto().getId());
 		}
-		return MemberResponse;
+		return memberResponse;
 	}
 
 	/**
@@ -105,15 +100,10 @@ public class MemberController extends BaseController<MemberController> {
 	@RequestMapping(value = "/register.do", method = RequestMethod.POST)
 	public @ResponseBody MemberResponse register(@RequestBody MemberRequest request, HttpServletRequest servletRequest)
 			throws Exception {
-		MemberResponse MemberResponse = null;
-		try {//MD5加密
-			request.getMemberDto().setPassword(MD5Util.encodeMD5String(request.getMemberDto().getPassword()));
-			MemberResponse = memberFacade.register(request);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return MemberResponse;
-
+		MemberResponse memberResponse = null;
+		request.getMemberDto().setPassword(MD5Util.encodeMD5String(request.getMemberDto().getPassword()));
+		memberResponse = memberFacade.register(request);
+		return memberResponse;
 	}
 
 	/**
@@ -125,29 +115,18 @@ public class MemberController extends BaseController<MemberController> {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "memberDto.memberName", value = "memberName", required = false, dataType = "long"), })
 	@RequestMapping(value = "/logout.do", method = RequestMethod.POST)
-	public @ResponseBody boolean logout(HttpServletRequest request, @RequestBody MemberRequest requests) {
+	public @ResponseBody boolean logout(HttpServletRequest request, @RequestBody MemberRequest requests)
+			throws Exception {
 		boolean flag = false;
 		HttpSession session = request.getSession();
-		MemberDto phonto = (MemberDto) session.getAttribute("MemberDto");
-		if (phonto != null) {
-			MemberRequest rquest = new MemberRequest();
-			MemberDto memberDto = new MemberDto();
-			//从缓存中取得该对象
-			memberDto.setId(phonto.getId());
-			memberDto.setStatus(AppConstants.QUERY_LOGIN_USER_NOT_STATUS_MESSAGE);
-			rquest.setMemberDto(memberDto);
-			try {
-				//根据id修改登录状态
-				memberFacade.updateMember(rquest);
-				//清空缓存
-				session.removeAttribute("MemberDto");
-				session.removeAttribute("ID");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		MemberDto member = (MemberDto) session.getAttribute("MemberDto");
+		if (member != null) {
+			//清空缓存
+			session.removeAttribute("MemberDto");
+			session.removeAttribute("MemberID");
 			flag = true;
 		}
-		return flag;
+		    return flag;
 
 	}
 
@@ -158,18 +137,18 @@ public class MemberController extends BaseController<MemberController> {
 	 */
 	@ApiOperation(value = "查询当前用户price", httpMethod = "GET", response = PriceRespnose.class)
 	@RequestMapping(value = "/getPrice.do", method = RequestMethod.GET)
-	public @ResponseBody PriceRespnose findCurrMemberPriceById(HttpServletRequest servletRequest) throws Exception {
+	public @ResponseBody PriceRespnose findCurrMemberPrice(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
-		Long id = (Long) session.getAttribute("ID");
+		Long memberId = (Long) session.getAttribute("MemberID");
 		//判断用户是否登录
-		if (id == null)
+		if (memberId == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		MemberRequest request = new MemberRequest();
 		MemberDto memberDto = new MemberDto();
-		memberDto.setId(id);
+		memberDto.setId(memberId);
 		request.setMemberDto(memberDto);
-		return memberFacade.SelPrice(request);
+		return memberFacade.findCurrMemberPrice(request);
 	}
 
 	/**

@@ -40,7 +40,6 @@ public class BalanceTraceController extends BaseController<BalanceTraceControlle
 	@RequestMapping(value = "/recharge.do", method = RequestMethod.POST)
 	public @ResponseBody BalanceTraceResponse recharge(@RequestBody BalanceTraceRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		
-		return balanceFacade.insertBalanceTrace(request);
+           	return balanceFacade.insertBalanceTrace(request);
 	}
 }

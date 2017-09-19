@@ -49,34 +49,30 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 			@RequestParam MultipartFile[] files, @RequestParam("number") String number,
 			HttpServletRequest servletRequest) throws Exception {
 		PanoramaEngineRequest request = new PanoramaEngineRequest();
-		PanoramaEngineDto peDto = new PanoramaEngineDto();
-		request.setPanoramaEngineDto(peDto);
+		PanoramaEngineDto panoramaEngineDto = new PanoramaEngineDto();
+		request.setPanoramaEngineDto(panoramaEngineDto);
 		HttpSession session = servletRequest.getSession();
 		//查询当前用户
-		//Long merberId = 2L;
-		Long merberId = (Long) session.getAttribute("ID");
+		Long merberId = (Long) session.getAttribute("MemberID");
 		if (merberId == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
-		peDto.setTitle(title);
-		peDto.setUid(merberId);
-		peDto.setApiKey(photoUrl.getKey());
-		peDto.setApiBaseUrl(photoUrl.getUrl());
+		panoramaEngineDto.setTitle(title);
+		panoramaEngineDto.setUid(merberId);
+		panoramaEngineDto.setApiKey(photoUrl.getKey());
+		panoramaEngineDto.setApiBaseUrl(photoUrl.getUrl());
 		List<File> fileUrlList = new ArrayList<File>(); //用来保存文件路径，
-		
-		String strFilePath = ("1").equals(number) ? photoUrl.getParamoPath(): photoUrl.getPhotoPath();
+    	String strFilePath = (AppConstants.NUMBER_MESSAGE_3D).equals(number) ? photoUrl.getParamoPath()
+				: photoUrl.getPhotoPath();
 		String strNowTime = new SimpleDateFormat("yyyyMMddhhmmssSSS").format(new Date());
-		strFilePath =  strFilePath + merberId.toString() + File.separator + strNowTime;
-		
+		strFilePath = strFilePath + merberId.toString() + File.separator + strNowTime;
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].isEmpty()) {
 				System.out.println("上传文件[" + i + "]为空");
 			} else {
-				System.out.println("文件名称: " + files[i].getName() + "文件原名: " + files[i].getOriginalFilename() + "文件类型: "
-						+ files[i].getContentType() + "文件大小: " + files[i].getSize());
-				
-				FileUtils.copyInputStreamToFile(files[i].getInputStream(),new File(strFilePath, files[i].getOriginalFilename()));
-				File f = new File(strFilePath + File.separator +files[i].getOriginalFilename());
+				FileUtils.copyInputStreamToFile(files[i].getInputStream(),
+						new File(strFilePath, files[i].getOriginalFilename()));
+				File f = new File(strFilePath + File.separator + files[i].getOriginalFilename());
 				fileUrlList.add(f);
 			}
 		}
@@ -100,12 +96,12 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	public @ResponseBody PanoramaEngineResponse startProcessing(@RequestBody PanoramaEngineRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
-		Long id = (Long) session.getAttribute("ID");
+		Long memberId = (Long) session.getAttribute("MemberID");
 		//查询当前用户
-		if (id == null)
+		if (memberId == null)
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
-		request.getPanoramaEngineDto().setUid(id);
+		request.getPanoramaEngineDto().setUid(memberId);
 		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
 		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		return panoramaEngineFacade.startProcessing(request);

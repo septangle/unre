@@ -3,6 +3,7 @@ package com.unre.photo.biz.logic.core;
 import java.io.File;
 import java.util.List;
 
+import com.unre.photo.biz.dto.CompleteOrderDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.exception.BusinessException;
 
@@ -73,7 +74,7 @@ public interface IOrderBiz {
 	 * 
 	 * @return list
 	 */
-	public List<OrderDto> querySelStatus(OrderDto orderDto) throws BusinessException;
+	public List<CompleteOrderDto> queryMemberScene(CompleteOrderDto completeOrderDto) throws BusinessException;
 	
 	/**
 	 * 通过ID查询Order
@@ -84,7 +85,20 @@ public interface IOrderBiz {
 	 * @throws BusinessException
 	 */
 	public OrderDto findOrder(OrderDto orderDto) throws BusinessException;
-	
+   
+	/**	
+    * @param orderDto
+    * @return
+    * @throws BusinessException
+    */
 	public List<OrderDto> queryOrder(OrderDto orderDto) throws BusinessException;
+	
+	/**
+	 * 更新Is_deleted
+	 * 
+	 * @param orderId  --id
+	 * @return boolean
+	 */
+	public boolean removeOrder(OrderDto orderDto) throws BusinessException;
 	
 }

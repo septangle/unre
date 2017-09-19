@@ -280,6 +280,7 @@ public class OrderEngine implements IOrderEngineBiz {
 	}
 
 	// Get number of points processed
+	@SuppressWarnings("unused")
 	private Integer GetProcessPointsByScanID(String scanID) {
 		Map<String, Object> mpParams = new HashMap<String, Object>();
 		mpParams.put("key", AppConstants.BENACO_PRIVATE_KEY);

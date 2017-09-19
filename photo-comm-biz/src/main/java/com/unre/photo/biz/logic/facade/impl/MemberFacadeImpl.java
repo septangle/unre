@@ -56,8 +56,8 @@ public class MemberFacadeImpl implements IMemberFacade {
 	public MemberResponse login(MemberRequest request) throws Exception {
         MemberResponse response = new MemberResponse();
 		response = new MemberResponse();
-		MemberDto MemberDto = memberBiz.queryLoginUsers(request.getMemberDto());
-		response.setMemberDto(MemberDto);
+		MemberDto memberDto = memberBiz.queryLoginUser(request.getMemberDto());
+		response.setMemberDto(memberDto);
 		return response;
 
 	}
@@ -66,17 +66,17 @@ public class MemberFacadeImpl implements IMemberFacade {
 	@Override
 	public MemberResponse register(MemberRequest request) throws Exception {
 		MemberResponse response = new MemberResponse();
-			response = new MemberResponse();
-			MemberDto MemberDto = memberBiz.addMember(request.getMemberDto());
-			response.setMemberDto(MemberDto);
-           return response;
+		response = new MemberResponse();
+		MemberDto memberDto = memberBiz.addMember(request.getMemberDto());
+		response.setMemberDto(memberDto);
+        return response;
 	}
 
 	@Override
-	public PriceRespnose SelPrice(MemberRequest request) throws Exception {
+	public PriceRespnose findCurrMemberPrice(MemberRequest request) throws Exception {
 		PriceRespnose priceRespnose= new PriceRespnose();
 		MemberDto memberDto = memberBiz.findMemberById(request.getMemberDto().getId());
-		PriceDto priceDto=memberBiz.SelPriceById(memberDto);
+		PriceDto priceDto=memberBiz.calculateMerberPrice(memberDto);
 		priceRespnose.setPriceDto(priceDto);
 		return priceRespnose;
 	}

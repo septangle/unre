@@ -1,6 +1,5 @@
 package com.unre.photo.biz.logic.core.impl;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,12 @@ public class MemberImpl implements IMemberBiz {
 
 	@Autowired
 	private MemberMapper memberMapper;
-	
+
 	@Autowired
 	private GoodsMapper goodMapper;
-	
+
 	@Autowired
-	private MemberLevelItemMapper   memberItemMapper;
+	private MemberLevelItemMapper memberItemMapper;
 
 	private static final Log LOGGER = LogFactory.getLog(MemberImpl.class);
 
@@ -76,17 +75,17 @@ public class MemberImpl implements IMemberBiz {
 	// 注册
 	@Override
 	public MemberDto addMember(MemberDto memberDto) throws BusinessException {
-		Member member = new Member();
-		member.setTel(memberDto.getTel());
-		member.setMail(memberDto.getMail());
-		List<Member> memberslist = memberMapper.selectByTelOrMail(member);
-		if (memberslist.size() > 0) {
-			for (int i = 0; i < memberslist.size(); i++) {
-				Member members = memberslist.get(i);
-				if (members.getTel().equals(memberDto.getTel())) {
+		Member memberParm = new Member();
+		memberParm.setTel(memberDto.getTel());
+		memberParm.setMail(memberDto.getMail());
+		List<Member> memberList = memberMapper.selectByTelOrMail(memberParm);//手机号、邮箱唯一校验
+		if (memberList.size() > 0) {
+			for (int i = 0; i < memberList.size(); i++) {
+				Member memberElement = memberList.get(i);
+				if (memberElement.getTel().equals(memberDto.getTel())) {
 					throw new BusinessException(AppConstants.QUERY_ADD_TEL_ERROR_CODE,
 							AppConstants.QUERY_ADD_TEL_ERROR_MESSAGE);
-				} else if (members.getMail().equals(memberDto.getMail())) {
+				} else if (memberElement.getMail().equals(memberDto.getMail())) {
 					throw new BusinessException(AppConstants.QUERY_ADD_MAIL_ERROR_CODE,
 							AppConstants.QUERY_ADD_MAIL_ERROR_MESSAGE);
 				}
@@ -95,44 +94,39 @@ public class MemberImpl implements IMemberBiz {
 		try {
 			//系统自动设置会员级别
 			memberDto.setLevel(AppConstants.MEMBER_LEVEL_DEFAULT);
-			Member members = ModelUtil.dtoToModel(memberDto, Member.class);
-			memberMapper.insertSelective(members);
-			Long id = members.getId();
+			Member member = ModelUtil.dtoToModel(memberDto, Member.class);
+			memberMapper.insertSelective(member);
+			Long id = member.getId();
 			memberDto = findMemberById(id);
 			if (memberDto == null) {
 				throw new BusinessException(AppConstants.QUERY_ADD_USER_ERROR_CODE,
 						AppConstants.QUERY_ADD_USER_ERROR_MESSAGE);
 			}
 		} catch (Exception e) {
-			LOGGER.error(AppConstants.QUERY_ADD_USER_ERROR_CODE, e);
-			throw new BusinessException(AppConstants.QUERY_ADD_USER_ERROR_CODE,
-					AppConstants.QUERY_ADD_USER_ERROR_MESSAGE);
+			LOGGER.error(AppConstants.QUERY_ADD_USER_ERROR_MESSAGE);
+			throw new BusinessException(AppConstants.SYSTEM_ERROR_CODE, AppConstants.SYSTEM_ERROR_MESSAGE);
 		}
 		return memberDto;
 	}
 
 	// 登录
 	@Override
-	public MemberDto queryLoginUsers(MemberDto MemberDto) throws BusinessException {
-		Member member;
+	public MemberDto queryLoginUser(MemberDto memberDto) throws BusinessException {
+		Member memberParam;
 		try {
-			Member members = ModelUtil.dtoToModel(MemberDto, Member.class);
-			member = memberMapper.queryLoginUsers(members);
-			if (member == null) {
+			memberParam = ModelUtil.dtoToModel(memberDto, Member.class);
+			Member member = memberMapper.queryLoginUser(memberParam);
+			if (member == null) {//判断该用户信息是否存在
 				throw new BusinessException(AppConstants.QUERY_LOGIN_USER_ERROR_CODE,
 						AppConstants.QUERY_LOGIN_USER_ERROR_MESSAGE);
 			}
-			Member ms = new Member();
-			ms.setId(member.getId());
-			ms.setStatus(AppConstants.QUERY_LOGIN_USER_STATUS_MESSAGE);
-			memberMapper.updateByPrimaryKeySelective(ms);
-			MemberDto = ModelUtil.modelToDto(member, MemberDto.class);
+			memberDto = ModelUtil.modelToDto(member, MemberDto.class);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.QUERY_LOGIN_USER_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.QUERY_LOGIN_USER_ERROR_CODE,
 					AppConstants.QUERY_LOGIN_USER_ERROR_MESSAGE);
 		}
-		return MemberDto;
+		return memberDto;
 	}
 
 	@Override
@@ -149,25 +143,25 @@ public class MemberImpl implements IMemberBiz {
 
 	//查询当前会员单价
 	@Override
-	public PriceDto SelPriceById(MemberDto memberDto) throws BusinessException {
+	public PriceDto calculateMerberPrice(MemberDto memberDto) throws BusinessException {
 		//根据Member表中level，查询MemberLevelItem表中折扣率
-		MemberLevelItem item=memberItemMapper.selectByValue(memberDto.getLevel());
+		MemberLevelItem memberLevelItem = memberItemMapper.selectByValue(memberDto.getLevel());
 		//查询Goods表单价
-    	Goods goods=goodMapper.selectByPrimaryKey(AppConstants.GOODS_ID_BENACO);
-    	PriceDto p = new PriceDto();
-    	//单价=单价*折扣率
-    	p.setPrice(item.getRebate().multiply(goods.getPrice()).doubleValue());
-    	//放入PriceDto中
-    	return p ;
+		Goods good = goodMapper.selectByPrimaryKey(AppConstants.GOODS_ID_BENACO);
+		PriceDto priceDto = new PriceDto();
+		//单价=单价*折扣率
+		priceDto.setPrice(memberLevelItem.getRebate().multiply(good.getPrice()).doubleValue());
+		//放入PriceDto中
+		return priceDto;
 	}
-	
+
 	// query all member
 	@Override
 	public List<MemberDto> queryAllMember() throws BusinessException {
-		
+
 		List<MemberDto> memberDtoList = new ArrayList<MemberDto>();
 		List<Member> memberList = memberMapper.queryAllMember();
-		
+
 		if (memberList != null) {
 			for (Member member : memberList) {
 				memberDtoList.add(ModelUtil.modelToDto(member, MemberDto.class));

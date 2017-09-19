@@ -11,14 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.unre.photo.biz.dto.CompleteOrderDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
+import com.unre.photo.biz.dto.WalkthroughDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.comm.dal.dao.OrderMapper;
 import com.unre.photo.comm.dal.model.Order;
+import com.unre.photo.comm.dal.model.Walkthrough;
 import com.unre.photo.util.ModelUtil;
 
 @Service("Process")
@@ -29,7 +32,6 @@ public class OrderImpl implements IOrderBiz {
 
 	@Autowired
 	private IPanoramaBiz panoramaBiz;
-
 
 	private static final Log LOGGER = LogFactory.getLog(OrderImpl.class);
 
@@ -66,14 +68,14 @@ public class OrderImpl implements IOrderBiz {
 	@Override
 	public boolean updateOrder(OrderDto orderDto) throws BusinessException {
 		boolean flg = false;
-		try {	
+		try {
 			//orderDto.setIsDeleted(AppConstants.SET_DELETE);
 			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
 			int number = orderMapper.updateBySelective(order);
-			/*if (number == 0) { // flag == 1 操作成功,否则操作失败
+			if (number == 0) { // flag == 1 操作成功,否则操作失败
 				throw new BusinessException(AppConstants.SCAN_UPDATE_ERROR_CODE,
 						AppConstants.SCAN_UPDATE_ERROR_MESSAGE);
-			}*/
+			}
 			flg = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,7 +85,6 @@ public class OrderImpl implements IOrderBiz {
 		return flg;
 	}
 
-	
 	@Override
 	public boolean deleteProcess(Long id) throws BusinessException {
 		boolean flg = false;
@@ -133,15 +134,25 @@ public class OrderImpl implements IOrderBiz {
 		return flg;
 	}
 
-	@Override
-	public List<OrderDto> querySelStatus(OrderDto orderDto) throws BusinessException {
-		List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
+	public List<CompleteOrderDto> queryMemberScene(CompleteOrderDto completeOrderDto) throws BusinessException {
+		List<CompleteOrderDto> orderDtoList = new ArrayList<CompleteOrderDto>();
+		OrderDto orderDtoParam = new OrderDto();
+		orderDtoParam.setMemberId(completeOrderDto.getMemberId());
 		try {
-			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
-			List<Order> orderList = orderMapper.SelStatus(order);
+			Order completionOrder = ModelUtil.dtoToModel(orderDtoParam, Order.class);
+			completionOrder.setWalkthrough(new Walkthrough());
+			List<Order> orderList = orderMapper.selectGetMemberScene(completionOrder);
 			if (!CollectionUtils.isEmpty(orderList)) {
-				for (Order p : orderList) {
-					orderDtoList.add(ModelUtil.modelToDto(p, OrderDto.class));
+				for (Order order : orderList) {
+					OrderDto orderDto = (OrderDto) ModelUtil.modelToDto(order, OrderDto.class);
+					WalkthroughDto walkthroughDto = ModelUtil.modelToDto(order.getWalkthrough(), WalkthroughDto.class);
+					orderDto.setWalkthrough(walkthroughDto);
+					CompleteOrderDto complete = new CompleteOrderDto();
+					complete.setMemberId(completeOrderDto.getMemberId());
+					complete.setOrderId(orderDto.getId());
+					complete.setImagePath(walkthroughDto.getImagePath());
+					complete.setThumbImagePath(walkthroughDto.getThumbImagePath());
+					orderDtoList.add(complete);
 				}
 			}
 		} catch (Exception e) {
@@ -157,7 +168,7 @@ public class OrderImpl implements IOrderBiz {
 
 		try {
 			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
-			Order orders = orderMapper.SelOrder(order);
+			Order orders = orderMapper.selectOrder(order);
 			orderDto = ModelUtil.modelToDto(orders, OrderDto.class);
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.SCAN_FIND_ERROR_CODE, e);
@@ -183,6 +194,30 @@ public class OrderImpl implements IOrderBiz {
 			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
 		}
 		return orderDtoList;
+	}
+
+	@Override
+	public boolean removeOrder(OrderDto orderDto) throws BusinessException {
+		boolean flag = false;
+		try {
+			Order orderParam = orderMapper.selectByPrimaryKey(orderDto.getId());//查出当前版本号
+			orderDto.setIsDeleted(AppConstants.SET_DELETE);//设置已删除
+			orderDto.setVersion(orderParam.getVersion());
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+			int i = orderMapper.updateBySelective(order);
+			if (i == 0) {
+				throw new BusinessException(AppConstants.UPDATE_IS_DELETED_ERROR_CODE,
+						AppConstants.UPDATE_IS_DELETED_ERROR_MESSAGE);
+			}
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(AppConstants.UPDATE_IS_DELETED_ERROR_CODE, e);
+			throw new BusinessException(AppConstants.UPDATE_IS_DELETED_ERROR_CODE,
+					AppConstants.UPDATE_IS_DELETED_ERROR_MESSAGE);
+
+		}
+		return flag;
 	}
 
 }
