@@ -55,7 +55,7 @@ public class OrderController extends BaseController<OrderController> {
 	 */
 	@ApiOperation(value = "删除订单", httpMethod = "POST", response = OrderResponse.class)
 	@ApiImplicitParams({ @ApiImplicitParam(name = "orderDto.id", value = "ID", required = true, dataType = "long") })
-	@RequestMapping(value = "/deleteOrderById.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/removeOrderById.do", method = RequestMethod.POST)
 	public @ResponseBody OrderResponse removeOrderById(@RequestBody OrderRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		return orderFacade.removeOrderById(request);
