@@ -1,134 +1,236 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.unre.photo.comm.dal.dao.PanoramaMapper" >
-  <resultMap id="BaseResultMap" type="com.unre.photo.comm.dal.model.Panorama" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="order_id" property="orderId" jdbcType="BIGINT" />
-    <result column="image_path" property="imagePath" jdbcType="VARCHAR" />
-    <result column="thumb_image_path" property="thumbImagePath" jdbcType="VARCHAR" />
-    <result column="stitch_status" property="stitchStatus" jdbcType="CHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
-    <result column="is_deleted" property="isDeleted" jdbcType="CHAR" />
-    <result column="create_by" property="createBy" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, order_id, image_path, thumb_image_path, stitch_status, type, is_deleted, create_by, 
-    create_time, update_by, update_time
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_panorama
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from tbl_panorama
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.unre.photo.comm.dal.model.Panorama" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_panorama (order_id, image_path, thumb_image_path, 
-      stitch_status, type, is_deleted, 
-      create_by, create_time, update_by, 
-      update_time)
-    values (#{orderId,jdbcType=BIGINT}, #{imagePath,jdbcType=VARCHAR}, #{thumbImagePath,jdbcType=VARCHAR}, 
-      #{stitchStatus,jdbcType=CHAR}, #{type,jdbcType=CHAR}, #{isDeleted,jdbcType=CHAR}, 
-      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.Panorama" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_panorama
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
-        order_id,
-      </if>
-      <if test="imagePath != null" >
-        image_path,
-      </if>
-      <if test="thumbImagePath != null" >
-        thumb_image_path,
-      </if>
-      <if test="stitchStatus != null" >
-        stitch_status,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted,
-      </if>
-      <if test="createBy != null" >
-        create_by,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="updateBy != null" >
-        update_by,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
-        #{orderId,jdbcType=BIGINT},
-      </if>
-      <if test="imagePath != null" >
-        #{imagePath,jdbcType=VARCHAR},
-      </if>
-      <if test="thumbImagePath != null" >
-        #{thumbImagePath,jdbcType=VARCHAR},
-      </if>
-      <if test="stitchStatus != null" >
-        #{stitchStatus,jdbcType=CHAR},
-      </if>
-      <if test="type != null" >
-        #{type,jdbcType=CHAR},
-      </if>
-      <if test="isDeleted != null" >
-        #{isDeleted,jdbcType=CHAR},
-      </if>
-      <if test="createBy != null" >
-        #{createBy,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateBy != null" >
-        #{updateBy,jdbcType=INTEGER},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  
-  <update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Panorama" >
-    update tbl_panorama
-    set order_id = #{orderId,jdbcType=BIGINT},
-      image_path = #{imagePath,jdbcType=VARCHAR},
-      thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR},
-      stitch_status = #{stitchStatus,jdbcType=CHAR},
-      type = #{type,jdbcType=CHAR},
-      is_deleted = #{isDeleted,jdbcType=CHAR},
-      create_by = #{createBy,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_by = #{updateBy,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  
-  	<!-- ===============扩展SQL================= -->
-  	
-  	<sql id="Order_And_Panorama_Column_List" >
-      p.id, p.order_id, p.image_path, p.thumb_image_path, p.stitch_status, p.type, p.is_deleted, 
-      p.create_by, p.create_time, p.update_by, p.update_time
-    </sql>
-  
-  	<!-- 根据order_id查询全景照片数量,返回list -->
+<mapper namespace="com.unre.photo.comm.dal.dao.PanoramaMapper">
+	<resultMap id="BaseResultMap" type="com.unre.photo.comm.dal.model.Panorama">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="order_id" property="orderId" jdbcType="BIGINT" />
+		<result column="image_path" property="imagePath" jdbcType="VARCHAR" />
+		<result column="thumb_image_path" property="thumbImagePath"
+			jdbcType="VARCHAR" />
+		<result column="stitch_status" property="stitchStatus"
+			jdbcType="CHAR" />
+		<result column="type" property="type" jdbcType="CHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="CHAR" />
+		<result column="create_by" property="createBy" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, order_id, image_path, thumb_image_path, stitch_status,
+		type,
+		is_deleted, create_by,
+		create_time, update_by, update_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_panorama
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		tbl_panorama
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.unre.photo.comm.dal.model.Panorama"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_panorama
+		(order_id, image_path, thumb_image_path,
+		stitch_status, type,
+		is_deleted,
+		create_by, create_time, update_by,
+		update_time)
+		values
+		(#{orderId,jdbcType=BIGINT}, #{imagePath,jdbcType=VARCHAR},
+		#{thumbImagePath,jdbcType=VARCHAR},
+		#{stitchStatus,jdbcType=CHAR},
+		#{type,jdbcType=CHAR}, #{isDeleted,jdbcType=CHAR},
+		#{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateBy,jdbcType=INTEGER},
+		#{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.Panorama"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_panorama
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="imagePath != null">
+				image_path,
+			</if>
+			<if test="thumbImagePath != null">
+				thumb_image_path,
+			</if>
+			<if test="stitchStatus != null">
+				stitch_status,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orderId != null">
+				#{orderId,jdbcType=BIGINT},
+			</if>
+			<if test="imagePath != null">
+				#{imagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbImagePath != null">
+				#{thumbImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="stitchStatus != null">
+				#{stitchStatus,jdbcType=CHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=CHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=CHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKey" parameterType="com.unre.photo.comm.dal.model.Panorama">
+		update
+		tbl_panorama
+		set order_id = #{orderId,jdbcType=BIGINT},
+		image_path =
+		#{imagePath,jdbcType=VARCHAR},
+		thumb_image_path =
+		#{thumbImagePath,jdbcType=VARCHAR},
+		stitch_status =
+		#{stitchStatus,jdbcType=CHAR},
+		type = #{type,jdbcType=CHAR},
+		is_deleted
+		= #{isDeleted,jdbcType=CHAR},
+		create_by = #{createBy,jdbcType=INTEGER},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_by =
+		#{updateBy,jdbcType=INTEGER},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateBySelective" parameterType="com.unre.photo.comm.dal.model.Panorama">
+		update tbl_panorama
+		<set>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=BIGINT},
+			</if>
+			<if test="imagePath != null">
+				image_path = #{imagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbImagePath != null">
+				thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="stitchStatus != null">
+				stitch_status = #{stitchStatus,jdbcType=CHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=CHAR},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=CHAR},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<!-- ===============扩展SQL================= -->
+	<select id="selectBySelective" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Panorama">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_panorama
+		where 1=1
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="orderId != null">
+			and order_id = #{orderId,jdbcType=BIGINT}
+		</if>
+		<if test="imagePath != null">
+			and image_path = #{imagePath,jdbcType=VARCHAR}
+		</if>
+		<if test="thumbImagePath != null">
+			and thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR}
+		</if>
+		<if test="stitchStatus != null">
+			and stitch_status = #{stitchStatus,jdbcType=CHAR}
+		</if>
+		<if test="type != null">
+			and type = #{type,jdbcType=CHAR}
+		</if>
+		<if test="isDeleted != null">
+			and is_deleted = #{isDeleted,jdbcType=CHAR}
+		</if>
+		<if test="createBy != null">
+			and create_by = #{createBy,jdbcType=INTEGER}
+		</if>
+		<if test="createTime != null">
+			and create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateBy != null">
+			and update_by = #{updateBy,jdbcType=INTEGER}
+		</if>
+		<if test="updateTime != null">
+			and update_time = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+	</select>
+
+	<sql id="Order_And_Panorama_Column_List">
+		p.id, p.order_id, p.image_path, p.thumb_image_path,
+		p.stitch_status,
+		p.type, p.is_deleted,
+		p.create_by, p.create_time,
+		p.update_by, p.update_time
+	</sql>
+
+	<!-- 根据order_id查询全景照片数量,返回list -->
 	<select id="selectByPhotoCount" resultMap="BaseResultMap"
 		parameterType="com.unre.photo.comm.dal.model.Panorama">
 		select
@@ -143,92 +245,20 @@
 		parameterType="com.unre.photo.comm.dal.model.Panorama">
 		select
 		<include refid="Order_And_Panorama_Column_List" />
-		from tbl_order o ,tbl_panorama p 
-        where o.id = p.order_id 
-        and o.status = '0'
-        <if test="orderId != null" >
-          and p.order_id = #{orderId,jdbcType=BIGINT}
-        </if>
-        <if test="stitchStatus != null" >
-          and p.stitch_status = #{stitchStatus,jdbcType=CHAR}
-      </if>
-	 </select>
-	 
-	<select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.unre.photo.comm.dal.model.Panorama" >
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_panorama
-    where 1=1 
-      <if test="id != null" >
-        and id = #{id,jdbcType=BIGINT}
-      </if>
-      <if test="orderId != null" >
-        and order_id = #{orderId,jdbcType=BIGINT}
-      </if>
-      <if test="imagePath != null" >
-        and image_path = #{imagePath,jdbcType=VARCHAR}
-      </if>
-      <if test="thumbImagePath != null" >
-        and thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR}
-      </if>
-      <if test="stitchStatus != null" >
-        and stitch_status = #{stitchStatus,jdbcType=CHAR}
-      </if>
-      <if test="type != null" >
-        and type = #{type,jdbcType=CHAR}
-      </if>
-      <if test="isDeleted != null" >
-        and is_deleted = #{isDeleted,jdbcType=CHAR}
-      </if>
-      <if test="createBy != null" >
-        and create_by = #{createBy,jdbcType=INTEGER}
-      </if>
-      <if test="createTime != null" >
-        and create_time = #{createTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="updateBy != null" >
-        and update_by = #{updateBy,jdbcType=INTEGER}
-      </if>
-      <if test="updateTime != null" >
-        and update_time = #{updateTime,jdbcType=TIMESTAMP}
-      </if>
-  </select>
-  
-  <update id="updateBySelective" parameterType="com.unre.photo.comm.dal.model.Panorama" >
-    update tbl_panorama
-    <set >
-      <if test="orderId != null" >
-        order_id = #{orderId,jdbcType=BIGINT},
-      </if>
-      <if test="imagePath != null" >
-        image_path = #{imagePath,jdbcType=VARCHAR},
-      </if>
-      <if test="thumbImagePath != null" >
-        thumb_image_path = #{thumbImagePath,jdbcType=VARCHAR},
-      </if>
-      <if test="stitchStatus != null" >
-        stitch_status = #{stitchStatus,jdbcType=CHAR},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=CHAR},
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted = #{isDeleted,jdbcType=CHAR},
-      </if>
-      <if test="createBy != null" >
-        create_by = #{createBy,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateBy != null" >
-        update_by = #{updateBy,jdbcType=INTEGER},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-    
+		from tbl_order o ,tbl_panorama p
+		where o.id = p.order_id
+		and o.status =
+		'0'
+		<if test="orderId != null">
+			and p.order_id = #{orderId,jdbcType=BIGINT}
+		</if>
+		<if test="stitchStatus != null">
+			and p.stitch_status = #{stitchStatus,jdbcType=CHAR}
+		</if>
+	</select>
+
+
+
+
+
 </mapper>

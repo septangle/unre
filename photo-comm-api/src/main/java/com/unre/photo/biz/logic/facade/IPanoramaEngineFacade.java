@@ -52,5 +52,15 @@ public interface IPanoramaEngineFacade {
 	 * @throws Exception
 	 */
 	PanoramaEngineResponse startPanoramaProcess() throws Exception;
+	
+	/**
+	 * 添加拼接完成照片
+	 * 
+	 * @param  PanoramaEngineDto
+	 * 
+	 * @return PanoramaResponse
+	 * @throws Exception
+	 */
+	PanoramaEngineResponse addPhotoStitchCompleted(PanoramaEngineRequest request) throws Exception;
 
 }

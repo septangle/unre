@@ -15,6 +15,9 @@ public interface BalanceMapper {
 
     int updateByPrimaryKey(Balance record);
     
+    
+    /****************自定义查询*******************/
+    
     // 根据会员ID取得会员余额信息
     Balance selectByMemberID(Long id);
 }

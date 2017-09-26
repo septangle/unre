@@ -73,4 +73,13 @@ public class PanoramaEngineFacadeImpl implements IPanoramaEngineFacade {
 		return retResponse;
 	}
 
+	@Override
+	public PanoramaEngineResponse addPhotoStitchCompleted(PanoramaEngineRequest request) throws Exception {
+		PanoramaEngineResponse retResponse = new PanoramaEngineResponse();
+		boolean flg=panoramaEngineBiz.addPhotoStitchCompleted(request.getPanoramaEngineDto());
+		String code = flg ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
+		retResponse.setCode(code);
+		return retResponse;
+	}
+
 }

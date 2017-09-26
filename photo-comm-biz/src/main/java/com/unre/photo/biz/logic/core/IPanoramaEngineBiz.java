@@ -74,4 +74,13 @@ public interface IPanoramaEngineBiz {
 	 */
 	public PanoramaEngineDto previewScan(PanoramaEngineDto panoramaEngineDto) throws Exception;
 
+	/**
+	 * 添加2D拼接
+	 * 
+	 * @param PanoramaDto
+	 * 
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public boolean addPhotoStitchCompleted(PanoramaEngineDto panoramaEngineDto) throws Exception;
 }

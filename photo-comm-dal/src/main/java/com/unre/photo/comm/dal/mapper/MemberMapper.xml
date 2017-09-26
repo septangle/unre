@@ -303,10 +303,10 @@
 
 	<!--===============自定义sql =============== -->
 	<select id="selectBySelective" resultMap="BaseResultMap"
-		parameterType="com.unre.photo.comm.dal.model.Order">
+		parameterType="com.unre.photo.comm.dal.model.Member">
 		select
 		<include refid="Base_Column_List" />
-		from tbl_order
+		from tbl_member
 		where 1=1
 		<if test="id != null">
 			and id = #{id,jdbcType=BIGINT}
@@ -315,80 +315,64 @@
 			and member_name = #{memberName,jdbcType=BIGINT}
 		</if>
 		<if test="memberNo != null">
-			and member_no = #{memberNo,jdbcType=VARCHAR},
+			and member_no = #{memberNo,jdbcType=VARCHAR}
 		</if>
 		<if test="password != null">
-			and password = #{password,jdbcType=VARCHAR},
+			and password = #{password,jdbcType=VARCHAR}
 		</if>
 		<if test="company != null">
-			and company = #{company,jdbcType=VARCHAR},
+			and company = #{company,jdbcType=VARCHAR}
 		</if>
 		<if test="province != null">
-			and province = #{province,jdbcType=VARCHAR},
+			and province = #{province,jdbcType=VARCHAR}
 		</if>
 		<if test="city != null">
-			and city = #{city,jdbcType=VARCHAR},
+			and city = #{city,jdbcType=VARCHAR}
 		</if>
 		<if test="adress != null">
-			and adress = #{adress,jdbcType=VARCHAR},
+			and adress = #{adress,jdbcType=VARCHAR}
 		</if>
 		<if test="industry != null">
-			and industry = #{industry,jdbcType=VARCHAR},
+			and industry = #{industry,jdbcType=VARCHAR}
 		</if>
 		<if test="contact != null">
-			and contact = #{contact,jdbcType=VARCHAR},
+			and contact = #{contact,jdbcType=VARCHAR}
 		</if>
 		<if test="tel != null">
-			and tel = #{tel,jdbcType=VARCHAR},
+			and tel = #{tel,jdbcType=VARCHAR}
 		</if>
 		<if test="mail != null">
-			and mail = #{mail,jdbcType=VARCHAR},
+			and mail = #{mail,jdbcType=VARCHAR}
 		</if>
 		<if test="type != null">
-			and type = #{type,jdbcType=CHAR},
+			and type = #{type,jdbcType=CHAR}
 		</if>
 		<if test="setType != null">
-			and set_type = #{setType,jdbcType=VARCHAR},
+			and set_type = #{setType,jdbcType=VARCHAR}
 		</if>
 		<if test="level != null">
-			and level = #{level,jdbcType=CHAR},
+			and level = #{level,jdbcType=CHAR}
 		</if>
 		<if test="status != null">
-			and status = #{status,jdbcType=CHAR},
+			and status = #{status,jdbcType=CHAR}
 		</if>
 		<if test="isDeleted != null">
-			and is_deleted = #{isDeleted,jdbcType=CHAR},
+			and is_deleted = #{isDeleted,jdbcType=CHAR}
 		</if>
 		<if test="createBy != null">
-			and create_by = #{createBy,jdbcType=INTEGER},
+			and create_by = #{createBy,jdbcType=INTEGER}
 		</if>
 		<if test="createTime != null">
-			and create_time = #{createTime,jdbcType=TIMESTAMP},
+			and create_time = #{createTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="updateBy != null">
-			and update_by = #{updateBy,jdbcType=INTEGER},
+			and update_by = #{updateBy,jdbcType=INTEGER}
 		</if>
 		<if test="updateTime != null">
-			and update_time = #{updateTime,jdbcType=TIMESTAMP},
+			and update_time = #{updateTime,jdbcType=TIMESTAMP}
 		</if>
 	</select>
 
-	<!-- get all member list -->
-	<select id="queryAllMember" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from tbl_member
-	</select>
-    <!-- 登录 -->
-	<select id="queryLoginUser" resultMap="BaseResultMap"
-		parameterType="com.unre.photo.comm.dal.model.Member">
-		select
-		<include refid="Base_Column_List" />
-		from tbl_member
-		where tel = #{tel,jdbcType=VARCHAR}
-		and password =
-		#{password,jdbcType=VARCHAR}
-	</select>
 	<!-- 验证手机号、邮箱 -->
 	<select id="selectByTelOrMail" resultMap="BaseResultMap"
 		parameterType="com.unre.photo.comm.dal.model.Member">

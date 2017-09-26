@@ -17,6 +17,9 @@ public interface MemberLevelItemMapper {
 
     int updateByPrimaryKey(MemberLevelItem record);
     
+    
+    /****************自定义查询*******************/
+    
     // 根据会员等级值取得会员等级定义信息
     MemberLevelItem selectByValue(String value);
     

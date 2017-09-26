@@ -47,7 +47,7 @@ public class OrderFacadeImpl implements IOrderFacade {
 	//查询当前用户场景
 	@Override
 	public OrderResponse findCurrMemberPanorama(OrderRequest request) throws Exception {
-		List<CompleteOrderDto> orderDtoList = iorderBiz.queryMemberScene(request.getCompleteOrderDto());
+		List<CompleteOrderDto> orderDtoList = iorderBiz.queryMemberScene(request.getOrderDto());
 		OrderResponse response = new OrderResponse();
 		response.setCompleteOrderDto(orderDtoList);
 		return response;
@@ -58,8 +58,17 @@ public class OrderFacadeImpl implements IOrderFacade {
 		OrderResponse response = new OrderResponse();
 		OrderDto orderDto = request.getOrderDto();
 		boolean flag = iorderBiz.removeOrder(orderDto);
-		String code =flag?AppConstants.SUCCESS_MESSAGE:AppConstants.FAIL_MESSAGE;
+		String code = flag ? AppConstants.SUCCESS_MESSAGE : AppConstants.FAIL_MESSAGE;
 		response.setCode(code);
+		return response;
+	}
+
+	@Override
+	public OrderResponse queryOrder(OrderRequest request) throws Exception {
+		OrderResponse response = new OrderResponse();
+		OrderDto orderDto = request.getOrderDto();
+		List<OrderDto> orderDtoList = iorderBiz.queryOrder(orderDto);
+		response.setOrderDtoList(orderDtoList);
 		return response;
 	}
 

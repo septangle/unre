@@ -14,4 +14,7 @@ public interface PhotoMapper {
     int updateByPrimaryKeySelective(Photo record);
 
     int updateByPrimaryKey(Photo record);
+    
+    /****************自定义查询*******************/    
+
 }

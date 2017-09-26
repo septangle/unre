@@ -47,10 +47,13 @@ public class MemberImpl implements IMemberBiz {
 						AppConstants.QUERY_LOGIN_USERID_ERROR_MESSAGE);
 			}
 			MemberDto = ModelUtil.modelToDto(member, MemberDto.class);
+		} catch (BusinessException e) {
+			LOGGER.error(e.getMessage());
+			throw e;
 		} catch (Exception e) {
-			LOGGER.error(AppConstants.QUERY_LOGIN_USERID_ERROR_CODE, e);
-			throw new BusinessException(AppConstants.QUERY_LOGIN_USERID_ERROR_CODE,
-					AppConstants.QUERY_LOGIN_USERID_ERROR_MESSAGE);
+			LOGGER.error(AppConstants.FIND_MEMBER_BY_ID_CODE, e);
+			throw new BusinessException(AppConstants.FIND_MEMBER_BY_ID_CODE,
+					AppConstants.FIND_MEMBER_BY_ID_MESSAGE);
 		}
 		return MemberDto;
 	}
@@ -75,23 +78,20 @@ public class MemberImpl implements IMemberBiz {
 	// 注册
 	@Override
 	public MemberDto addMember(MemberDto memberDto) throws BusinessException {
-		Member memberParm = new Member();
-		memberParm.setTel(memberDto.getTel());
-		memberParm.setMail(memberDto.getMail());
-		List<Member> memberList = memberMapper.selectByTelOrMail(memberParm);//手机号、邮箱唯一校验
-		if (memberList.size() > 0) {
-			for (int i = 0; i < memberList.size(); i++) {
-				Member memberElement = memberList.get(i);
-				if (memberElement.getTel().equals(memberDto.getTel())) {
+		try {
+			Member memberParm = new Member();
+			memberParm.setTel(memberDto.getTel());
+			memberParm.setMail(memberDto.getMail());
+			List<Member> memberList = memberMapper.selectByTelOrMail(memberParm);//手机号、邮箱唯一校验
+			if (memberList.size() > 0) {
+				if (memberList.get(0).getTel().equals(memberDto.getTel())) {
 					throw new BusinessException(AppConstants.QUERY_ADD_TEL_ERROR_CODE,
 							AppConstants.QUERY_ADD_TEL_ERROR_MESSAGE);
-				} else if (memberElement.getMail().equals(memberDto.getMail())) {
+				} else if (memberList.get(0).getMail().equals(memberDto.getMail())) {
 					throw new BusinessException(AppConstants.QUERY_ADD_MAIL_ERROR_CODE,
 							AppConstants.QUERY_ADD_MAIL_ERROR_MESSAGE);
 				}
 			}
-		}
-		try {
 			//系统自动设置会员级别
 			memberDto.setLevel(AppConstants.MEMBER_LEVEL_DEFAULT);
 			Member member = ModelUtil.dtoToModel(memberDto, Member.class);
@@ -102,6 +102,9 @@ public class MemberImpl implements IMemberBiz {
 				throw new BusinessException(AppConstants.QUERY_ADD_USER_ERROR_CODE,
 						AppConstants.QUERY_ADD_USER_ERROR_MESSAGE);
 			}
+		} catch (BusinessException e) {
+			LOGGER.error(e.getMessage());
+			throw e;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.QUERY_ADD_USER_ERROR_MESSAGE);
 			throw new BusinessException(AppConstants.SYSTEM_ERROR_CODE, AppConstants.SYSTEM_ERROR_MESSAGE);
@@ -115,12 +118,16 @@ public class MemberImpl implements IMemberBiz {
 		Member memberParam;
 		try {
 			memberParam = ModelUtil.dtoToModel(memberDto, Member.class);
-			Member member = memberMapper.queryLoginUser(memberParam);
-			if (member == null) {//判断该用户信息是否存在
+			List<Member> memberList = memberMapper.selectBySelective(memberParam);
+			if (memberList.size() == 0 && memberList.size() > 1) {//判断该用户信息是否存在
 				throw new BusinessException(AppConstants.QUERY_LOGIN_USER_ERROR_CODE,
 						AppConstants.QUERY_LOGIN_USER_ERROR_MESSAGE);
 			}
+			Member member = memberList.get(0);
 			memberDto = ModelUtil.modelToDto(member, MemberDto.class);
+		} catch (BusinessException e) {
+			LOGGER.error(e.getMessage());
+			throw e;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.QUERY_LOGIN_USER_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.QUERY_LOGIN_USER_ERROR_CODE,
@@ -158,16 +165,14 @@ public class MemberImpl implements IMemberBiz {
 	// query all member
 	@Override
 	public List<MemberDto> queryAllMember() throws BusinessException {
-
+		Member member = null;
 		List<MemberDto> memberDtoList = new ArrayList<MemberDto>();
-		List<Member> memberList = memberMapper.queryAllMember();
-
+		List<Member> memberList = memberMapper.selectBySelective(member);
 		if (memberList != null) {
-			for (Member member : memberList) {
-				memberDtoList.add(ModelUtil.modelToDto(member, MemberDto.class));
+			for (Member members : memberList) {
+				memberDtoList.add(ModelUtil.modelToDto(members, MemberDto.class));
 			}
 		}
-
 		return memberDtoList;
 	}
 

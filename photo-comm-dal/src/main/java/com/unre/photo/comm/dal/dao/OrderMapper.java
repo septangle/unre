@@ -17,10 +17,10 @@ public interface OrderMapper {
 
     int updateByPrimaryKey(Order record);
     
+    
+   /****************自定义查询*******************/
     int updateBySelective(Order record);
     
-    
-   /***************************************/
     int updateOrderByBenacoId(Order record);
     
     List<Order> selectBySelective(Order record);

@@ -38,10 +38,11 @@ public class MemberController extends BaseController<MemberController> {
 	public @ResponseBody MemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		//根据缓存ID查询当前登录会员
-		Long memberId = (Long) session.getAttribute("MemberID");
-		if (memberId == null)
+		Long memberId = (Long) session.getAttribute("memberId");
+		if (memberId == null) {
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		}
 		MemberRequest request = new MemberRequest();
 		MemberDto memberDto = new MemberDto();
 		memberDto.setId(memberId);
@@ -64,7 +65,7 @@ public class MemberController extends BaseController<MemberController> {
 			HttpServletRequest servletRequest) throws Exception {
 		MemberResponse memberResponse = null;
 		HttpSession session = servletRequest.getSession();
-		MemberDto member = (MemberDto) session.getAttribute("MemberDto");
+		MemberDto member = (MemberDto) session.getAttribute("memberDto");
 		//判断会员是否登录
 		if (member != null) {
 			throw new BusinessException(AppConstants.QUERY_LOGIN_USERLOING_ERROR_CODE,
@@ -74,8 +75,8 @@ public class MemberController extends BaseController<MemberController> {
 		memberResponse = memberFacade.login(request);
 		//判断对象是否为空，并放入session
 		if (memberResponse != null && memberResponse.getMemberDto() != null) {
-			servletRequest.getSession().setAttribute("MemberDto", memberResponse.getMemberDto());
-			servletRequest.getSession().setAttribute("MemberID", memberResponse.getMemberDto().getId());
+			servletRequest.getSession().setAttribute("memberDto", memberResponse.getMemberDto());
+			servletRequest.getSession().setAttribute("memberId", memberResponse.getMemberDto().getId());
 		}
 		return memberResponse;
 	}
@@ -119,14 +120,14 @@ public class MemberController extends BaseController<MemberController> {
 			throws Exception {
 		boolean flag = false;
 		HttpSession session = request.getSession();
-		MemberDto member = (MemberDto) session.getAttribute("MemberDto");
+		MemberDto member = (MemberDto) session.getAttribute("memberDto");
 		if (member != null) {
 			//清空缓存
-			session.removeAttribute("MemberDto");
-			session.removeAttribute("MemberID");
+			session.removeAttribute("memberDto");
+			session.removeAttribute("memberId");
 			flag = true;
 		}
-		    return flag;
+		return flag;
 
 	}
 
@@ -139,11 +140,12 @@ public class MemberController extends BaseController<MemberController> {
 	@RequestMapping(value = "/getPrice.do", method = RequestMethod.GET)
 	public @ResponseBody PriceRespnose findCurrMemberPrice(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
-		Long memberId = (Long) session.getAttribute("MemberID");
+		Long memberId = (Long) session.getAttribute("memberId");
 		//判断用户是否登录
-		if (memberId == null)
+		if (memberId == null) {
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		}
 		MemberRequest request = new MemberRequest();
 		MemberDto memberDto = new MemberDto();
 		memberDto.setId(memberId);

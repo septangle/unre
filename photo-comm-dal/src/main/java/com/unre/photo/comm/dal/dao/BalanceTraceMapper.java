@@ -17,6 +17,9 @@ public interface BalanceTraceMapper {
 
     int updateByPrimaryKey(BalanceTrace record);
     
+    
+    /****************自定义查询*******************/
+    
     // 取得会员最新一条流水记录
     BalanceTrace selectLastestRecordByMemberID(Long id);
     

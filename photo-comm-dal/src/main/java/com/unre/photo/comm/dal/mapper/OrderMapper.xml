@@ -234,28 +234,6 @@
 	</update>
 
 	<!-- ===============扩展SQL================= -->
-	<!-- 查询当前用户所有完成场景 -->
-	<select id="selectGetMemberScene" parameterType="com.unre.photo.comm.dal.model.Order"
-		resultMap="Scenelist">
-		select
-		a.id,a.status,a.benaco_scan_id,b.image_path,b.thumb_image_path
-		from
-		tbl_order a left join tbl_walkthrough b on
-		a.id=b.order_id where
-		a.member_id=#{memberId,jdbcType=BIGINT} and
-		a.is_deleted = '0'
-	</select>
-
-	<!--查询订单 -->
-	<select id="selectOrder" resultMap="BaseResultMap"
-		parameterType="com.unre.photo.comm.dal.model.Order">
-		select
-		<include refid="Base_Column_List" />
-		from tbl_order
-		where benaco_scan_id =
-		#{benacoScanId,jdbcType=VARCHAR}
-	</select>
-
 	<select id="selectBySelective" resultMap="BaseResultMap"
 		parameterType="com.unre.photo.comm.dal.model.Order">
 		select
@@ -315,6 +293,29 @@
 			and update_time = #{updateTime,jdbcType=TIMESTAMP}
 		</if>
 	</select>
+	<!-- 查询当前用户所有完成场景 -->
+	<select id="selectGetMemberScene" parameterType="com.unre.photo.comm.dal.model.Order"
+		resultMap="Scenelist">
+		select
+		a.id,a.status,a.benaco_scan_id,b.image_path,b.thumb_image_path
+		from
+		tbl_order a left join tbl_walkthrough b on
+		a.id=b.order_id where
+		a.member_id=#{memberId,jdbcType=BIGINT} and
+		a.is_deleted = '0'
+	</select>
+
+	<!--查询订单 -->
+	<select id="selectOrder" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Order">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_order
+		where benaco_scan_id =
+		#{benacoScanId,jdbcType=VARCHAR}
+	</select>
+
+	
 
 	<!--根据beanonId更新status状态 -->
 	<update id="updateOrderByBenacoId" parameterType="com.unre.photo.comm.dal.model.Order">

@@ -31,6 +31,12 @@ public final static String SYSTEM_ERROR_MESSAGE = "系统异常";
     public final static String BENACO_STATUS_FAILED = "failed";
     public final static String BENACO_STATUS_COMPLETED = "completed";
     
+    public final static String PHOTOPATH="C:/img_upload_2D/";
+    public final static String PARAMOPATH="C:/img_upload_3D/";
+    
+    //public final static String PHOTOPATH="/home/unre/project/photo-scan/2D_img_upload/";
+    //public final static String PARAMOPATH="/home/unre/project/photo-scan/3D_img_upload/";
+    
     public final static String HTTP_RETURN_CODE_200 = "200";
 
     // 平面照片
@@ -70,10 +76,14 @@ public final static String SYSTEM_ERROR_MESSAGE = "系统异常";
 	public final static String QUERY_LOGIN_USERLOING_ERROR_MESSAGE = "该用户已登录！";
 	public final static String MEMBER_NOT_LOGIN_ERROR_CODE = "10010003";
 	public final static String MEMBER_NOT_LOGIN_ERROR_MESSAGE = "该用户未登录！";
+	public final static String FIND_MEMBER_BY_ID_CODE="10010004";
+	public final static String FIND_MEMBER_BY_ID_MESSAGE="根据id查找失败";
+
 
 	//login模块 1002
 	public final static String QUERY_LOGIN_USER_ERROR_CODE = "10020001";
 	public final static String QUERY_LOGIN_USER_ERROR_MESSAGE = "用户登录失败:账号或密码错误！";
+
 	
 	//register模块  1003
 	public final static String QUERY_ADD_USER_ERROR_CODE = "10030001";
@@ -109,19 +119,22 @@ public final static String SYSTEM_ERROR_MESSAGE = "系统异常";
 	
 	public final static String PENGINE_PREVIEW_SCAN_STATUS_ERROR_CODE = "10040007";
 	public final static String PENGINE_PREVIEW_SCAN_STATUS_ERROR_MESSAGE = "生程SCAN PRVIEW URL失败！";
+	
+	public final static String ADD_PHOTO_STITCH_COMPLETED_CODE="10040008";
+	public final static String ADD_PHOTO_STITCH_COMPLETED_MESSAGE="拼接照片上传失败:照片数量不匹配";
 
 	//Photo Scan 10050000
 	public final static String SCAN_FIND_ERROR_CODE = "10050001";
 	public final static String SCAN_FIND_ERROR_MESSAGE = "根据ID查询Scan失败!";
 	
 	public final static String SCAN_QUERY_ERROR_CODE = "10050002";
-	public final static String SCAN_QUERY_ERROR_MESSAGE = "查询Scan失败!";
+	public final static String SCAN_QUERY_ERROR_MESSAGE = "查询Order失败!";
 	
 	public final static String SCAN_ADD_ERROR_CODE = "10050003";
 	public final static String SCAN_ADD_ERROR_MESSAGE = "新增Scan失败!";
 	
-	public final static String SCAN_UPDATE_ERROR_CODE = "10050004";
-	public final static String SCAN_UPDATE_ERROR_MESSAGE = "更新Scan失败!";
+	public final static String UPDATE_ORDER_ERROR_CODE = "10050004";
+	public final static String UPDATE_ORDER_ERROR_MESSAGE = "更新Order失败!";
 	
 	public final static String SCAN_SAVE_IMAGE_ERROR_CODE = "10050005";
 	public final static String SCAN_SAVE_IMAGE_ERROR_MESSAGE = "保存图片信息失败!";
@@ -152,12 +165,15 @@ public final static String SYSTEM_ERROR_MESSAGE = "系统异常";
 	
 	public final static String NUMBER_MESSAGE_3D="1";
 	
+	public final static String UPDATE_PANORAMA_BY_ORDERID_CODE="1007005";
+	public final static String UPDATE_PANORAMA_BY_ORDERID_MESSAGE="更新拼接照片失败";
+
 	//自动设置会员级别
 	public final static String MEMBER_LEVEL_DEFAULT="3";
 	
 	//order
-	public final static String UPDATE_IS_DELETED_ERROR_CODE = "10080001";
-	public final static String UPDATE_IS_DELETED_ERROR_MESSAGE= "删除订单失败!";
+	public final static String REMOVE_ORDER_CODE = "10080001";
+	public final static String REMOVE_ORDER_MESSAGE= "删除订单失败!";
 
 	
 }

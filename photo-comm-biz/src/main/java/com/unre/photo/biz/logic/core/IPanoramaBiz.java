@@ -38,9 +38,6 @@ public interface IPanoramaBiz {
 	 */
 	public PanoramaDto addProcessSource(PanoramaDto processSourceDto) throws BusinessException;
 
-
-
-	
 	/**
 	 * 更新ProcessItem
 	 * 
@@ -87,5 +84,14 @@ public interface IPanoramaBiz {
 	 * @throws BusinessException
 	 */
 	public boolean updateAfterBenacoProcess(Long orderId) throws BusinessException;
+	/**
+	 * 更新ProcessItem
+	 * 
+	 * @param panoramaDto --要更新的panoramaDto
+	 * 
+	 * @return boolean
+	 * @throws BusinessException
+	 */
+	public boolean updatePanoramaByPrimaryKey(PanoramaDto panoramaDto) throws BusinessException;
 	
 }

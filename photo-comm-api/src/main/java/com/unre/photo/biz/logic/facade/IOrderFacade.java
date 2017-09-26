@@ -39,5 +39,13 @@ public interface IOrderFacade {
 	 */
 	public OrderResponse removeOrderById(OrderRequest request) throws Exception;
 	
+	/**
+	 * 查询order 条件查询
+	 * 
+	 * @param request
+	 * @return list
+	 */
+	public OrderResponse queryOrder(OrderRequest reqeust) throws Exception;
+	
 
 }

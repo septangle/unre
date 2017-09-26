@@ -41,11 +41,11 @@ public class PanoramaImpl implements IPanoramaBiz {
 	}
 
 	@Override
-	public List<PanoramaDto> queryProcessSource(PanoramaDto processSourceDto) throws BusinessException {
+	public List<PanoramaDto> queryProcessSource(PanoramaDto panoramaDto) throws BusinessException {
 		List<PanoramaDto> MemberDtoList = new ArrayList<PanoramaDto>();
 		try {
-			Panorama ProcessSource = ModelUtil.dtoToModel(processSourceDto, Panorama.class);
-			List<Panorama> ProcessSourceList = panoramaMapper.selectBySelective(ProcessSource);
+			Panorama panorama = ModelUtil.dtoToModel(panoramaDto, Panorama.class);
+			List<Panorama> ProcessSourceList = panoramaMapper.selectBySelective(panorama);
 			if (!CollectionUtils.isEmpty(ProcessSourceList)) {
 				for (Panorama p : ProcessSourceList) {
 					MemberDtoList.add(ModelUtil.modelToDto(p, PanoramaDto.class));
@@ -167,6 +167,19 @@ public class PanoramaImpl implements IPanoramaBiz {
 			throw new BusinessException(AppConstants.SCAN_FIND_ERROR_CODE, AppConstants.SCAN_FIND_ERROR_MESSAGE);
 		}
 		return retFlg;
+	}
+
+	@Override
+	public boolean updatePanoramaByPrimaryKey(PanoramaDto panoramaDto) throws BusinessException {
+		boolean flag=false;
+		Panorama panorama=ModelUtil.dtoToModel(panoramaDto, Panorama.class);
+		int i=panoramaMapper.updateBySelective(panorama);
+		if (i != 1) { // flag == 1 操作成功,否则操作失败
+			throw new BusinessException(AppConstants.UPDATE_PANORAMA_BY_ORDERID_CODE,
+					AppConstants.UPDATE_PANORAMA_BY_ORDERID_MESSAGE);
+		}
+		flag=true;
+		return flag;
 	}
 
 }

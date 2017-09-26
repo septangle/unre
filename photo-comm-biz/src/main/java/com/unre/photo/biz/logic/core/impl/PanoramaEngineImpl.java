@@ -40,7 +40,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	private OrderEngine orderEngine;
 	@Autowired
 	private PhotoMapper photoMapper;
-	
+
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
 
@@ -302,5 +302,39 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 		return retPanEngineDto;
 	}
 
+	@Override
+	public boolean addPhotoStitchCompleted(PanoramaEngineDto panoramaEngineDto) throws Exception {
+		boolean flag = false;
+		PanoramaDto panoramaDto = new PanoramaDto();
+		//取file添加至list
+		List<File> imagesList = panoramaEngineDto.getFiles();
+		panoramaDto.setOrderId(panoramaEngineDto.getOrderId());
+		try {
+			//1、查询Panorama中id
+			List<PanoramaDto> panoramaList = panoramaBizImpl.queryProcessSource(panoramaDto);
+			//2、判断imageList与panoramaList大小
+			if (imagesList.size() != panoramaList.size()) {
+				throw new BusinessException(AppConstants.ADD_PHOTO_STITCH_COMPLETED_CODE,
+						AppConstants.ADD_PHOTO_STITCH_COMPLETED_MESSAGE);
+			}//3、循环添加至Panorama表
+			for (int i = 0; i < panoramaList.size(); i++) {
+				panoramaDto.setId(panoramaList.get(i).getId());
+				//取imagesList.get(i)，count++
+				File file = imagesList.get(i);
+				panoramaDto.setImagePath(file.getPath());
+				panoramaDto.setStitchStatus(AppConstants.PANORAMA_STITCHED);
+				panoramaBizImpl.updatePanoramaByPrimaryKey(panoramaDto);
+			}
+			flag = true;
+		} catch (BusinessException e) {
+			LOGGER.error(e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			LOGGER.error(AppConstants.ADD_PHOTO_STITCH_COMPLETED_CODE, e);
+			throw new BusinessException(AppConstants.ADD_PHOTO_STITCH_COMPLETED_CODE,
+					AppConstants.ADD_PHOTO_STITCH_COMPLETED_MESSAGE);
+		}
+		return flag;
+	}
 
 }

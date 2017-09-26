@@ -39,7 +39,6 @@ public class OrderDto {
 
     private Date updateTime;
     
-    private WalkthroughDto walkthrough;
 
 
 	public Long getId() {
@@ -178,13 +177,6 @@ public class OrderDto {
         this.updateTime = updateTime;
     }
 
-	public WalkthroughDto getWalkthrough() {
-		return walkthrough;
-	}
-
-	public void setWalkthrough(WalkthroughDto walkthrough) {
-		this.walkthrough = walkthrough;
-	}
 
 	
     

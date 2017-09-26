@@ -12,12 +12,6 @@ public  class PhotoUrl {
 	@Value("${photo.serviceUrl}")
     private String url;
 	
-	@Value("${photo.photopath}")
-	private String photoPath;
-	
-	@Value("${photo.paramopath}")
-	private String paramoPath;
-
 	public String getKey() {
 		return key;
 	}
@@ -34,20 +28,6 @@ public  class PhotoUrl {
 		this.url = url;
 	}
 
-	public String getPhotoPath() {
-		return photoPath;
-	}
-
-	public void setPhotoPath(String photoPath) {
-		this.photoPath = photoPath;
-	}
-
-	public String getParamoPath() {
-		return paramoPath;
-	}
-
-	public void setParamoPath(String paramoPath) {
-		this.paramoPath = paramoPath;
-	}
+	
 
 }

@@ -14,4 +14,8 @@ public interface MemberLevelMapper {
     int updateByPrimaryKeySelective(MemberLevel record);
 
     int updateByPrimaryKey(MemberLevel record);
+    
+    /****************自定义查询*******************/
+    
+    
 }

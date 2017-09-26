@@ -14,4 +14,7 @@ public interface WalkthroughMapper {
     int updateByPrimaryKeySelective(Walkthrough record);
 
     int updateByPrimaryKey(Walkthrough record);
+    
+    /****************自定义查询*******************/    
+
 }

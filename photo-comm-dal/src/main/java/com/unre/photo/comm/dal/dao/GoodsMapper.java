@@ -14,4 +14,7 @@ public interface GoodsMapper {
     int updateByPrimaryKeySelective(Goods record);
 
     int updateByPrimaryKey(Goods record);
+    
+    
+    /****************自定义查询*******************/
 }
