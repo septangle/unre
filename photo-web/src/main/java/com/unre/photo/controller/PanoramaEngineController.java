@@ -68,6 +68,7 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		request.getPanoramaEngineDto().setTitle(title);
 		request.getPanoramaEngineDto().setFiles(fileUrlList);
 		request.getPanoramaEngineDto().setNumber(number);
+		request.getPanoramaEngineDto().setUid(merberId);
 		return panoramaEngineFacade.addPhotos(request);
 	}
 

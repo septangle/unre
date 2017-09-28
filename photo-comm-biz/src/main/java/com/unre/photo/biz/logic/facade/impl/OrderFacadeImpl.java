@@ -28,8 +28,8 @@ public class OrderFacadeImpl implements IOrderFacade {
 		OrderResponse response = new OrderResponse();
 		OrderDto ProcessParm = request.getOrderDto();
 		if (ProcessParm != null) {
-			OrderDto ProcessDto = iorderBiz.findOrderById(ProcessParm.getId());
-			response.setOrderDto(ProcessDto);
+			OrderDto orderDto = iorderBiz.findOrderById(ProcessParm.getId());
+			response.setOrderDto(orderDto);
 		}
 		return response;
 	}
@@ -47,9 +47,9 @@ public class OrderFacadeImpl implements IOrderFacade {
 	//查询当前用户场景
 	@Override
 	public OrderResponse findCurrMemberPanorama(OrderRequest request) throws Exception {
-		List<CompleteOrderDto> orderDtoList = iorderBiz.queryMemberScene(request.getOrderDto());
+		List<OrderDto> orderDtoList = iorderBiz.queryMemberScene(request.getOrderDto());
 		OrderResponse response = new OrderResponse();
-		response.setCompleteOrderDto(orderDtoList);
+		response.setOrderDtoList(orderDtoList);
 		return response;
 	}
 

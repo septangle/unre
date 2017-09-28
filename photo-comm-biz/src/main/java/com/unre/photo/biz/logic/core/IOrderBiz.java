@@ -74,7 +74,7 @@ public interface IOrderBiz {
 	 * 
 	 * @return list
 	 */
-	public List<CompleteOrderDto> queryMemberScene(OrderDto orderDto) throws BusinessException;
+	public List<OrderDto> queryMemberScene(OrderDto orderDto) throws BusinessException;
 	
 	/**
 	 * 通过ID查询Order

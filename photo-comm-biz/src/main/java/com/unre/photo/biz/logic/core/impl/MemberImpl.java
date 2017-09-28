@@ -1,5 +1,6 @@
 package com.unre.photo.biz.logic.core.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import com.unre.photo.biz.dto.MemberDto;
 import com.unre.photo.biz.dto.PriceDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IMemberBiz;
+import com.unre.photo.comm.dal.model.Balance;
 import com.unre.photo.comm.dal.model.Goods;
 import com.unre.photo.comm.dal.model.Member;
 import com.unre.photo.comm.dal.model.MemberLevelItem;
@@ -16,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.unre.photo.comm.AppConstants;
+import com.unre.photo.comm.dal.dao.BalanceMapper;
 import com.unre.photo.comm.dal.dao.GoodsMapper;
 import com.unre.photo.comm.dal.dao.MemberLevelItemMapper;
 import com.unre.photo.comm.dal.dao.MemberMapper;
@@ -30,6 +33,9 @@ public class MemberImpl implements IMemberBiz {
 
 	@Autowired
 	private GoodsMapper goodMapper;
+	
+	@Autowired
+	private BalanceMapper balanceMapper;
 
 	@Autowired
 	private MemberLevelItemMapper memberItemMapper;
@@ -102,6 +108,11 @@ public class MemberImpl implements IMemberBiz {
 				throw new BusinessException(AppConstants.QUERY_ADD_USER_ERROR_CODE,
 						AppConstants.QUERY_ADD_USER_ERROR_MESSAGE);
 			}
+			//插入一条记录到balance表
+			Balance balance = new Balance();
+			balance.setMemberId(memberDto.getId());
+			balance.setVersion(AppConstants.VERSION);
+			balanceMapper.insertSelective(balance);
 		} catch (BusinessException e) {
 			LOGGER.error(e.getMessage());
 			throw e;

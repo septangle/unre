@@ -1,5 +1,7 @@
 package com.unre.photo.comm;
 
+import java.math.BigDecimal;
+
 public class AppConstants {
 
 public final static String SYSTEM_ERROR_CODE = "10000001"; //系统异常
@@ -31,11 +33,11 @@ public final static String SYSTEM_ERROR_MESSAGE = "系统异常";
     public final static String BENACO_STATUS_FAILED = "failed";
     public final static String BENACO_STATUS_COMPLETED = "completed";
     
-    //public final static String PHOTOPATH="C:/img_upload_2D/";
-    //public final static String PARAMOPATH="C:/img_upload_3D/";
+    public final static String PHOTOPATH="C:/img_upload_2D/";
+    public final static String PARAMOPATH="C:/img_upload_3D/";
     
-    public final static String PHOTOPATH="/home/unre/project/photo-scan/2D_img_upload/";
-    public final static String PARAMOPATH="/home/unre/project/photo-scan/3D_img_upload/";
+   // public final static String PHOTOPATH="/home/unre/project/photo-scan/2D_img_upload/";
+    //public final static String PARAMOPATH="/home/unre/project/photo-scan/3D_img_upload/";
     
     public final static String HTTP_RETURN_CODE_200 = "200";
 
@@ -174,6 +176,9 @@ public final static String SYSTEM_ERROR_MESSAGE = "系统异常";
 	//order
 	public final static String REMOVE_ORDER_CODE = "10080001";
 	public final static String REMOVE_ORDER_MESSAGE= "删除订单失败!";
+	
+	//Balance
+	public final static Long VERSION=(long) 0;
 
 	
 }

@@ -38,7 +38,7 @@ public class Order {
 
 	private Date updateTime;
 
-	private Walkthrough walkthrough;
+	private Panorama panorama;
 
 	public Long getId() {
 		return id;
@@ -176,13 +176,14 @@ public class Order {
 		this.updateTime = updateTime;
 	}
 
-	public Walkthrough getWalkthrough() {
-		return walkthrough;
+	public Panorama getPanorama() {
+		return panorama;
 	}
 
-	public void setWalkthrough(Walkthrough walkthrough) {
-		this.walkthrough = walkthrough;
+	public void setPanorama(Panorama panorama) {
+		this.panorama = panorama;
 	}
+
 
 	
 

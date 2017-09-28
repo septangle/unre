@@ -28,19 +28,18 @@
 	<resultMap type="com.unre.photo.comm.dal.model.Order" id="Scenelist">
 		<!-- 实体类属性对应数据库的主键字段，不然主键会查不到 -->
 		<id property="id" column="id" />
-		<result property="memberId" column="member_id" jdbcType="BIGINT" />
-		<result property="status" column="status" jdbcType="CHAR" />
-		<result property="benacoScanId" column="benaco_scan_id"
+		<result column="member_id" property="memberId" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="benaco_scan_id" property="benacoScanId"
 			jdbcType="VARCHAR" />
 		<result column="description" property="description" jdbcType="VARCHAR" />
-		<!-- 用association标签 ,也是实体类属性要对应数据库字段 -->
-		<association property="walkthrough"
-			javaType="com.unre.photo.comm.dal.model.Walkthrough">
-			<id property="id" column="id" />
-			<result property="orderId" column="order_id" />
-			<result property="imagePath " column="image_path" />
+		<!-- 用collection标签 ,也是实体类属性要对应数据库字段 -->
+		<collection property="panorama"
+			ofType="com.unre.photo.comm.dal.model.Panorama">
+			<id property="orderId" column="order_id" />
+			<result property="imagePath" column="image_path" />
 			<result property="thumbImagePath" column="thumb_image_path" />
-		</association>
+		</collection>
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -293,13 +292,13 @@
 			and update_time = #{updateTime,jdbcType=TIMESTAMP}
 		</if>
 	</select>
-	<!-- 查询当前用户所有完成场景 -->
+	<!-- 查询当前用户所有场景 -->
 	<select id="selectGetMemberScene" parameterType="com.unre.photo.comm.dal.model.Order"
 		resultMap="Scenelist">
 		select
-		a.id,a.status,a.benaco_scan_id,b.image_path,b.thumb_image_path
+		a.id,a.status,a.benaco_scan_id,a.description,b.image_path,b.thumb_image_path
 		from
-		tbl_order a left join tbl_walkthrough b on
+		tbl_order a left join tbl_panorama b on
 		a.id=b.order_id where
 		a.member_id=#{memberId,jdbcType=BIGINT} and
 		a.is_deleted = '0'

@@ -21,6 +21,7 @@ import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.comm.dal.dao.OrderMapper;
 import com.unre.photo.comm.dal.model.Order;
+import com.unre.photo.comm.dal.model.Panorama;
 import com.unre.photo.util.ModelUtil;
 
 @Service("Process")
@@ -132,23 +133,17 @@ public class OrderImpl implements IOrderBiz {
 		return flg;
 	}
 
-	public List<CompleteOrderDto> queryMemberScene(OrderDto orderDto) throws BusinessException {
-		List<CompleteOrderDto> orderDtoList = new ArrayList<CompleteOrderDto>();
+	public List<OrderDto> queryMemberScene(OrderDto orderDto) throws BusinessException {
+		List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
 		try {
-			Order completeOrder = ModelUtil.dtoToModel(orderDto, Order.class);
-			List<Order> orderList = orderMapper.selectGetMemberScene(completeOrder);
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+			List<Order> orderList = orderMapper.selectGetMemberScene(order);
 			if (!CollectionUtils.isEmpty(orderList)) {
-				for (Order order : orderList) {
-					orderDto = (OrderDto) ModelUtil.modelToDto(order, OrderDto.class);
-					WalkthroughDto walkthroughDto = ModelUtil.modelToDto(order.getWalkthrough(), WalkthroughDto.class);
-					CompleteOrderDto completeOrderDtoParam = new CompleteOrderDto();
-					//将需要的值放入CompleteOrderDto
-					completeOrderDtoParam.setMemberId(completeOrder.getMemberId());
-					completeOrderDtoParam.setOrderId(orderDto.getId());
-					completeOrderDtoParam.setImagePath(walkthroughDto.getImagePath());
-					completeOrderDtoParam.setThumbImagePath(walkthroughDto.getThumbImagePath());
-					//返回list<CompleteOrderDto>
-					orderDtoList.add(completeOrderDtoParam);
+				for (Order orderParam : orderList) {
+					orderDto = (OrderDto) ModelUtil.modelToDto(orderParam, OrderDto.class);
+					PanoramaDto panoramaDto = ModelUtil.modelToDto(orderParam.getPanorama(), PanoramaDto.class);
+					orderDto.setPanoramaDto(panoramaDto);
+					orderDtoList.add(orderDto);
 				}
 			}
 		} catch (Exception e) {

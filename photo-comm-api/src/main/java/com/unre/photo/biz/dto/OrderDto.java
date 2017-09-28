@@ -39,6 +39,8 @@ public class OrderDto {
 
     private Date updateTime;
     
+    private PanoramaDto panoramaDto;
+    
 
 
 	public Long getId() {
@@ -176,6 +178,14 @@ public class OrderDto {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public PanoramaDto getPanoramaDto() {
+		return panoramaDto;
+	}
+
+	public void setPanoramaDto(PanoramaDto panoramaDto) {
+		this.panoramaDto = panoramaDto;
+	}
 
 
 	
