@@ -1,6 +1,5 @@
 package com.unre.photo.biz.logic.core.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,17 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.unre.photo.biz.dto.CompleteOrderDto;
+import com.unre.photo.biz.dto.ImageInfoDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
-import com.unre.photo.biz.dto.WalkthroughDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.comm.dal.dao.OrderMapper;
 import com.unre.photo.comm.dal.model.Order;
-import com.unre.photo.comm.dal.model.Panorama;
 import com.unre.photo.util.ModelUtil;
 
 @Service("Process")
@@ -102,7 +99,7 @@ public class OrderImpl implements IOrderBiz {
 
 	@Override
 	@Transactional(rollbackFor = BusinessException.class)
-	public boolean saveUploadedImages(String benacoScanId, List<File> imageFiles) throws BusinessException {
+	public boolean saveUploadedImages(String benacoScanId, List<ImageInfoDto> imageInfoList) throws BusinessException {
 		boolean flg = false;
 		try {
 			//1.更新scan状态
@@ -115,8 +112,8 @@ public class OrderImpl implements IOrderBiz {
 			}
 			Order order = orderList.get(0);
 			//2. 新增scan item
-			for (File f : imageFiles) {
-				String imageFullPath = f.getPath();
+			for (ImageInfoDto imageInfo : imageInfoList) {
+				String imageFullPath = imageInfo.getFullPath();
 				PanoramaDto pScanItemDto = new PanoramaDto();
 				pScanItemDto.setOrderId(order.getId());
 				pScanItemDto.setImagePath(imageFullPath);

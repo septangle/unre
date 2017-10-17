@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import com.unre.photo.biz.dto.CompleteOrderDto;
+import com.unre.photo.biz.dto.ImageInfoDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.exception.BusinessException;
 
@@ -59,12 +60,12 @@ public interface IOrderBiz {
 	 * 保存已经成功上传至benaco的图片
 	 * 
 	 * @param benacoScanId
-	 * @param imageFiles --要保存的文件
+	 * @param imageInfoList --要保存的文件
 	 * 
 	 * @return boolean 
 	 * @throws BusinessException
 	 */
-	public boolean saveUploadedImages(String benacoScanId,List<File> imageFiles) throws BusinessException;
+	public boolean saveUploadedImages(String benacoScanId,List<ImageInfoDto> imageInfoList) throws BusinessException;
 	
 	
 	/**

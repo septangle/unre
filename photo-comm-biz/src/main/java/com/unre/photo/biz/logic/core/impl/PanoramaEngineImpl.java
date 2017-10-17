@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.unre.photo.biz.dto.ImageInfoDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
 import com.unre.photo.biz.dto.PanoramaEngineDto;
@@ -46,7 +47,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 		String benacoScanId;
 		PanoramaEngineDto retPanEngineDto = new PanoramaEngineDto();
-		retPanEngineDto.setFiles(panoramaEngineDto.getFiles());
+		retPanEngineDto.setImageInfoList(panoramaEngineDto.getImageInfoList());
 		retPanEngineDto.setApiBaseUrl(panoramaEngineDto.getApiBaseUrl());
 		retPanEngineDto.setApiKey(panoramaEngineDto.getApiKey());
 		retPanEngineDto.setUid(panoramaEngineDto.getUid());
@@ -85,7 +86,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 		try {
 			//1. 取得参数benocoId、imageFiles、number
 			String benacoScanId = panoramaEngineDto.getBenacoScanId();
-			List<File> imageFiles = panoramaEngineDto.getFiles();
+			List<ImageInfoDto> imageFiles = panoramaEngineDto.getImageInfoList();
 			String number = panoramaEngineDto.getNumber();
 			int panoramanumber = imageFiles.size() / Integer.parseInt(number);//panorama照片数量
 			//2. 更新状态     创建订单
@@ -118,9 +119,9 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 						// insert photo table
 						Photo photo = new Photo();
 						photo.setPanoramaId(pDto.getId());
-						photo.setImagePath(imageFiles.get(i * numberOfOnepoint + j).getPath());
+						photo.setImagePath(imageFiles.get(i * numberOfOnepoint + j).getFullPath());
 						photo.setOrderId(order.getId());
-						photo.setThumbImagePath(imageFiles.get(i * numberOfOnepoint + j).getPath());
+						photo.setThumbImagePath(imageFiles.get(i * numberOfOnepoint + j).getFullPath());
 						photoMapper.insertSelective(photo);
 					}
 				}
@@ -307,21 +308,21 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 		boolean flag = false;
 		PanoramaDto panoramaDto = new PanoramaDto();
 		//取file添加至list
-		List<File> imagesList = panoramaEngineDto.getFiles();
+		List<ImageInfoDto> imageInfoList = panoramaEngineDto.getImageInfoList();
 		panoramaDto.setOrderId(panoramaEngineDto.getOrderId());
 		try {
 			//1、查询Panorama中id
 			List<PanoramaDto> panoramaList = panoramaBizImpl.queryProcessSource(panoramaDto);
 			//2、判断imageList与panoramaList大小
-			if (imagesList.size() != panoramaList.size()) {
+			if (imageInfoList.size() != panoramaList.size()) {
 				throw new BusinessException(AppConstants.ADD_PHOTO_STITCH_COMPLETED_CODE,
 						AppConstants.ADD_PHOTO_STITCH_COMPLETED_MESSAGE);
 			}//3、循环添加至Panorama表
 			for (int i = 0; i < panoramaList.size(); i++) {
 				panoramaDto.setId(panoramaList.get(i).getId());
 				//取imagesList.get(i)，count++
-				File file = imagesList.get(i);
-				panoramaDto.setImagePath(file.getPath());
+				ImageInfoDto imageInfo = imageInfoList.get(i);
+				panoramaDto.setImagePath(imageInfo.getFullPath());
 				panoramaDto.setStitchStatus(AppConstants.PANORAMA_STITCHED);
 				panoramaBizImpl.updatePanoramaByPrimaryKey(panoramaDto);
 			}

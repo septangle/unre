@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import com.unre.photo.biz.dto.ImageInfoDto;
 import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.request.PanoramaEngineRequest;
 import com.unre.photo.biz.response.PanoramaEngineResponse;
@@ -32,12 +33,13 @@ public class PanoramaEngineFacadeImplTest extends AbstractJUnit4SpringContextTes
 			peDto.setTitle("test-001");
 	
 			String jpgsPath = "C:/jpgs/";
-			List<File> files = new ArrayList<File>();
+			List<ImageInfoDto> imageInfoList = new ArrayList<ImageInfoDto>();
 			for(int i=1;i<=5;i++){
-				File f = new File(jpgsPath + i +".jpg");
-				files.add(f);
+				ImageInfoDto imageInfo = new ImageInfoDto();
+				imageInfo.setFullPath(jpgsPath + i +".jpg");
+				imageInfoList.add(imageInfo);
 			}
-			peDto.setFiles(files);
+			peDto.setImageInfoList(imageInfoList);
 			peDto.setBenacoScanId("6a079061-680e-4cf6-a2f6-62df9bd53a6a");
 			request.setPanoramaEngineDto(peDto);
 			/*

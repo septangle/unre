@@ -14,7 +14,7 @@ public class PanoramaEngineDto {
 
 	private String title;
 
-	private List<File> files;
+	private List<ImageInfoDto> imageInfoList;
 
 	private String previewUrl;
 	
@@ -78,12 +78,12 @@ public class PanoramaEngineDto {
 		this.title = title;
 	}
 
-	public List<File> getFiles() {
-		return files;
+	public List<ImageInfoDto> getImageInfoList() {
+		return imageInfoList;
 	}
 
-	public void setFiles(List<File> files) {
-		this.files = files;
+	public void setImageInfoList(List<ImageInfoDto> imageInfoList) {
+		this.imageInfoList = imageInfoList;
 	}
 
 	public String getPreviewUrl() {

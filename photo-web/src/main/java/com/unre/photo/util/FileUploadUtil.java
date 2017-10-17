@@ -10,11 +10,12 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.unre.photo.biz.dto.ImageInfoDto;
 import com.unre.photo.comm.AppConstants;
 
 public class FileUploadUtil {
-	public static List<File> Upload(MultipartFile[] files,String number,Long merberId) throws IOException{
-		List<File> fileUrlList = new ArrayList<File>(); //用来保存文件路径，
+	public static List<ImageInfoDto> upload(MultipartFile[] files,String number,Long merberId) throws IOException{
+		List<ImageInfoDto> imageInfoList = new ArrayList<ImageInfoDto>(); //用来保存文件路径，
 		String strFilePath = (AppConstants.NUMBER_MESSAGE_3D).equals(number) ? AppConstants.PARAMOPATH
 				: AppConstants.PHOTOPATH;
 		String strNowTime = new SimpleDateFormat("yyyyMMddhhmmssSSS").format(new Date());
@@ -23,13 +24,19 @@ public class FileUploadUtil {
 			if (files[i].isEmpty()) {
 				System.out.println("上传文件[" + i + "]为空");
 			} else {
+				//1.拷贝图片至服务器
 				FileUtils.copyInputStreamToFile(files[i].getInputStream(),
 						new File(strFilePath, files[i].getOriginalFilename()));
-				File f = new File(strFilePath + File.separator + files[i].getOriginalFilename());
-				fileUrlList.add(f);
+				
+				//File f = new File(strFilePath + File.separator + files[i].getOriginalFilename());
+				
+				ImageInfoDto imageInfo = new ImageInfoDto();
+				imageInfo.setFullPath(strFilePath + File.separator + files[i].getOriginalFilename());
+				//2.形成图片信息集合
+				imageInfoList.add(imageInfo);
 			}
 		}
-		return fileUrlList;
+		return imageInfoList;
 		
 		
 	}
