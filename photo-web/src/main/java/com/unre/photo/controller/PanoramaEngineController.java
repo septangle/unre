@@ -58,7 +58,7 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		request.setPanoramaEngineDto(panoramaEngineDto);
 		HttpSession session = servletRequest.getSession();
 		//查询当前用户
-		Long merberId = 2L;//(Long) session.getAttribute("memberId");
+		Long merberId = (Long) session.getAttribute("memberId");
 		if (merberId == null) {
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
