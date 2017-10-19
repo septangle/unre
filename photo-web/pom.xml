@@ -100,6 +100,11 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
 
 		<dependency>
 			<groupId>dom4j</groupId>
@@ -190,6 +195,12 @@
 			<version>2.5</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.sun.mail </groupId>
+			<artifactId>javax.mail </artifactId>
+			<version>1.5.4 </version>
+		</dependency>
+
 		<!-- upload -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -210,7 +221,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.2</version><!--$NO-MVN-MAN-VER$-->
+			<version>2.2</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 	</dependencies>
 
