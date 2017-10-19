@@ -34,7 +34,7 @@ public interface IMemberFacade {
 	 * @return void
 	 * @throws Exception
 	 */
-	public void updateMember(MemberRequest request) throws Exception;
+	public MemberResponse updatePassword(MemberRequest request) throws Exception;
 
 	/**
 	 * 登录
@@ -65,5 +65,11 @@ public interface IMemberFacade {
 	
 	// select all member
 	public MemberResponse queryAllMember(MemberRequest request) throws Exception;
-  
+	
+	/**
+	 * 查询当前会员信息
+	 * 
+	 * @param request
+	 */
+	public MemberResponse findMemberInfomaction(MemberRequest request) throws Exception;
 }

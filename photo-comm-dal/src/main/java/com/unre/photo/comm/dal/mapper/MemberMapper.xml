@@ -24,6 +24,20 @@
 		<result column="update_by" property="updateBy" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 	</resultMap>
+
+	<resultMap type="com.unre.photo.comm.dal.model.MemberInformation"
+		id="memberInfomation">
+		<result column="member_name" property="memberName" jdbcType="VARCHAR" />
+		<result column="company" property="company" jdbcType="VARCHAR" />
+		<result column="industry" property="industry" jdbcType="VARCHAR" />
+		<result column="level" property="level" jdbcType="CHAR" />
+		<result column="balance" property="balance" jdbcType="DECIMAL" />
+		<result column="freeze_amount" property="freezeAmount"
+			jdbcType="DECIMAL" />
+		<result column="consumeAmount" property="consumeAmount"
+			jdbcType="DECIMAL" />
+
+	</resultMap>
 	<sql id="Base_Column_List">
 		id, member_name, member_no, password, company, province,
 		city, adress,
@@ -387,5 +401,30 @@
 			or mail = #{mail,jdbcType=VARCHAR}
 		</if>
 	</select>
-
+	<select id="selectMemberInfo" parameterType="com.unre.photo.comm.dal.model.Member"
+		resultMap="memberInfomation">
+		select
+		a.member_name,a.company,a.industry,a.`level`,c.amount
+		as balance,c.freeze_amount,SUM(b.actual_amount)
+		as consumeAmount
+		from
+		tbl_member as a ,
+		tbl_order as b ,
+		tbl_balance as c
+		where
+		a.id=b.member_id and b.member_id=c.member_id
+		and a.id =
+		#{id,jdbcType=BIGINT}
+	</select>
+	<update id="updatePassword" parameterType="com.unre.photo.comm.dal.model.Member">
+		update tbl_member
+		set password = #{password,jdbcType=VARCHAR}
+		where 1=1
+		<if test="tel != null">
+			and tel = #{tel,jdbcType=VARCHAR}
+		</if>
+		<if test="mail != null">
+			or mail = #{mail,jdbcType=VARCHAR}
+		</if>
+	</update>
 </mapper>

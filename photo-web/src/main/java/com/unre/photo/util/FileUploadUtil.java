@@ -40,4 +40,25 @@ public class FileUploadUtil {
 		
 		
 	}
+	
+	
+	public static List<File> UploadThumbFile(List<ImageInfoDto> fileList,Long memberId){  
+		List<File> thumbUrlList = new ArrayList<File>(); //用来保存缩略图路径，
+		String strNowTime = new SimpleDateFormat("yyyyMMddhhmmssSSS").format(new Date());
+		String pic_path=AppConstants.THUMB_PATH + strNowTime;
+		File files  = new File(pic_path);
+		if  (!files .exists()  && !files .isDirectory())      
+		{       
+		    files .mkdir();    
+		}
+        for (int i = 0; i < fileList.size(); i++) {
+        	String filePath =fileList.get(i).getFullPath();
+			File file = new ImageUtil().thumbnailImage(filePath, AppConstants.WIDTH, AppConstants.HEIGHT,AppConstants.DEFAULT_PREVFIX, AppConstants.DEFAULT_FORCE,files.toString());
+			thumbUrlList.add(new File(strNowTime+File.separator+file.getName())); 
+        }
+		return thumbUrlList;
+		
+		
+		
+	}
 }

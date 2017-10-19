@@ -2,6 +2,7 @@ package com.unre.photo.comm.dal.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Order {
 	private Long id;
@@ -38,7 +39,7 @@ public class Order {
 
 	private Date updateTime;
 
-	private Panorama panorama;
+	private List<Panorama> panorama;
 
 	public Long getId() {
 		return id;
@@ -176,13 +177,14 @@ public class Order {
 		this.updateTime = updateTime;
 	}
 
-	public Panorama getPanorama() {
+	public List<Panorama> getPanorama() {
 		return panorama;
 	}
 
-	public void setPanorama(Panorama panorama) {
+	public void setPanorama(List<Panorama> panorama) {
 		this.panorama = panorama;
 	}
+
 
 
 	

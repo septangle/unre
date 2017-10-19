@@ -2,8 +2,8 @@ package com.unre.photo.biz.response;
 
 import java.util.List;
 
-import com.unre.photo.biz.dto.CompleteOrderDto;
 import com.unre.photo.biz.dto.OrderDto;
+import com.unre.photo.biz.dto.SceneDto;
 
 @SuppressWarnings("serial")
 public class OrderResponse extends BaseResponse {
@@ -12,8 +12,8 @@ public class OrderResponse extends BaseResponse {
 
 	private List<OrderDto> orderDtoList;
 	
-	private List<CompleteOrderDto> completeOrderDto;
-	
+	private List<SceneDto> sceneDtoList;
+		
 
 	public OrderDto getOrderDto() {
 		return orderDto;
@@ -31,13 +31,14 @@ public class OrderResponse extends BaseResponse {
 		this.orderDtoList = orderDtoList;
 	}
 
-	public List<CompleteOrderDto> getCompleteOrderDto() {
-		return completeOrderDto;
+	public List<SceneDto> getSceneDtoList() {
+		return sceneDtoList;
 	}
 
-	public void setCompleteOrderDto(List<CompleteOrderDto> completeOrderDto) {
-		this.completeOrderDto = completeOrderDto;
+	public void setSceneDtoList(List<SceneDto> sceneDtoList) {
+		this.sceneDtoList = sceneDtoList;
 	}
+
 
 
 	

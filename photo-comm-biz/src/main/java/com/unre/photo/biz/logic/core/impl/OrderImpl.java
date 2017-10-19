@@ -1,5 +1,6 @@
 package com.unre.photo.biz.logic.core.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.unre.photo.biz.dto.ImageInfoDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
+import com.unre.photo.biz.dto.SceneDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
@@ -99,7 +101,7 @@ public class OrderImpl implements IOrderBiz {
 
 	@Override
 	@Transactional(rollbackFor = BusinessException.class)
-	public boolean saveUploadedImages(String benacoScanId, List<ImageInfoDto> imageInfoList) throws BusinessException {
+	public boolean saveUploadedImages(String benacoScanId, List<ImageInfoDto> imageInfoList,List<File> thumbFiles) throws BusinessException {
 		boolean flg = false;
 		try {
 			//1.更新scan状态
@@ -112,13 +114,16 @@ public class OrderImpl implements IOrderBiz {
 			}
 			Order order = orderList.get(0);
 			//2. 新增scan item
+			int count=0;
 			for (ImageInfoDto imageInfo : imageInfoList) {
 				String imageFullPath = imageInfo.getFullPath();
 				PanoramaDto pScanItemDto = new PanoramaDto();
 				pScanItemDto.setOrderId(order.getId());
 				pScanItemDto.setImagePath(imageFullPath);
+				pScanItemDto.setThumbImagePath(thumbFiles.get(count).toString());
 				pScanItemDto.setStitchStatus(AppConstants.PANORAMA_STITCH_STATUS_COMPLETED);
 				panoramaBiz.addProcessSource(pScanItemDto);
+				count++;
 			}
 			flg = true;
 		} catch (Exception e) {
@@ -130,17 +135,26 @@ public class OrderImpl implements IOrderBiz {
 		return flg;
 	}
 
-	public List<OrderDto> queryMemberScene(OrderDto orderDto) throws BusinessException {
-		List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
+	public List<SceneDto> queryMemberScene(OrderDto orderDto) throws BusinessException {
+		List<SceneDto> sceneDtoList = new ArrayList<SceneDto>();
 		try {
+			//通用方法，判断Description字段是否存在，进行模糊查询
+			if (orderDto.getStatus()!=null) {
+				orderDto.setDescription(orderDto.getStatus());
+			}
 			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
 			List<Order> orderList = orderMapper.selectGetMemberScene(order);
 			if (!CollectionUtils.isEmpty(orderList)) {
 				for (Order orderParam : orderList) {
-					orderDto = (OrderDto) ModelUtil.modelToDto(orderParam, OrderDto.class);
-					PanoramaDto panoramaDto = ModelUtil.modelToDto(orderParam.getPanorama(), PanoramaDto.class);
-					orderDto.setPanoramaDto(panoramaDto);
-					orderDtoList.add(orderDto);
+					SceneDto sceneDto= new SceneDto();
+					sceneDto.setOrderId(orderParam.getId());
+					sceneDto.setStatus(orderParam.getStatus());
+					sceneDto.setBenacoScanId(orderParam.getBenacoScanId());
+					sceneDto.setDescription(orderParam.getDescription());
+					//取每个Panorama对象的第一张缩略图
+					sceneDto.setThumbImagePath(orderParam.getPanorama().get(0).getThumbImagePath());
+					sceneDto.setCreateTime(orderParam.getCreateTime());
+					sceneDtoList.add(sceneDto);
 				}
 			}
 		} catch (Exception e) {
@@ -148,7 +162,7 @@ public class OrderImpl implements IOrderBiz {
 			LOGGER.error(AppConstants.SCAN_QUERY_ERROR_CODE, e);
 			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
 		}
-		return orderDtoList;
+		return sceneDtoList;
 	}
 
 	@Override
@@ -209,5 +223,6 @@ public class OrderImpl implements IOrderBiz {
 		}
 		return flag;
 	}
+
 
 }

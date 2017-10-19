@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.unre.photo.biz.dto.CompleteOrderDto;
 import com.unre.photo.biz.dto.OrderDto;
+import com.unre.photo.biz.dto.SceneDto;
 import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.biz.logic.facade.IOrderFacade;
 import com.unre.photo.biz.request.OrderRequest;
@@ -47,9 +47,9 @@ public class OrderFacadeImpl implements IOrderFacade {
 	//查询当前用户场景
 	@Override
 	public OrderResponse findCurrMemberPanorama(OrderRequest request) throws Exception {
-		List<OrderDto> orderDtoList = iorderBiz.queryMemberScene(request.getOrderDto());
+		List<SceneDto> sceneDtoList = iorderBiz.queryMemberScene(request.getOrderDto());
 		OrderResponse response = new OrderResponse();
-		response.setOrderDtoList(orderDtoList);
+		response.setSceneDtoList(sceneDtoList);;
 		return response;
 	}
 

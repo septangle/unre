@@ -3,6 +3,7 @@ package com.unre.photo.comm.dal.dao;
 import java.util.List;
 
 import com.unre.photo.comm.dal.model.Member;
+import com.unre.photo.comm.dal.model.MemberInformation;
 
 public interface MemberMapper {
     int deleteByPrimaryKey(Long id);
@@ -23,5 +24,10 @@ public interface MemberMapper {
     
     //验证邮箱和手机号是否唯一
     List<Member> selectByTelOrMail(Member record);
+    
+    MemberInformation selectMemberInfo(Member record);
+    
+    //修改密码
+    int updatePassword(Member record);;
     
 }

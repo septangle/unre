@@ -1,17 +1,18 @@
 package com.unre.photo.biz.logic.core.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.unre.photo.biz.dto.MemberDto;
+import com.unre.photo.biz.dto.MemberInformationDto;
 import com.unre.photo.biz.dto.PriceDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IMemberBiz;
 import com.unre.photo.comm.dal.model.Balance;
 import com.unre.photo.comm.dal.model.Goods;
 import com.unre.photo.comm.dal.model.Member;
+import com.unre.photo.comm.dal.model.MemberInformation;
 import com.unre.photo.comm.dal.model.MemberLevelItem;
 
 import org.apache.commons.logging.Log;
@@ -33,7 +34,7 @@ public class MemberImpl implements IMemberBiz {
 
 	@Autowired
 	private GoodsMapper goodMapper;
-	
+
 	@Autowired
 	private BalanceMapper balanceMapper;
 
@@ -58,17 +59,16 @@ public class MemberImpl implements IMemberBiz {
 			throw e;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.FIND_MEMBER_BY_ID_CODE, e);
-			throw new BusinessException(AppConstants.FIND_MEMBER_BY_ID_CODE,
-					AppConstants.FIND_MEMBER_BY_ID_MESSAGE);
+			throw new BusinessException(AppConstants.FIND_MEMBER_BY_ID_CODE, AppConstants.FIND_MEMBER_BY_ID_MESSAGE);
 		}
 		return MemberDto;
 	}
 
 	@Override
-	public List<MemberDto> queryMember(MemberDto MemberDto) throws BusinessException {
+	public List<MemberDto> queryMember(MemberDto memberDto) throws BusinessException {
 		List<MemberDto> MemberDtoList = new ArrayList<MemberDto>();
 		try {
-			Member member = ModelUtil.dtoToModel(MemberDto, Member.class);
+			Member member = ModelUtil.dtoToModel(memberDto, Member.class);
 			List<Member> memberList = memberMapper.selectBySelective(member);
 			if (!CollectionUtils.isEmpty(memberList)) {
 				for (Member p : memberList) {
@@ -148,14 +148,22 @@ public class MemberImpl implements IMemberBiz {
 	}
 
 	@Override
-	public void updateMember(MemberDto MemberDto) throws BusinessException {
-		Member members = ModelUtil.dtoToModel(MemberDto, Member.class);
-		memberMapper.updateByPrimaryKeySelective(members);
+	public boolean updateMember(MemberDto MemberDto) throws BusinessException {
+		boolean flag = false;
+		try {
+			Member member = ModelUtil.dtoToModel(MemberDto, Member.class);
+			int i = memberMapper.updateByPrimaryKeySelective(member);
+			if (i != 0) {
+				flag = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
 	}
 
 	@Override
 	public void deleteMember(Long id) throws BusinessException {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -185,6 +193,40 @@ public class MemberImpl implements IMemberBiz {
 			}
 		}
 		return memberDtoList;
+	}
+
+	//修改密码
+	@Override
+	public boolean updatePassword(MemberDto memberDto) throws BusinessException {
+		boolean flag = false;
+		try {
+			Member member = ModelUtil.dtoToModel(memberDto, Member.class);
+			int i = memberMapper.updatePassword(member);
+			if (i == 0) {
+				throw new BusinessException(AppConstants.UPDATE_PASSWORD_CODE, AppConstants.UPDATE_PASSWORD_MESSAGE);
+			}
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(AppConstants.UPDATE_PASSWORD_CODE, AppConstants.UPDATE_PASSWORD_MESSAGE);
+		}
+		return flag;
+
+	}
+
+	@Override
+	public MemberInformationDto getMemberInfomation(MemberDto memberDto) throws BusinessException {
+		MemberInformationDto memberInfomationDto = null;
+		try {
+			Member member = ModelUtil.dtoToModel(memberDto, Member.class);
+			MemberInformation memberInfomation = memberMapper.selectMemberInfo(member);
+			memberInfomationDto = ModelUtil.modelToDto(memberInfomation, MemberInformationDto.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(AppConstants.QUERY_LOGIN_USERID_ERROR_CODE,
+					AppConstants.QUERY_LOGIN_USERID_ERROR_MESSAGE);
+		}
+		return memberInfomationDto;
 	}
 
 }

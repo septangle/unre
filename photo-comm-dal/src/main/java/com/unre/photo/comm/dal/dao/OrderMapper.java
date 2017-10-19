@@ -30,7 +30,7 @@ public interface OrderMapper {
     
     int updateStatus(Order record);
     
-    //查询当前用户所有完成场景
+    //查询当前用户所有场景
     List<Order> selectGetMemberScene(Order record);
     
     //根据benonId查询订单

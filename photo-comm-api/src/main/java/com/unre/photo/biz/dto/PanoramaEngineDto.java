@@ -26,9 +26,16 @@ public class PanoramaEngineDto {
 	
 	private String number;
 	
-	
-	
-	
+	private List<File> fileThumb;
+
+
+	public List<File> getFileThumb() {
+		return fileThumb;
+	}
+
+	public void setFileThumb(List<File> fileThumb) {
+		this.fileThumb = fileThumb;
+	}
 
 	public Long getOrderId() {
 		return orderId;

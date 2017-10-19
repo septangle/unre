@@ -6,12 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unre.photo.biz.dto.MemberDto;
+import com.unre.photo.biz.dto.MemberInformationDto;
 import com.unre.photo.biz.dto.PriceDto;
 import com.unre.photo.biz.logic.core.IMemberBiz;
 import com.unre.photo.biz.logic.facade.IMemberFacade;
 import com.unre.photo.biz.request.MemberRequest;
 import com.unre.photo.biz.response.MemberResponse;
 import com.unre.photo.biz.response.PriceRespnose;
+import com.unre.photo.comm.AppConstants;
+
 /**
  * @author TDH
  *
@@ -47,14 +50,18 @@ public class MemberFacadeImpl implements IMemberFacade {
 	}
 
 	@Override
-	public void updateMember(MemberRequest request) throws Exception {
-        memberBiz.updateMember(request.getMemberDto());
+	public MemberResponse updatePassword(MemberRequest request) throws Exception {
+		MemberResponse response = new MemberResponse();
+		boolean flag = memberBiz.updatePassword(request.getMemberDto());
+		String code = flag ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
+		response.setCode(code);
+		return response;
 	}
 
 	// 登录
 	@Override
 	public MemberResponse login(MemberRequest request) throws Exception {
-        MemberResponse response = new MemberResponse();
+		MemberResponse response = new MemberResponse();
 		response = new MemberResponse();
 		MemberDto memberDto = memberBiz.queryLoginUser(request.getMemberDto());
 		response.setMemberDto(memberDto);
@@ -69,14 +76,14 @@ public class MemberFacadeImpl implements IMemberFacade {
 		response = new MemberResponse();
 		MemberDto memberDto = memberBiz.addMember(request.getMemberDto());
 		response.setMemberDto(memberDto);
-        return response;
+		return response;
 	}
 
 	@Override
 	public PriceRespnose findCurrMemberPrice(MemberRequest request) throws Exception {
-		PriceRespnose priceRespnose= new PriceRespnose();
+		PriceRespnose priceRespnose = new PriceRespnose();
 		MemberDto memberDto = memberBiz.findMemberById(request.getMemberDto().getId());
-		PriceDto priceDto=memberBiz.calculateMerberPrice(memberDto);
+		PriceDto priceDto = memberBiz.calculateMerberPrice(memberDto);
 		priceRespnose.setPriceDto(priceDto);
 		return priceRespnose;
 	}
@@ -86,6 +93,14 @@ public class MemberFacadeImpl implements IMemberFacade {
 		List<MemberDto> memberList = memberBiz.queryAllMember();
 		MemberResponse response = new MemberResponse();
 		response.setMemberDtoList(memberList);
+		return response;
+	}
+
+	@Override
+	public MemberResponse findMemberInfomaction(MemberRequest request) throws Exception {
+		MemberInformationDto memberInfomactionDto = memberBiz.getMemberInfomation(request.getMemberDto());
+		MemberResponse response = new MemberResponse();
+		response.setMemberInfomationDto(memberInfomactionDto);
 		return response;
 	}
 

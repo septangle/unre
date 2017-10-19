@@ -33,11 +33,11 @@
 		<result column="benaco_scan_id" property="benacoScanId"
 			jdbcType="VARCHAR" />
 		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<!-- 用collection标签 ,也是实体类属性要对应数据库字段 -->
 		<collection property="panorama"
 			ofType="com.unre.photo.comm.dal.model.Panorama">
 			<id property="orderId" column="order_id" />
-			<result property="imagePath" column="image_path" />
 			<result property="thumbImagePath" column="thumb_image_path" />
 		</collection>
 	</resultMap>
@@ -296,12 +296,17 @@
 	<select id="selectGetMemberScene" parameterType="com.unre.photo.comm.dal.model.Order"
 		resultMap="Scenelist">
 		select
-		a.id,a.status,a.benaco_scan_id,a.description,b.image_path,b.thumb_image_path
+		a.id,a.status,a.benaco_scan_id,a.description,b.thumb_image_path,a.create_time
 		from
 		tbl_order a left join tbl_panorama b on
-		a.id=b.order_id where
-		a.member_id=#{memberId,jdbcType=BIGINT} and
-		a.is_deleted = '0'
+		a.id=b.order_id where 1=1
+		<if test="memberId != null">
+		and a.member_id=#{memberId,jdbcType=BIGINT} 
+		</if>
+		and a.is_deleted = '0'   
+		<if test="status != null">
+		 and a.status = #{status,jdbcType=CHAR}
+		</if>
 	</select>
 
 	<!--查询订单 -->
@@ -313,9 +318,7 @@
 		where benaco_scan_id =
 		#{benacoScanId,jdbcType=VARCHAR}
 	</select>
-
 	
-
 	<!--根据beanonId更新status状态 -->
 	<update id="updateOrderByBenacoId" parameterType="com.unre.photo.comm.dal.model.Order">
 		update

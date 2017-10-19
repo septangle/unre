@@ -87,6 +87,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			//1. 取得参数benocoId、imageFiles、number
 			String benacoScanId = panoramaEngineDto.getBenacoScanId();
 			List<ImageInfoDto> imageFiles = panoramaEngineDto.getImageInfoList();
+			List<File> thumbFiles=panoramaEngineDto.getFileThumb();
 			String number = panoramaEngineDto.getNumber();
 			int panoramanumber = imageFiles.size() / Integer.parseInt(number);//panorama照片数量
 			//2. 更新状态     创建订单
@@ -100,7 +101,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 			//3.添加图片
 			if ((AppConstants.NUMBER_MESSAGE_3D).equals(number)) {//3D
-				orderBizImpl.saveUploadedImages(benacoScanId, imageFiles);
+				orderBizImpl.saveUploadedImages(benacoScanId, imageFiles,thumbFiles);
 			} else {//2D
 				int numberOfOnepoint = Integer.parseInt(number);//点数
 				if (imageFiles.size() % numberOfOnepoint != 0) {
@@ -113,9 +114,9 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				panoramaDto.setStitchStatus(AppConstants.PANORAMA_STITCH_INIT);
 				for (int i = 0; i < panoramanumber; i++) {
 					// insert panorama table
+					panoramaDto.setThumbImagePath(thumbFiles.get(i).toString());
 					PanoramaDto pDto = panoramaBizImpl.addProcessSource(panoramaDto);
-
-					for (int j = 0; j < numberOfOnepoint; j++) {
+        			for (int j = 0; j < numberOfOnepoint; j++) {
 						// insert photo table
 						Photo photo = new Photo();
 						photo.setPanoramaId(pDto.getId());
@@ -153,8 +154,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 			String retCode = hcResponse.getCode();
 			//2. 更新scan表中scanid对应记录的状态
-
-			if ("200".equals(retCode)) {
+           	if ("200".equals(retCode)) {
 				retFlg = true;
 			}
 

@@ -1,5 +1,7 @@
 package com.unre.photo.controller;
 
+import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.unre.photo.biz.dto.MemberDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IMemberFacade;
@@ -17,6 +21,9 @@ import com.unre.photo.biz.response.MemberResponse;
 import com.unre.photo.biz.response.PriceRespnose;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.MD5Util;
+import com.unre.photo.util.MailUtils;
+import com.unre.photo.util.Sendsms;
+import com.unre.photo.util.Token;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -33,23 +40,23 @@ public class MemberController extends BaseController<MemberController> {
 	 * @param ID
 	 * @return Member
 	 */
-	@ApiOperation(value = "查询当前会员", httpMethod = "GET", response = MemberResponse.class)
-	@RequestMapping(value = "/getCurrMember", method = RequestMethod.GET)
-	public @ResponseBody MemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
-		HttpSession session = servletRequest.getSession();
-		//根据缓存ID查询当前登录会员
-		Long memberId = (Long) session.getAttribute("memberId");
-		if (memberId == null) {
-			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
-					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
-		}
-		MemberRequest request = new MemberRequest();
-		MemberDto memberDto = new MemberDto();
-		memberDto.setId(memberId);
-		request.setMemberDto(memberDto);
-		//根据ID查询
-		return memberFacade.findMemberById(request);
-	}
+	/*	@ApiOperation(value = "查询当前会员", httpMethod = "GET", response = MemberResponse.class)
+		@RequestMapping(value = "/getCurrMember", method = RequestMethod.GET)
+		public @ResponseBody MemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
+			HttpSession session = servletRequest.getSession();
+			//根据缓存ID查询当前登录会员
+			Long memberId = (Long) session.getAttribute("memberId");
+			if (memberId == null) {
+				throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
+						AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+			}
+			MemberRequest request = new MemberRequest();
+			MemberDto memberDto = new MemberDto();
+			memberDto.setId(memberId);
+			request.setMemberDto(memberDto);
+			//根据ID查询
+			return memberFacade.findMemberById(request);
+		}*/
 
 	/**
 	 * 登录
@@ -71,6 +78,15 @@ public class MemberController extends BaseController<MemberController> {
 			throw new BusinessException(AppConstants.QUERY_LOGIN_USERLOING_ERROR_CODE,
 					AppConstants.QUERY_LOGIN_USERLOING_ERROR_MESSAGE);
 		}
+		//登录方式：用户名/电话号码
+		String loginParam = request.getMemberDto().getTel();
+		boolean flag = isInteger(loginParam);
+		//整数返回true,否则返回false
+		if (flag == false) {
+			request.getMemberDto().setMail(loginParam);
+			request.getMemberDto().setTel(null);
+		}
+		//加密
 		request.getMemberDto().setPassword(MD5Util.encodeMD5String(request.getMemberDto().getPassword()));
 		memberResponse = memberFacade.login(request);
 		//判断对象是否为空，并放入session
@@ -141,15 +157,18 @@ public class MemberController extends BaseController<MemberController> {
 	public @ResponseBody PriceRespnose findCurrMemberPrice(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		Long memberId = (Long) session.getAttribute("memberId");
+		
 		//判断用户是否登录
 		if (memberId == null) {
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		}
+		
 		MemberRequest request = new MemberRequest();
 		MemberDto memberDto = new MemberDto();
 		memberDto.setId(memberId);
 		request.setMemberDto(memberDto);
+		
 		return memberFacade.findCurrMemberPrice(request);
 	}
 
@@ -162,5 +181,151 @@ public class MemberController extends BaseController<MemberController> {
 	@RequestMapping(value = "/getAllMember.do", method = RequestMethod.GET)
 	public @ResponseBody MemberResponse findAllMember(HttpServletRequest servletRequest) throws Exception {
 		return memberFacade.queryAllMember(new MemberRequest());
+	}
+
+	/**
+	  * 判断是否为整数 
+	  * @param str 传入的字符串 
+	  * @return 是整数返回true,否则返回false 
+	  */
+	public static boolean isInteger(String str) {
+		Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+		return pattern.matcher(str).matches();
+	}
+
+	@ApiOperation(value = "查询当前会员信息", httpMethod = "GET", response = MemberResponse.class)
+	@RequestMapping(value = "/getMemberInfomaction", method = RequestMethod.GET)
+	public @ResponseBody MemberResponse findMemberInfomaction(HttpServletRequest servletRequest) throws Exception {
+		HttpSession session = servletRequest.getSession();
+		//根据缓存ID查询当前登录会员
+		Long memberId = (Long) session.getAttribute("memberId");
+		MemberRequest request = new MemberRequest();
+		MemberDto memberDto = new MemberDto();
+		memberDto.setId(memberId);
+		request.setMemberDto(memberDto);
+		//根据ID查询
+		return memberFacade.findMemberInfomaction(request);
+	}
+
+	/**
+	 * 忘记密码
+	 * 第一步：
+	 * 验证手机号/邮箱
+	 * @param mailOrTel
+	 */
+	@RequestMapping(value = "/verifyAccount.do", method = RequestMethod.POST)
+	public @ResponseBody MemberResponse verifyAccount(@RequestParam("mailOrTel") String mailOrTel,
+			HttpServletRequest servletRequest) throws Exception {
+		MemberRequest request = new MemberRequest();
+		MemberDto memberDto = new MemberDto();
+		boolean flag = isInteger(mailOrTel);
+		
+		//整数返回true,否则返回false
+		if (flag == false) {
+			memberDto.setMail(mailOrTel);
+			request.setMemberDto(memberDto);
+		} else {
+			memberDto.setTel(mailOrTel);
+			request.setMemberDto(memberDto);
+		}
+		
+		return memberFacade.queryMember(request);
+	}
+
+	/**
+	 * 第二步：
+	 * 发送验证码/邮件 
+	 * @param mailOrTel
+	 */
+	@RequestMapping(value = "/sendVerifyCode.do", method = RequestMethod.POST)
+	public @ResponseBody MemberResponse sendVerifyCode(@RequestParam("mailOrTel") String mailOrTel,
+			HttpServletRequest servletRequest) throws Exception {
+		MemberResponse response = new MemberResponse();
+		boolean flag = isInteger(mailOrTel);
+		int code=0;
+		//整数返回true,否则返回false
+		if (flag == false) {
+			//发送邮件
+			code = MailUtils.email(AppConstants.SUBJECT, mailOrTel);
+			if (code != 0) {
+				//发送成功存入邮箱验证码放session
+				response.setCode(AppConstants.SEND_CODE_MAIL_SUCCESS);
+			} else {
+				response.setCode(AppConstants.SEND_CODE_MAIL_FAIL);
+			}
+		} else {
+			//发送短信
+			code = Sendsms.sendMessage(mailOrTel);
+			if (code != 0) {
+				response.setCode(AppConstants.SEND_CODE_TEL_SUCCESS);
+			} else {
+				response.setCode(AppConstants.SEND_CODE_TEL_FAIL);
+			}
+		}
+		servletRequest.getSession().setAttribute("code", code);
+		
+		return response;
+	}
+
+	/**
+	 * 第三步：
+	 * 校验验证码
+	 * @param mailOrTel,code
+	 */
+	@RequestMapping(value = "/verifyCode.do", method = RequestMethod.POST)
+	public @ResponseBody MemberResponse verifyCode(@RequestParam("mailOrTel") String mailOrTel,
+			@RequestParam("code") String code, HttpServletRequest servletRequest) throws Exception {
+		MemberResponse response = new MemberResponse();
+		HttpSession session = servletRequest.getSession();
+		boolean flag = isInteger(mailOrTel);
+		int verifyCode = (int) session.getAttribute("code");
+		//整数返回true,否则返回false
+		if (flag == false) {
+			if (code.equals(Integer.toString(verifyCode))) {
+				//生成token存session
+				String tokenName = Token.getTokenString(session);
+				response.setToken(tokenName);
+				response.setCode(AppConstants.VERIFY_CODE_MAIL_SUCCESS);
+			} else {
+				response.setCode(AppConstants.VERIFY_CODE_MAIL_FAIL);
+			}
+		} else {
+			if (code.equals(Integer.toString(verifyCode))) {
+				String token = Token.getTokenString(session);
+				response.setToken(token);
+				response.setCode(AppConstants.VERIFY_CODE_TEL_SUCCESS);
+			} else {
+				response.setCode(AppConstants.VERIFY_CODE_TEL_FAIL);
+			}
+		}
+		return response;
+	}
+
+	/**
+	 * 第四步：
+	 * 重置密码
+	 * @param mailOrTel,password
+	 */
+	@RequestMapping(value = "/resetPassword.do", method = RequestMethod.POST)
+	public @ResponseBody MemberResponse resetPassword(@RequestParam("mailOrTel") String mailOrTel,
+			@RequestParam("tokenName") String tokenName, @RequestParam("password") String password,
+			HttpServletRequest servletRequest) throws Exception {
+		MemberDto memberDto = new MemberDto();
+		MemberRequest request = new MemberRequest();
+		boolean flag = isInteger(mailOrTel);
+		//整数返回true,否则返回false
+		//进行身份验证
+		if (Token.isTokenStringValid(tokenName, servletRequest.getSession())) {
+			if (flag == false) {
+				memberDto.setMail(mailOrTel);
+				request.setMemberDto(memberDto);
+			} else {
+				memberDto.setTel(mailOrTel);
+				request.setMemberDto(memberDto);
+			}
+		}
+		//加密
+		request.getMemberDto().setPassword(MD5Util.encodeMD5String(password));
+		return memberFacade.updatePassword(request);
 	}
 }

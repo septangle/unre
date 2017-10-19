@@ -64,10 +64,13 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		}
 		List<ImageInfoDto> imageInfoList =FileUploadUtil.upload(files, number, merberId);
+		//生成缩略图
+		List<File> fileThumb=FileUploadUtil.UploadThumbFile(imageInfoList,merberId);
 		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
 		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		request.getPanoramaEngineDto().setTitle(title);
 		request.getPanoramaEngineDto().setImageInfoList(imageInfoList);
+		request.getPanoramaEngineDto().setFileThumb(fileThumb);
 		request.getPanoramaEngineDto().setNumber(number);
 		request.getPanoramaEngineDto().setUid(merberId);
 		return panoramaEngineFacade.addPhotos(request);

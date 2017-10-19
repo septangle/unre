@@ -3,9 +3,9 @@ package com.unre.photo.biz.logic.core;
 import java.io.File;
 import java.util.List;
 
-import com.unre.photo.biz.dto.CompleteOrderDto;
 import com.unre.photo.biz.dto.ImageInfoDto;
 import com.unre.photo.biz.dto.OrderDto;
+import com.unre.photo.biz.dto.SceneDto;
 import com.unre.photo.biz.exception.BusinessException;
 
 /**
@@ -65,7 +65,7 @@ public interface IOrderBiz {
 	 * @return boolean 
 	 * @throws BusinessException
 	 */
-	public boolean saveUploadedImages(String benacoScanId,List<ImageInfoDto> imageInfoList) throws BusinessException;
+	public boolean saveUploadedImages(String benacoScanId,List<ImageInfoDto> imageInfoList,List<File> thumbFiles) throws BusinessException;
 	
 	
 	/**
@@ -75,7 +75,7 @@ public interface IOrderBiz {
 	 * 
 	 * @return list
 	 */
-	public List<OrderDto> queryMemberScene(OrderDto orderDto) throws BusinessException;
+	public List<SceneDto> queryMemberScene(OrderDto orderDto) throws BusinessException;
 	
 	/**
 	 * 通过ID查询Order

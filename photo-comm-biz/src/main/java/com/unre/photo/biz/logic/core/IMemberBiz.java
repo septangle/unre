@@ -3,6 +3,7 @@ package com.unre.photo.biz.logic.core;
 import java.util.List;
 
 import com.unre.photo.biz.dto.MemberDto;
+import com.unre.photo.biz.dto.MemberInformationDto;
 import com.unre.photo.biz.dto.PriceDto;
 import com.unre.photo.biz.exception.BusinessException;
 
@@ -49,7 +50,7 @@ public interface IMemberBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public void updateMember(MemberDto memberDto) throws BusinessException;
+	public boolean updateMember(MemberDto memberDto) throws BusinessException;
 
 	/**
 	 * 删除Member
@@ -85,4 +86,17 @@ public interface IMemberBiz {
 	 * @throws BusinessException
 	 */
 	public List<MemberDto> queryAllMember() throws BusinessException;
+	
+	/**
+	 * 修改密码
+	 * 
+	 * @param tel/email
+	 * @throws BusinessException
+	 */
+	public boolean updatePassword(MemberDto memberDto) throws BusinessException;
+	
+	/**
+	 * 查询用户信息(用户名，等级，消费金额等)
+	 */
+	public MemberInformationDto getMemberInfomation(MemberDto memberDto) throws BusinessException;
 }
