@@ -74,9 +74,17 @@ public class MemberImpl implements IMemberBiz {
 				for (Member p : memberList) {
 					MemberDtoList.add(ModelUtil.modelToDto(p, MemberDto.class));
 				}
+			}else{
+				throw new BusinessException(AppConstants.QUERY_LOGIN_USERID_ERROR_CODE,
+						AppConstants.QUERY_LOGIN_USERID_ERROR_MESSAGE);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (BusinessException e) {
+			LOGGER.error(e.getMessage());
+			throw e;
+		}  
+		catch (Exception e) {
+			throw new BusinessException(AppConstants.QUERY_LOGIN_USERID_ERROR_CODE,
+					AppConstants.QUERY_LOGIN_USERID_ERROR_MESSAGE);
 		}
 		return MemberDtoList;
 	}

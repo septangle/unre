@@ -158,18 +158,18 @@ public class MemberController extends BaseController<MemberController> {
 	public @ResponseBody PriceRespnose findCurrMemberPrice(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		Long memberId = (Long) session.getAttribute("memberId");
-		
+
 		//判断用户是否登录
 		if (memberId == null) {
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		}
-		
+
 		MemberRequest request = new MemberRequest();
 		MemberDto memberDto = new MemberDto();
 		memberDto.setId(memberId);
 		request.setMemberDto(memberDto);
-		
+
 		return memberFacade.findCurrMemberPrice(request);
 	}
 
@@ -226,7 +226,7 @@ public class MemberController extends BaseController<MemberController> {
 		MemberRequest request = new MemberRequest();
 		MemberDto memberDto = new MemberDto();
 		boolean flag = isInteger(mailOrTel);
-		
+
 		//整数返回true,否则返回false
 		if (flag == false) {
 			memberDto.setMail(mailOrTel);
@@ -235,13 +235,13 @@ public class MemberController extends BaseController<MemberController> {
 			memberDto.setTel(mailOrTel);
 			request.setMemberDto(memberDto);
 		}
-		 memberResponse=memberFacade.queryMember(request);
-		
+		memberResponse = memberFacade.queryMember(request);
+
 		if (memberResponse.getMemberDtoList() != null) {
 			servletRequest.getSession().setAttribute("memberId", memberResponse.getMemberDtoList().get(0).getId());
 		}
-		
-		 return memberResponse;
+
+		return memberResponse;
 	}
 
 	/**
@@ -254,24 +254,25 @@ public class MemberController extends BaseController<MemberController> {
 			HttpServletRequest servletRequest) throws Exception {
 		MemberResponse response = new MemberResponse();
 		boolean flag = isInteger(mailOrTel);
-		int code=0;
+		int code = 0;
 		//整数返回true,否则返回false
 		if (flag == false) {
 			//发送邮件
 			code = MailUtils.email(AppConstants.SUBJECT, mailOrTel);
-			if (code== 0) {
+			if (code == 0) {
 				response.setError(new Error(AppConstants.SEND_CODE_FAIL_CODE, AppConstants.SEND_CODE_FAIL));
 			}
 		} else {
 			//发送短信
 			code = Sendsms.sendMessage(mailOrTel);
-			if (code== 0) {
+			if (code == 0) {
 				response.setError(new Error(AppConstants.SEND_CODE_FAIL_CODE, AppConstants.SEND_CODE_FAIL));
-			} 
-			
+			}
+
 		}
 		servletRequest.getSession().setAttribute("code", code);
-		
+		servletRequest.getSession().setMaxInactiveInterval(60*5);
+
 		return response;
 	}
 
@@ -281,11 +282,15 @@ public class MemberController extends BaseController<MemberController> {
 	 * @param mailOrTel,code
 	 */
 	@RequestMapping(value = "/verifyCode.do", method = RequestMethod.POST)
-	public @ResponseBody MemberResponse verifyCode(@RequestParam("code") String code, HttpServletRequest servletRequest) throws Exception {
+	public @ResponseBody MemberResponse verifyCode(@RequestParam("code") String code, HttpServletRequest servletRequest)
+			throws Exception {
 		MemberResponse response = new MemberResponse();
 		HttpSession session = servletRequest.getSession();
-		int verifyCode = (int) session.getAttribute("code");
-		//整数返回true,否则返回false
+		if (session.getAttribute("code") == null) {
+			response.setError(new Error(AppConstants.VERIFY_CODE_FAIL_CODE, AppConstants.VERIFY_CODE_FAIL_INVALID));
+
+		} else {
+			int verifyCode = (int) session.getAttribute("code");
 			if (code.equals(Integer.toString(verifyCode))) {
 				//生成token存session
 				String tokenName = Token.getTokenString(session);
@@ -293,7 +298,8 @@ public class MemberController extends BaseController<MemberController> {
 			} else {
 				response.setError(new Error(AppConstants.VERIFY_CODE_FAIL_CODE, AppConstants.VERIFY_CODE_FAIL));
 			}
-		   return response;
+		}
+		return response;
 	}
 
 	/**
@@ -313,7 +319,7 @@ public class MemberController extends BaseController<MemberController> {
 		//整数返回true,否则返回false
 		//进行身份验证
 		Long memberId = (Long) session.getAttribute("memberId");
-		if (Token.isTokenStringValid(tokenName, servletRequest.getSession())&&memberId!=null) {
+		if (Token.isTokenStringValid(tokenName, servletRequest.getSession()) && memberId != null) {
 			session.removeAttribute("memberId");
 			if (flag == false) {
 				memberDto.setMail(mailOrTel);
@@ -323,8 +329,8 @@ public class MemberController extends BaseController<MemberController> {
 				request.setMemberDto(memberDto);
 			}
 			request.getMemberDto().setPassword(MD5Util.encodeMD5String(password));
-			response=memberFacade.updatePassword(request);
-		}else{
+			response = memberFacade.updatePassword(request);
+		} else {
 			response.setError(new Error(AppConstants.UPDATE_PASSWORD_CODE, AppConstants.UPDATE_PASSWORD));
 		}
 		return response;

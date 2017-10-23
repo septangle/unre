@@ -194,6 +194,9 @@ public class AppConstants {
 
 	public final static String VERIFY_CODE_FAIL_CODE="100100002";
 	public final static String VERIFY_CODE_FAIL = "验证失败";
+	public final static String VERIFY_CODE_FAIL_INVALID = "验证码失效";
+
+	
 
 	public final static String SUBJECT = "盎锐全景平台-修改密码保护验证";
 	
