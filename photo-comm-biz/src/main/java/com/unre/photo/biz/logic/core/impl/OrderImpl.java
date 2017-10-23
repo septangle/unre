@@ -152,7 +152,9 @@ public class OrderImpl implements IOrderBiz {
 					sceneDto.setBenacoScanId(orderParam.getBenacoScanId());
 					sceneDto.setDescription(orderParam.getDescription());
 					//取每个Panorama对象的第一张缩略图
-					sceneDto.setThumbImagePath(orderParam.getPanorama().get(0).getThumbImagePath());
+					if (orderParam.getPanorama().get(0).getThumbImagePath()!=null) {
+						sceneDto.setThumbImagePath(orderParam.getPanorama().get(0).getThumbImagePath());
+             		}
 					sceneDto.setCreateTime(orderParam.getCreateTime());
 					sceneDtoList.add(sceneDto);
 				}

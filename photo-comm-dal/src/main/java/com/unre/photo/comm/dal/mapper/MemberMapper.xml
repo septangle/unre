@@ -27,6 +27,7 @@
 
 	<resultMap type="com.unre.photo.comm.dal.model.MemberInformation"
 		id="memberInfomation">
+		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="member_name" property="memberName" jdbcType="VARCHAR" />
 		<result column="company" property="company" jdbcType="VARCHAR" />
 		<result column="industry" property="industry" jdbcType="VARCHAR" />
@@ -403,7 +404,7 @@
 	</select>
 	<select id="selectMemberInfo" parameterType="com.unre.photo.comm.dal.model.Member"
 		resultMap="memberInfomation">
-		select
+		select a.id,
 		a.member_name,a.company,a.industry,a.`level`,c.amount
 		as balance,c.freeze_amount,SUM(b.actual_amount)
 		as consumeAmount

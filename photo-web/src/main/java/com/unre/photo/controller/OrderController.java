@@ -107,6 +107,11 @@ public class OrderController extends BaseController<OrderController> {
 	public @ResponseBody OrderResponse findRecordsConsumption (HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		Long memberId = (Long) session.getAttribute("memberId");
+		//判断用户是否登录
+		if (memberId == null) {
+			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
+					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		}
 		OrderRequest orderRequest = new OrderRequest();
 		OrderDto orderDto = new OrderDto();
 		orderDto.setMemberId(memberId);

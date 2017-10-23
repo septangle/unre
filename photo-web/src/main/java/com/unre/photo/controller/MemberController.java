@@ -194,11 +194,16 @@ public class MemberController extends BaseController<MemberController> {
 	}
 
 	@ApiOperation(value = "查询当前会员信息", httpMethod = "GET", response = MemberResponse.class)
-	@RequestMapping(value = "/getMemberInfomaction", method = RequestMethod.GET)
+	@RequestMapping(value = "/getMemberInfomaction.do", method = RequestMethod.GET)
 	public @ResponseBody MemberResponse findMemberInfomaction(HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
 		//根据缓存ID查询当前登录会员
 		Long memberId = (Long) session.getAttribute("memberId");
+		//判断用户是否登录
+		if (memberId == null) {
+			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
+					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		}
 		MemberRequest request = new MemberRequest();
 		MemberDto memberDto = new MemberDto();
 		memberDto.setId(memberId);
@@ -216,6 +221,7 @@ public class MemberController extends BaseController<MemberController> {
 	@RequestMapping(value = "/verifyAccount.do", method = RequestMethod.POST)
 	public @ResponseBody MemberResponse verifyAccount(@RequestParam("mailOrTel") String mailOrTel,
 			HttpServletRequest servletRequest) throws Exception {
+		MemberResponse memberResponse = null;
 		MemberRequest request = new MemberRequest();
 		MemberDto memberDto = new MemberDto();
 		boolean flag = isInteger(mailOrTel);
@@ -228,8 +234,12 @@ public class MemberController extends BaseController<MemberController> {
 			memberDto.setTel(mailOrTel);
 			request.setMemberDto(memberDto);
 		}
+		 memberResponse=memberFacade.queryMember(request);
+		if (memberResponse != null && memberResponse.getMemberDto() != null) {
+			servletRequest.getSession().setAttribute("memberId", memberResponse.getMemberDto().getId());
+		}
 		
-		return memberFacade.queryMember(request);
+		 return memberResponse;
 	}
 
 	/**
@@ -310,12 +320,15 @@ public class MemberController extends BaseController<MemberController> {
 	public @ResponseBody MemberResponse resetPassword(@RequestParam("mailOrTel") String mailOrTel,
 			@RequestParam("tokenName") String tokenName, @RequestParam("password") String password,
 			HttpServletRequest servletRequest) throws Exception {
+		HttpSession session = servletRequest.getSession();
 		MemberDto memberDto = new MemberDto();
 		MemberRequest request = new MemberRequest();
 		boolean flag = isInteger(mailOrTel);
 		//整数返回true,否则返回false
 		//进行身份验证
-		if (Token.isTokenStringValid(tokenName, servletRequest.getSession())) {
+		Long memberId = (Long) session.getAttribute("memberId");
+		if (Token.isTokenStringValid(tokenName, servletRequest.getSession())&&memberId!=null) {
+			session.removeAttribute("memberId");
 			if (flag == false) {
 				memberDto.setMail(mailOrTel);
 				request.setMemberDto(memberDto);

@@ -31,12 +31,12 @@ public class AppConstants {
 	public final static String BENACO_STATUS_FAILED = "failed";
 	public final static String BENACO_STATUS_COMPLETED = "completed";
 
-	// public final static String PHOTOPATH="C:/img_upload_2D/";
+	//public final static String PHOTOPATH="C:/img_upload_2D/";
 	//public final static String PARAMOPATH="C:/img_upload_3D/";
-	// public final static String THUMB_PATH="E:/Tomcat-8.0.26/webapps/thumb_image/";
-	public final static String THUMB_PATH = "/home/unre/project/photo-scan/Tomcat-8.0.26/webapps/thumb_image/";
-	public final static String PHOTOPATH = "/home/unre/project/photo-scan/2D_img_upload/";
-	public final static String PARAMOPATH = "/home/unre/project/photo-scan/3D_img_upload/";
+	//public final static String THUMB_PATH="E:/Tomcat-8.0.26/webapps/thumb_image/";
+	 public final static String THUMB_PATH = "/home/unre/project/photo-scan/Tomcat-8.0.26/webapps/thumb_image/";
+	 public final static String PHOTOPATH = "/home/unre/project/photo-scan/2D_img_upload/";
+	 public final static String PARAMOPATH = "/home/unre/project/photo-scan/3D_img_upload/";
 
 	public final static String LOGIN_NAME = "admin";
 

@@ -3,6 +3,8 @@ package com.unre.photo.biz.dto;
 import java.math.BigDecimal;
 
 public class MemberInformationDto {
+	
+    private Long id; //用户id
     
 	private String memberName;//用户名
     
@@ -16,7 +18,16 @@ public class MemberInformationDto {
     
     private BigDecimal freezeAmount; //冻结金额
     
-    private BigDecimal consumeAmount;//消费总金额
+    private BigDecimal consumeAmount;//消费总金额   
+    
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getMemberName() {
 		return memberName;

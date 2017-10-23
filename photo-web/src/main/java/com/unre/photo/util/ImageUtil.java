@@ -57,8 +57,9 @@ public class ImageUtil {
 				g.dispose();
 				// 将图片保存在原目录并加上前缀
 				File f=null;
+			
 				ImageIO.write(bi, suffix, f=new File(
-						p + File.separator + prevfix + imgFile.getName()));
+						p + File.separator + prevfix + 	imgFile.getName()));
 				return f;
 			} catch (IOException e) {
 				e.getStackTrace();

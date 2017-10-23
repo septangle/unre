@@ -3,6 +3,8 @@ package com.unre.photo.comm.dal.model;
 import java.math.BigDecimal;
 
 public class MemberInformation {
+	
+    private Long id;
 
     private String memberName;//用户名
     
@@ -17,6 +19,15 @@ public class MemberInformation {
     private BigDecimal freezeAmount; //冻结金额
     
     private BigDecimal consumeAmount;//消费总金额
+     
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getMemberName() {
 		return memberName;

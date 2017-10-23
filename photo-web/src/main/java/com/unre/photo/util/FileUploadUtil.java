@@ -26,7 +26,7 @@ public class FileUploadUtil {
 			} else {
 				//1.拷贝图片至服务器
 				FileUtils.copyInputStreamToFile(files[i].getInputStream(),
-						new File(strFilePath, files[i].getOriginalFilename()));
+						new File(strFilePath,files[i].getOriginalFilename()));
 				
 				//File f = new File(strFilePath + File.separator + files[i].getOriginalFilename());
 				
