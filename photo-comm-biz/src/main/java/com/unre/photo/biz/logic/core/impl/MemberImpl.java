@@ -206,7 +206,11 @@ public class MemberImpl implements IMemberBiz {
 				throw new BusinessException(AppConstants.UPDATE_PASSWORD_CODE, AppConstants.UPDATE_PASSWORD_MESSAGE);
 			}
 			flag = true;
-		} catch (Exception e) {
+		}catch (BusinessException e) {
+			LOGGER.error(e.getMessage());
+			throw e;
+		}  
+		catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(AppConstants.UPDATE_PASSWORD_CODE, AppConstants.UPDATE_PASSWORD_MESSAGE);
 		}

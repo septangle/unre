@@ -17,6 +17,7 @@ import com.unre.photo.biz.dto.MemberDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IMemberFacade;
 import com.unre.photo.biz.request.MemberRequest;
+import com.unre.photo.biz.response.Error;
 import com.unre.photo.biz.response.MemberResponse;
 import com.unre.photo.biz.response.PriceRespnose;
 import com.unre.photo.comm.AppConstants;
@@ -235,8 +236,9 @@ public class MemberController extends BaseController<MemberController> {
 			request.setMemberDto(memberDto);
 		}
 		 memberResponse=memberFacade.queryMember(request);
-		if (memberResponse != null && memberResponse.getMemberDto() != null) {
-			servletRequest.getSession().setAttribute("memberId", memberResponse.getMemberDto().getId());
+		
+		if (memberResponse.getMemberDtoList() != null) {
+			servletRequest.getSession().setAttribute("memberId", memberResponse.getMemberDtoList().get(0).getId());
 		}
 		
 		 return memberResponse;
@@ -257,20 +259,16 @@ public class MemberController extends BaseController<MemberController> {
 		if (flag == false) {
 			//发送邮件
 			code = MailUtils.email(AppConstants.SUBJECT, mailOrTel);
-			if (code != 0) {
-				//发送成功存入邮箱验证码放session
-				response.setCode(AppConstants.SEND_CODE_MAIL_SUCCESS);
-			} else {
-				response.setCode(AppConstants.SEND_CODE_MAIL_FAIL);
+			if (code== 0) {
+				response.setError(new Error(AppConstants.SEND_CODE_FAIL_CODE, AppConstants.SEND_CODE_FAIL));
 			}
 		} else {
 			//发送短信
 			code = Sendsms.sendMessage(mailOrTel);
-			if (code != 0) {
-				response.setCode(AppConstants.SEND_CODE_TEL_SUCCESS);
-			} else {
-				response.setCode(AppConstants.SEND_CODE_TEL_FAIL);
-			}
+			if (code== 0) {
+				response.setError(new Error(AppConstants.SEND_CODE_FAIL_CODE, AppConstants.SEND_CODE_FAIL));
+			} 
+			
 		}
 		servletRequest.getSession().setAttribute("code", code);
 		
@@ -283,32 +281,19 @@ public class MemberController extends BaseController<MemberController> {
 	 * @param mailOrTel,code
 	 */
 	@RequestMapping(value = "/verifyCode.do", method = RequestMethod.POST)
-	public @ResponseBody MemberResponse verifyCode(@RequestParam("mailOrTel") String mailOrTel,
-			@RequestParam("code") String code, HttpServletRequest servletRequest) throws Exception {
+	public @ResponseBody MemberResponse verifyCode(@RequestParam("code") String code, HttpServletRequest servletRequest) throws Exception {
 		MemberResponse response = new MemberResponse();
 		HttpSession session = servletRequest.getSession();
-		boolean flag = isInteger(mailOrTel);
 		int verifyCode = (int) session.getAttribute("code");
 		//整数返回true,否则返回false
-		if (flag == false) {
 			if (code.equals(Integer.toString(verifyCode))) {
 				//生成token存session
 				String tokenName = Token.getTokenString(session);
 				response.setToken(tokenName);
-				response.setCode(AppConstants.VERIFY_CODE_MAIL_SUCCESS);
 			} else {
-				response.setCode(AppConstants.VERIFY_CODE_MAIL_FAIL);
+				response.setError(new Error(AppConstants.VERIFY_CODE_FAIL_CODE, AppConstants.VERIFY_CODE_FAIL));
 			}
-		} else {
-			if (code.equals(Integer.toString(verifyCode))) {
-				String token = Token.getTokenString(session);
-				response.setToken(token);
-				response.setCode(AppConstants.VERIFY_CODE_TEL_SUCCESS);
-			} else {
-				response.setCode(AppConstants.VERIFY_CODE_TEL_FAIL);
-			}
-		}
-		return response;
+		   return response;
 	}
 
 	/**
@@ -320,6 +305,7 @@ public class MemberController extends BaseController<MemberController> {
 	public @ResponseBody MemberResponse resetPassword(@RequestParam("mailOrTel") String mailOrTel,
 			@RequestParam("tokenName") String tokenName, @RequestParam("password") String password,
 			HttpServletRequest servletRequest) throws Exception {
+		MemberResponse response = new MemberResponse();
 		HttpSession session = servletRequest.getSession();
 		MemberDto memberDto = new MemberDto();
 		MemberRequest request = new MemberRequest();
@@ -336,9 +322,11 @@ public class MemberController extends BaseController<MemberController> {
 				memberDto.setTel(mailOrTel);
 				request.setMemberDto(memberDto);
 			}
+			request.getMemberDto().setPassword(MD5Util.encodeMD5String(password));
+			response=memberFacade.updatePassword(request);
+		}else{
+			response.setError(new Error(AppConstants.UPDATE_PASSWORD_CODE, AppConstants.UPDATE_PASSWORD));
 		}
-		//加密
-		request.getMemberDto().setPassword(MD5Util.encodeMD5String(password));
-		return memberFacade.updatePassword(request);
+		return response;
 	}
 }

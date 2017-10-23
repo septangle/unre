@@ -188,16 +188,15 @@ public class AppConstants {
 	public final static Long VERSION = (long) 0;
 
 	//sendCode
-	public final static String SEND_CODE_MAIL_SUCCESS = "邮件发送成功";
-	public final static String SEND_CODE_MAIL_FAIL = "邮件发送失败";
-	public final static String SEND_CODE_TEL_SUCCESS = "短信发送成功";
-	public final static String SEND_CODE_TEL_FAIL = "短信发送失败";
+	public final static String SEND_CODE_FAIL_CODE="10090002";
+	public final static String SEND_CODE_FAIL = "发送失败";
 
-	public final static String VERIFY_CODE_MAIL_SUCCESS = "邮件验证成功";
-	public final static String VERIFY_CODE_MAIL_FAIL = "邮件验证失败";
-	public final static String VERIFY_CODE_TEL_SUCCESS = "短信验证成功";
-	public final static String VERIFY_CODE_TEL_FAIL = "短信验证失败";
+
+	public final static String VERIFY_CODE_FAIL_CODE="100100002";
+	public final static String VERIFY_CODE_FAIL = "验证失败";
 
 	public final static String SUBJECT = "盎锐全景平台-修改密码保护验证";
+	
+	public final static String UPDATE_PASSWORD="更新失败:token不一致或memberId保存session失效";
 
 }
