@@ -31,6 +31,7 @@
 		<result column="member_name" property="memberName" jdbcType="VARCHAR" />
 		<result column="company" property="company" jdbcType="VARCHAR" />
 		<result column="industry" property="industry" jdbcType="VARCHAR" />
+		<result column="name" property="LevelName" jdbcType="VARCHAR" />
 		<result column="level" property="level" jdbcType="CHAR" />
 		<result column="balance" property="balance" jdbcType="DECIMAL" />
 		<result column="freeze_amount" property="freezeAmount"
@@ -405,17 +406,20 @@
 	<select id="selectMemberInfo" parameterType="com.unre.photo.comm.dal.model.Member"
 		resultMap="memberInfomation">
 		select a.id,
-		a.member_name,a.company,a.industry,a.`level`,c.amount
+		a.member_name,a.company,a.industry,d.`name`,a.`level`,c.amount
 		as balance,c.freeze_amount,SUM(b.actual_amount)
 		as consumeAmount
 		from
 		tbl_member as a ,
 		tbl_order as b ,
-		tbl_balance as c
+		tbl_balance as c,
+        tbl_member_level_item d
 		where
-		a.id=b.member_id and b.member_id=c.member_id
-		and a.id =
-		#{id,jdbcType=BIGINT}
+		a.id=b.member_id 
+        and b.member_id=c.member_id 
+        and a.`level`=d.`value`
+		and a.id =#{id,jdbcType=BIGINT} 
+		and b.status=2
 	</select>
 	<update id="updatePassword" parameterType="com.unre.photo.comm.dal.model.Member">
 		update tbl_member

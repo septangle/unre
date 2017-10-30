@@ -38,6 +38,9 @@ public interface OrderMapper {
     
     // select unclosed orders 
     List<Order> selectUnclosedOrder();
+    
+    //查询消费订单
+    List<Order> selectConsumeOrder(Order record);
 
 
 }

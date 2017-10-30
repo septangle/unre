@@ -102,4 +102,11 @@ public interface IOrderBiz {
 	 */
 	public boolean removeOrder(OrderDto orderDto) throws BusinessException;
 	
+	/**
+	 * 查询消费记录
+	 * 
+	 * @param memberId
+	 */
+	public List<OrderDto> findConsumeOrder(OrderDto orderDto) throws BusinessException;
+	
 }

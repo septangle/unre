@@ -11,6 +11,8 @@ public class MemberInformationDto {
     private String company; //公司
     
     private String industry; //行业
+    
+    private String LevelName;//等级名称
 
     private String level; //等级
         
@@ -51,6 +53,15 @@ public class MemberInformationDto {
 
 	public void setIndustry(String industry) {
 		this.industry = industry;
+	}
+
+	
+	public String getLevelName() {
+		return LevelName;
+	}
+
+	public void setLevelName(String levelName) {
+		LevelName = levelName;
 	}
 
 	public String getLevel() {

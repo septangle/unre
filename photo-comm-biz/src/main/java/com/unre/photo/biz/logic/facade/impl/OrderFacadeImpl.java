@@ -72,4 +72,13 @@ public class OrderFacadeImpl implements IOrderFacade {
 		return response;
 	}
 
+	@Override
+	public OrderResponse findConsumeOrder(OrderRequest request) throws Exception {
+		OrderResponse response = new OrderResponse();
+		OrderDto orderDto = request.getOrderDto();
+		List<OrderDto> orderDtoList = iorderBiz.findConsumeOrder(orderDto);
+		response.setOrderDtoList(orderDtoList);
+		return response;
+	}
+
 }

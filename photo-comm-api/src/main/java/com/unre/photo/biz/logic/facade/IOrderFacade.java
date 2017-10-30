@@ -47,5 +47,13 @@ public interface IOrderFacade {
 	 */
 	public OrderResponse queryOrder(OrderRequest reqeust) throws Exception;
 	
+	/**
+	 * 查询消费记录
+	 * 
+	 * @param request
+	 * @return list
+	 */
+	public OrderResponse findConsumeOrder(OrderRequest request)throws Exception;
+	
 
 }

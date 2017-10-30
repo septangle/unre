@@ -342,6 +342,15 @@
 		from tbl_order
 		where status = '1'
 	</select>
+	<!-- 查询消费订单 -->
+	<select id="selectConsumeOrder" resultMap="BaseResultMap" 
+	   parameterType="com.unre.photo.comm.dal.model.Order">
+	   select
+		<include refid="Base_Column_List" />
+	   from tbl_order
+	   where member_id = #{memberId,jdbcType=BIGINT} 
+	   and status!=3
+	</select>
 
 	<update id="updateBySelective" parameterType="com.unre.photo.comm.dal.model.Order">
 		update tbl_order

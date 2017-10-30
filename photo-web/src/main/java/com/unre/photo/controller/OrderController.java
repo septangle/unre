@@ -116,6 +116,6 @@ public class OrderController extends BaseController<OrderController> {
 		OrderDto orderDto = new OrderDto();
 		orderDto.setMemberId(memberId);
 		orderRequest.setOrderDto(orderDto);
-		return orderFacade.queryOrder(orderRequest);
+		return orderFacade.findConsumeOrder(orderRequest);
 	}
 }

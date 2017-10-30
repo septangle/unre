@@ -1,5 +1,6 @@
 package com.unre.photo.biz.logic.core.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -232,6 +233,10 @@ public class MemberImpl implements IMemberBiz {
 		try {
 			Member member = ModelUtil.dtoToModel(memberDto, Member.class);
 			MemberInformation memberInfomation = memberMapper.selectMemberInfo(member);
+			BigDecimal consumeAmount = new BigDecimal(0);
+			if (memberInfomation.getConsumeAmount()==null) {
+				memberInfomation.setConsumeAmount(consumeAmount);
+			}
 			memberInfomationDto = ModelUtil.modelToDto(memberInfomation, MemberInformationDto.class);
 		} catch (Exception e) {
 			e.printStackTrace();
