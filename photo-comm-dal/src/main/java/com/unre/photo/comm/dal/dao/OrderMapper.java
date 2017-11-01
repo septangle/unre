@@ -41,6 +41,10 @@ public interface OrderMapper {
     
     //查询消费订单
     List<Order> selectConsumeOrder(Order record);
+    
+    
+    //查询拼接照片完成的订单
+    List<Order> selectStitchedProcessOrder(Order record);
 
 
 }

@@ -246,5 +246,24 @@ public class OrderImpl implements IOrderBiz {
 		return orderDtoList;
 	}
 
+	@Override
+	public List<OrderDto> findStitchedProcessOrder(OrderDto orderDto) throws BusinessException {
+		List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
+		try {
+			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+			List<Order> orderList = orderMapper.selectStitchedProcessOrder(order);
+			if (!CollectionUtils.isEmpty(orderList)) {
+				for (Order p : orderList) {
+					orderDtoList.add(ModelUtil.modelToDto(p, OrderDto.class));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(AppConstants.SCAN_QUERY_ERROR_CODE, e);
+			throw new BusinessException(AppConstants.SCAN_QUERY_ERROR_CODE, AppConstants.SCAN_QUERY_ERROR_MESSAGE);
+		}
+		return orderDtoList;
+	}
+
 
 }

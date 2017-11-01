@@ -301,11 +301,11 @@
 		tbl_order a left join tbl_panorama b on
 		a.id=b.order_id where 1=1
 		<if test="memberId != null">
-		and a.member_id=#{memberId,jdbcType=BIGINT} 
+			and a.member_id=#{memberId,jdbcType=BIGINT}
 		</if>
-		and a.is_deleted = '0'   
+		and a.is_deleted = '0'
 		<if test="status != null">
-		 and a.status = #{status,jdbcType=CHAR}
+			and a.status = #{status,jdbcType=CHAR}
 		</if>
 	</select>
 
@@ -318,7 +318,7 @@
 		where benaco_scan_id =
 		#{benacoScanId,jdbcType=VARCHAR}
 	</select>
-	
+
 	<!--根据beanonId更新status状态 -->
 	<update id="updateOrderByBenacoId" parameterType="com.unre.photo.comm.dal.model.Order">
 		update
@@ -343,13 +343,23 @@
 		where status = '1'
 	</select>
 	<!-- 查询消费订单 -->
-	<select id="selectConsumeOrder" resultMap="BaseResultMap" 
-	   parameterType="com.unre.photo.comm.dal.model.Order">
-	   select
+	<select id="selectConsumeOrder" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Order">
+		select
 		<include refid="Base_Column_List" />
-	   from tbl_order
-	   where member_id = #{memberId,jdbcType=BIGINT} 
-	   and status!=3
+		from tbl_order
+		where member_id = #{memberId,jdbcType=BIGINT}
+		and status!=3
+	</select>
+	<!-- 查询拼接完成并处理状态为0的订单 -->
+	<select id="selectStitchedProcessOrder" resultMap="BaseResultMap"
+		parameterType="com.unre.photo.comm.dal.model.Order">
+		select a.id,a.benaco_scan_id,a.version
+		from tbl_order a,tbl_panorama b
+		where a.id=b.order_id
+		and a.`status`=#{status,jdbcType=CHAR}
+		and b.stitch_status=2
+		group by a.id
 	</select>
 
 	<update id="updateBySelective" parameterType="com.unre.photo.comm.dal.model.Order">

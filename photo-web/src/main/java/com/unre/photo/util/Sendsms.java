@@ -18,8 +18,6 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;   
 import org.dom4j.Element;   
 
-
-
 public class Sendsms {
 	
 	private static String Url = "http://106.ihuyi.cn/webservice/sms.php?method=Submit";
@@ -33,7 +31,7 @@ public class Sendsms {
 
 		int mobile_code = (int)((Math.random()*9+1)*100000);
 
-	    String content = new String("尊敬的用户，您好！感谢您使用photo平台，您正在进行短信验证，本次请求的验证码为：" + mobile_code + "。请不要把验证码泄露给其他人。");
+	    String content = new String("尊敬的用户，您好！感谢您使用盎维全景平台，您正在进行短信验证，本次请求的验证码为：" + mobile_code + "。请不要把验证码泄露给其他人。");
 
 		NameValuePair[] data = {//提交短信
 			    new NameValuePair("account", "C66102472"), //查看用户名是登录用户中心->验证码短信->产品总览->APIID

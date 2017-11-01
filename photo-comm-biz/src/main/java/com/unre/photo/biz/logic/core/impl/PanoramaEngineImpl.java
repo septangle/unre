@@ -197,13 +197,14 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 
 			OrderDto orderParm = new OrderDto();
 			orderParm.setStatus(AppConstants.ORDER_STATUS_INIT);
-			List<OrderDto> orderList = orderBizImpl.queryOrder(orderParm);
+			List<OrderDto> orderList = orderBizImpl.findStitchedProcessOrder(orderParm);//findStitchedProcessOrder
+			if (orderList!=null)
 			for (OrderDto order : orderList) {
 				String benacoScanId = order.getBenacoScanId();
 				//2.查询全景表中 2D照片拼接完成的 + 订单状态为：未处理 的记录
 				PanoramaDto panDtoParm = new PanoramaDto();
 				panDtoParm.setOrderId(pEngineDto.getOrderId());
-				List<PanoramaDto> panDtoList = panoramaBizImpl.queryStitchedProcessSource(panDtoParm);
+				List<PanoramaDto> panDtoList = panoramaBizImpl.queryStitchedProcessSource(panDtoParm);//queryOrder改成queryStitchedProcessSource
 
 				if (panDtoList == null || panDtoList.size() == 0) {
 					continue;

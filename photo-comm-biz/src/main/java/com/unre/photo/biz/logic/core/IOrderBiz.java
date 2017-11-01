@@ -24,7 +24,6 @@ public interface IOrderBiz {
 	 */
 	public OrderDto findOrderById(Long orderId) throws BusinessException;
 
-
 	/**
 	 * 新增Process
 	 * 
@@ -44,8 +43,6 @@ public interface IOrderBiz {
 	 */
 	public boolean updateOrder(OrderDto orderDto) throws BusinessException;
 
-
-	
 	/**
 	 * 删除Process
 	 * 
@@ -55,7 +52,7 @@ public interface IOrderBiz {
 	 * @throws BusinessException
 	 */
 	public boolean deleteProcess(Long id) throws BusinessException;
-	
+
 	/**
 	 * 保存已经成功上传至benaco的图片
 	 * 
@@ -65,9 +62,9 @@ public interface IOrderBiz {
 	 * @return boolean 
 	 * @throws BusinessException
 	 */
-	public boolean saveUploadedImages(String benacoScanId,List<ImageInfoDto> imageInfoList,List<File> thumbFiles) throws BusinessException;
-	
-	
+	public boolean saveUploadedImages(String benacoScanId, List<ImageInfoDto> imageInfoList, List<File> thumbFiles)
+			throws BusinessException;
+
 	/**
 	 * 查询当前用户场景
 	 * 
@@ -76,7 +73,7 @@ public interface IOrderBiz {
 	 * @return list
 	 */
 	public List<SceneDto> queryMemberScene(OrderDto orderDto) throws BusinessException;
-	
+
 	/**
 	 * 通过ID查询Order
 	 * 
@@ -86,14 +83,14 @@ public interface IOrderBiz {
 	 * @throws BusinessException
 	 */
 	public OrderDto findOrder(OrderDto orderDto) throws BusinessException;
-   
+
 	/**	
-    * @param orderDto
-    * @return
-    * @throws BusinessException
-    */
+	* @param orderDto
+	* @return
+	* @throws BusinessException
+	*/
 	public List<OrderDto> queryOrder(OrderDto orderDto) throws BusinessException;
-	
+
 	/**
 	 * 更新Is_deleted
 	 * 
@@ -101,12 +98,19 @@ public interface IOrderBiz {
 	 * @return boolean
 	 */
 	public boolean removeOrder(OrderDto orderDto) throws BusinessException;
-	
+
 	/**
 	 * 查询消费记录
 	 * 
 	 * @param memberId
 	 */
 	public List<OrderDto> findConsumeOrder(OrderDto orderDto) throws BusinessException;
-	
+
+	/**	
+	 * @param orderDto
+	 * @return
+	 * @throws BusinessException
+	 */
+	public List<OrderDto> findStitchedProcessOrder(OrderDto orderDto) throws BusinessException;
+
 }

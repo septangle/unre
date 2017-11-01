@@ -118,4 +118,21 @@ public class OrderController extends BaseController<OrderController> {
 		orderRequest.setOrderDto(orderDto);
 		return orderFacade.findConsumeOrder(orderRequest);
 	}
+	/**
+	 * 查询该用户下所有2D未拼接的订单
+	 * @param memberId
+	 * @resp
+	 */
+	@ApiOperation(value ="根据memberId查询所有2D未拼接订单",httpMethod="POST",response=OrderResponse.class)
+	@ApiImplicitParams({@ApiImplicitParam(name="orderDto.memberId",value="memberId",required=true,dataType="Long")})
+	@RequestMapping(value="/findIncompleteOrder.do",method=RequestMethod.POST)
+	public @ResponseBody OrderResponse findIncompleteOrder(@RequestBody OrderRequest request,
+			HttpServletRequest servletRequest) throws Exception {
+		OrderDto orderDto=request.getOrderDto();
+		orderDto.setStatus(AppConstants.PANORAMA_STITCH_INIT);
+		orderDto.setMemberId(request.getOrderDto().getMemberId());
+		request.setOrderDto(orderDto);
+		return orderFacade.queryOrder(request);
+		
+	}
 }
