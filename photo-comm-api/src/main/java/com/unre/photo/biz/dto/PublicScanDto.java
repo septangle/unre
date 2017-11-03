@@ -2,45 +2,24 @@ package com.unre.photo.biz.dto;
 
 import java.util.Date;
 
-public class SceneDto {
- 
-	private Long orderId;
+public class PublicScanDto {
 	
 	private Long memberId;
- 
-	private String status;
 
 	private String benacoScanId;
 
 	private String description;
 	
-    private String thumbImagePath;
-
+	private String thumbImagePath;
+	
 	private Date createTime;
 
-	public Long getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
-
-	
 	public Long getMemberId() {
 		return memberId;
 	}
 
 	public void setMemberId(Long memberId) {
 		this.memberId = memberId;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public String getBenacoScanId() {
@@ -74,6 +53,8 @@ public class SceneDto {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+
 	
 	
+
 }

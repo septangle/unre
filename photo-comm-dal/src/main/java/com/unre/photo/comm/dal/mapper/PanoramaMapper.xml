@@ -15,12 +15,14 @@
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="update_by" property="updateBy" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="upload_status" property="uploadStatus" jdbcType="CHAR" />
+		
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, order_id, image_path, thumb_image_path, stitch_status,
 		type,
 		is_deleted, create_by,
-		create_time, update_by, update_time
+		create_time, update_by, update_time,upload_status
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -41,7 +43,7 @@
 		stitch_status, type,
 		is_deleted,
 		create_by, create_time, update_by,
-		update_time)
+		update_time,upload_status)
 		values
 		(#{orderId,jdbcType=BIGINT}, #{imagePath,jdbcType=VARCHAR},
 		#{thumbImagePath,jdbcType=VARCHAR},
@@ -49,7 +51,8 @@
 		#{type,jdbcType=CHAR}, #{isDeleted,jdbcType=CHAR},
 		#{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
 		#{updateBy,jdbcType=INTEGER},
-		#{updateTime,jdbcType=TIMESTAMP})
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{uploadStatus,jdbcType=CHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="com.unre.photo.comm.dal.model.Panorama"
 		useGeneratedKeys="true" keyProperty="id">
@@ -85,6 +88,9 @@
 			<if test="updateTime != null">
 				update_time,
 			</if>
+			<if test="uploadStatus != null">
+				upload_Status,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="orderId != null">
@@ -117,6 +123,9 @@
 			<if test="updateTime != null">
 				#{updateTime,jdbcType=TIMESTAMP},
 			</if>
+			<if test="uploadStatus != null">
+				#{uploadStatus,jdbcType=TIMESTAMP},
+			</if>
 		</trim>
 	</insert>
 
@@ -138,7 +147,8 @@
 		update_by =
 		#{updateBy,jdbcType=INTEGER},
 		update_time =
-		#{updateTime,jdbcType=TIMESTAMP}
+		#{updateTime,jdbcType=TIMESTAMP},
+		upload_Status=#{uploadStatus,jdbcType=CHAR}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 

@@ -36,13 +36,12 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 
 	@Autowired
 	private IPanoramaEngineFacade panoramaEngineFacade;//photo upload
-	
-	@Autowired 
+
+	@Autowired
 	private IOrderFacade iOrderFacade;
 
 	@Autowired
 	private PhotoUrl photoUrl; //key、url
-	
 
 	/**
 	 * 新建场景（上传全景照片）
@@ -52,7 +51,7 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	@RequestMapping(value = "/addPhotos.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse addPhotos(@RequestParam("title") String title,
 			@RequestParam MultipartFile[] files, @RequestParam("number") String number,
-			HttpServletRequest servletRequest) throws Exception {
+			@RequestParam("privacy") String privacy, HttpServletRequest servletRequest) throws Exception {
 		PanoramaEngineRequest request = new PanoramaEngineRequest();
 		PanoramaEngineDto panoramaEngineDto = new PanoramaEngineDto();
 		request.setPanoramaEngineDto(panoramaEngineDto);
@@ -63,9 +62,9 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
 					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
 		}
-		List<ImageInfoDto> imageInfoList =FileUploadUtil.upload(files, number, merberId);
+		List<ImageInfoDto> imageInfoList = FileUploadUtil.upload(files, number, merberId);
 		//生成缩略图
-		List<File> fileThumb=FileUploadUtil.UploadThumbFile(imageInfoList,merberId);
+		List<File> fileThumb = FileUploadUtil.UploadThumbFile(imageInfoList, merberId);
 		request.getPanoramaEngineDto().setApiKey(photoUrl.getKey());
 		request.getPanoramaEngineDto().setApiBaseUrl(photoUrl.getUrl());
 		request.getPanoramaEngineDto().setTitle(title);
@@ -73,9 +72,9 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		request.getPanoramaEngineDto().setFileThumb(fileThumb);
 		request.getPanoramaEngineDto().setNumber(number);
 		request.getPanoramaEngineDto().setUid(merberId);
+		request.getPanoramaEngineDto().setPrivacy(privacy);
 		return panoramaEngineFacade.addPhotos(request);
 	}
-
 
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "panoramaEngineDto.benacoScanId", value = "Benaco Scan Id", required = true, dataType = "string"), })
@@ -94,7 +93,7 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	 */
 	@RequestMapping(value = "/addStitchedPhotos.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse addPhotoStitchCompleted(@RequestParam("orderId") String orderId,
-			@RequestParam MultipartFile[] files,HttpServletRequest servletRequest) throws Exception {
+			@RequestParam MultipartFile[] files, HttpServletRequest servletRequest) throws Exception {
 		PanoramaEngineRequest request = new PanoramaEngineRequest();
 		PanoramaEngineDto panoramaEngineDto = new PanoramaEngineDto();
 		request.setPanoramaEngineDto(panoramaEngineDto);
@@ -103,15 +102,15 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		orderDto.setId(Long.parseLong(orderId));
 		orderRequest.setOrderDto(orderDto);
 		//1、取memberId
-		OrderResponse orderResponse=iOrderFacade.queryOrder(orderRequest);
-		orderDto=orderResponse.getOrderDtoList().get(0);
-        String number =AppConstants.NUMBER_MESSAGE_3D;
-        //2、上传图片至server
-        List<ImageInfoDto> imageInfoList =FileUploadUtil.upload(files, number, orderDto.getMemberId());
-        Long orderIdParam=Long.parseLong(orderId);
-        request.getPanoramaEngineDto().setOrderId(orderIdParam);
-        request.getPanoramaEngineDto().setImageInfoList(imageInfoList);
-        //3、保存数据库
+		OrderResponse orderResponse = iOrderFacade.queryOrder(orderRequest);
+		orderDto = orderResponse.getOrderDtoList().get(0);
+		String number = AppConstants.NUMBER_MESSAGE_3D;
+		//2、上传图片至server
+		List<ImageInfoDto> imageInfoList = FileUploadUtil.upload(files, number, orderDto.getMemberId());
+		Long orderIdParam = Long.parseLong(orderId);
+		request.getPanoramaEngineDto().setOrderId(orderIdParam);
+		request.getPanoramaEngineDto().setImageInfoList(imageInfoList);
+		//3、保存数据库
 		return panoramaEngineFacade.addPhotoStitchCompleted(request);
 	}
 

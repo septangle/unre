@@ -27,6 +27,8 @@ public class PanoramaEngineDto {
 	private String number;
 	
 	private List<File> fileThumb;
+	
+    private String privacy;
 
 
 	public List<File> getFileThumb() {
@@ -123,6 +125,14 @@ public class PanoramaEngineDto {
 
 	public void setNumber(String number) {
 		this.number = number;
+	}
+
+	public String getPrivacy() {
+		return privacy;
+	}
+
+	public void setPrivacy(String privacy) {
+		this.privacy = privacy;
 	}
 
 	

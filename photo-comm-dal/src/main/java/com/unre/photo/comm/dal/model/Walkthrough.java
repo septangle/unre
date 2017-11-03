@@ -20,6 +20,8 @@ public class Walkthrough {
     private Integer updateBy;
 
     private Date updateTime;
+    
+    private String privacy;
 
     public Long getId() {
         return id;
@@ -92,4 +94,14 @@ public class Walkthrough {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getPrivacy() {
+		return privacy;
+	}
+
+	public void setPrivacy(String privacy) {
+		this.privacy = privacy;
+	}
+    
+    
 }

@@ -138,7 +138,7 @@ public class OrderImpl implements IOrderBiz {
 	public List<SceneDto> queryMemberScene(OrderDto orderDto) throws BusinessException {
 		List<SceneDto> sceneDtoList = new ArrayList<SceneDto>();
 		try {
-			//通用方法，判断Description字段是否存在，进行模糊查询
+			//通用方法，判断Status字段是否存在，进行查询
 			if (orderDto.getStatus()!=null) {
 				orderDto.setDescription(orderDto.getStatus());
 			}
@@ -148,9 +148,11 @@ public class OrderImpl implements IOrderBiz {
 				for (Order orderParam : orderList) {
 					SceneDto sceneDto= new SceneDto();
 					sceneDto.setOrderId(orderParam.getId());
+					sceneDto.setMemberId(orderParam.getMemberId());
 					sceneDto.setStatus(orderParam.getStatus());
 					sceneDto.setBenacoScanId(orderParam.getBenacoScanId());
 					sceneDto.setDescription(orderParam.getDescription());
+					
 					//取每个Panorama对象的第一张缩略图
 					if (orderParam.getPanorama().size()!=0) {
 						sceneDto.setThumbImagePath(orderParam.getPanorama().get(0).getThumbImagePath());

@@ -1,5 +1,8 @@
 package com.unre.photo.comm.dal.dao;
 
+import java.util.List;
+
+import com.unre.photo.comm.dal.model.PublicScan;
 import com.unre.photo.comm.dal.model.Walkthrough;
 
 public interface WalkthroughMapper {
@@ -15,6 +18,7 @@ public interface WalkthroughMapper {
 
     int updateByPrimaryKey(Walkthrough record);
     
-    /****************自定义查询*******************/    
+    /****************自定义查询*******************/  
+    List<PublicScan> getPubilcScan();
 
 }

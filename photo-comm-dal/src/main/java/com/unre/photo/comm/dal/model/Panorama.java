@@ -24,6 +24,8 @@ public class Panorama {
     private Integer updateBy;
 
     private Date updateTime;
+    
+    private String uploadStatus;
 
     public Long getId() {
         return id;
@@ -112,4 +114,14 @@ public class Panorama {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getUploadStatus() {
+		return uploadStatus;
+	}
+
+	public void setUploadStatus(String uploadStatus) {
+		this.uploadStatus = uploadStatus;
+	}
+    
+    
 }

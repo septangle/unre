@@ -15,10 +15,12 @@ import com.unre.photo.biz.dto.ImageInfoDto;
 import com.unre.photo.biz.dto.OrderDto;
 import com.unre.photo.biz.dto.PanoramaDto;
 import com.unre.photo.biz.dto.PanoramaEngineDto;
+import com.unre.photo.biz.dto.WalkthroughDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.core.IOrderBiz;
 import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
+import com.unre.photo.biz.logic.core.IWalkthroughBiz;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.comm.dal.dao.PhotoMapper;
 import com.unre.photo.comm.dal.model.Photo;
@@ -41,6 +43,8 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	private OrderEngine orderEngine;
 	@Autowired
 	private PhotoMapper photoMapper;
+	@Autowired
+	private IWalkthroughBiz walkthroughBiz;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -98,6 +102,12 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 			orderDto.setGoodsNum(panoramanumber);//图片数量除以点数
 			orderDto.setGoodsId(AppConstants.GOODS_ID_BENACO);//商品id
 			OrderDto order = orderBizImpl.addOrder(orderDto);
+			//添加至walkthrough
+			WalkthroughDto walkthroughDto = new WalkthroughDto();
+			walkthroughDto.setOrderId(order.getId());
+			walkthroughDto.setThumbImagePath(thumbFiles.get(0).toString());
+			walkthroughDto.setPrivacy(panoramaEngineDto.getPrivacy());
+			walkthroughBiz.addWalkthrough(walkthroughDto);
 
 			//3.添加图片
 			if ((AppConstants.NUMBER_MESSAGE_3D).equals(number)) {//3D
