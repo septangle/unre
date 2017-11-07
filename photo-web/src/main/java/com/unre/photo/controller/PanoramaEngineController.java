@@ -20,10 +20,13 @@ import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IOrderFacade;
 import com.unre.photo.biz.logic.facade.IPanoramaEngineFacade;
+import com.unre.photo.biz.logic.facade.IPanoramaFacade;
 import com.unre.photo.biz.request.OrderRequest;
 import com.unre.photo.biz.request.PanoramaEngineRequest;
+import com.unre.photo.biz.request.PanoramaRequest;
 import com.unre.photo.biz.response.OrderResponse;
 import com.unre.photo.biz.response.PanoramaEngineResponse;
+import com.unre.photo.biz.response.PanoramaResponse;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.FileUploadUtil;
 import com.unre.photo.util.PhotoUrl;
@@ -42,6 +45,9 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 
 	@Autowired
 	private PhotoUrl photoUrl; //key、url
+	
+	@Autowired
+	private IPanoramaFacade iPanoramaFacade;
 
 	/**
 	 * 新建场景（上传全景照片）
@@ -113,5 +119,19 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		//3、保存数据库
 		return panoramaEngineFacade.addPhotoStitchCompleted(request);
 	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "panoramaDto.id", value = "id", required = true, dataType = "Long"), 
+		@ApiImplicitParam(name = "panoramaDto.uploadStatus", value = "uploadStatus", required = true, dataType = "String"), 
+
+	})
+@RequestMapping(value = "/uddatestatus.do", method = RequestMethod.POST)
+public @ResponseBody PanoramaResponse updateStatus(@RequestBody PanoramaRequest request,
+		HttpServletRequest servletRequest) throws Exception {
+
+	return iPanoramaFacade.updatePanorama(request);
+}
+
+	
 
 }

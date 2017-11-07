@@ -1,18 +1,22 @@
 package com.unre.photo.util;
 
+import java.io.File;
+
 public class ImageInfo {
 	
-	private String imagePath;
+	private File imagePath;
 	
 	private Long id;
 
 	
 
-	public String getImagePath() {
+
+
+	public File getImagePath() {
 		return imagePath;
 	}
 
-	public void setImagePath(String imagePath) {
+	public void setImagePath(File imagePath) {
 		this.imagePath = imagePath;
 	}
 

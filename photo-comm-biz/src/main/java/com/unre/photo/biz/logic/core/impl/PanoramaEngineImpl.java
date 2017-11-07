@@ -237,7 +237,8 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				ImageInfo imageInfo = new ImageInfo();
 				List<ImageInfo> imageFiles = new ArrayList<ImageInfo>();
 				for (PanoramaDto panDto : panDtoList) {
-					imageInfo.setImagePath(panDto.getImagePath());
+					File file = new File(panDto.getImagePath());
+					imageInfo.setImagePath(file);
 					imageInfo.setId(panDto.getId());
 					imageFiles.add(imageInfo);
 				}
@@ -258,13 +259,38 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				//5.调用Benaco 3D照片上传接口
 				String addPhotosUrl = pEngineDto.getApiBaseUrl() + benacoScanId + "/add-photos";
 				long start = System.currentTimeMillis();
-				HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl, pEngineDto.getApiKey(),
-						imageFiles);
+				HttpClientResponse hcResponse;
+				PanoramaDto panoramaDto = new PanoramaDto();
+				List<ImageInfo> imageList = new ArrayList<>();
+				try {
+					for (int i = 0; i < imageFiles.size(); i++) {
+						imageInfo.setId(imageFiles.get(i).getId());
+						imageInfo.setImagePath(imageFiles.get(i).getImagePath());
+						imageList.add(imageInfo);
+						hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl, pEngineDto.getApiKey(),
+								imageList);
+						if ("200".equals(hcResponse.getCode())) {
+							panoramaDto.setId(imageFiles.get(i).getId());
+							panoramaDto.setUploadStatus("2");
+							panoramaBizImpl.updatePanorama(panoramaDto);
+						}
+						imageList.clear();
+						System.out.println(hcResponse);
+
+					}
+			
+				} catch (Exception e) {
+					System.out.println("上传异常***");
+					panoramaDto.setId((long)2793);
+					panoramaDto.setUploadStatus("0");
+					panoramaBizImpl.updatePanorama(panoramaDto);
+					e.printStackTrace();
+				}
 				long end = System.currentTimeMillis();
 				System.out.println("调用Benaco add-photos 耗时==" + (end - start) / 1000 + " 秒");
-				if (!"200".equals(hcResponse.getCode())) {
+/*				if (!"200".equals(hcResponse.getCode())) {
 					return false;
-				}
+				}*/
 
 				//TODO Benaco 处理上传图片需要一点时间，下面的运行早了会导致失败
 				//Thread.sleep(4*60*1000);
