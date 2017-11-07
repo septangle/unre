@@ -88,6 +88,7 @@ public class PanoramaImpl implements IPanoramaBiz {
 		}
 		return flag;
 	}
+	
 
 	@Override
 	public List<PanoramaDto> selectByPhoto(PanoramaDto panoramaDto) throws BusinessException {

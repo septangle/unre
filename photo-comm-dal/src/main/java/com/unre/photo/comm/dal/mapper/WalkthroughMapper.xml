@@ -17,6 +17,7 @@
 	
 	<resultMap id="WalkResultMap" type="com.unre.photo.comm.dal.model.PublicScan" >
 	   <result column="member_id" property="memberId" jdbcType="BIGINT" />
+	   <result column="member_name" property="memberName" jdbcType="VARCHAR"/>
 	   <result column="benaco_scan_id" property="benacoScanId"
 			jdbcType="VARCHAR" />
 	   <result column="description" property="description" jdbcType="VARCHAR" />
@@ -176,9 +177,12 @@
 	<!--===============自定义sql =============== -->
 	<select id="getPubilcScan" resultMap="WalkResultMap" >
 		select
-		a.member_id,a.benaco_scan_id,a.description,b.thumb_image_path,a.create_time
-		from tbl_order a,tbl_walkthrough b where a.id=b.order_id and
-		a.status=2 and b.privacy=0
+		a.member_id,c.member_name,a.benaco_scan_id,a.description,
+		b.thumb_image_path,a.create_time
+		from tbl_order a,tbl_walkthrough b,tbl_member c
+		where a.id=b.order_id and a.member_id=c.id
+		and a.status=2 
+		and b.privacy=0
 	</select>
 
 </mapper>

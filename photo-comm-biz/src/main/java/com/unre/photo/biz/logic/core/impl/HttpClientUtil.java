@@ -1,6 +1,5 @@
-package com.unre.photo.util;
+package com.unre.photo.biz.logic.core.impl;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -22,6 +21,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -41,13 +41,23 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.unre.photo.biz.dto.PanoramaDto;
+import com.unre.photo.biz.exception.BusinessException;
+import com.unre.photo.util.HttpClientResponse;
+import com.unre.photo.util.ImageInfo;
 
 /**
  * 基于Apache HttpClient的封装，支持HTTP GET、POST请求，支持多文件上传
  */
 @SuppressWarnings("deprecation")
+@Service
 public class HttpClientUtil {
-
+	
+	@Autowired
+	private static PanoramaImpl panoramaImpl = new PanoramaImpl();
 	private static PoolingHttpClientConnectionManager connMgr;
 	private static RequestConfig requestConfig;
 	private static final int MAX_TIMEOUT = 7000;
@@ -174,7 +184,8 @@ public class HttpClientUtil {
 		return hcResponse;
 	}
 
-	public static HttpClientResponse doPostMultipart(String apiUrl, String apiKey, List<File> fileList)
+	@SuppressWarnings("unchecked")
+	public static HttpClientResponse doPostMultipart(String apiUrl, String apiKey, List<ImageInfo> fileList)
 			throws Exception {
 		HttpClientResponse hcResponse = new HttpClientResponse();
 		try {
@@ -184,33 +195,26 @@ public class HttpClientUtil {
 			MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
 			//multipartEntityBuilder.addTextBody("key", "\"3c7c6941-2204-4ee7-a4b5-0981e0e6e09c\"",ContentType.create("text/plain", Charset.forName("utf-8")));
 			//TODO benaco 有个小bug 这边的key需要加上单引号
-			apiKey = "\"" + apiKey + "\"";  
-			multipartEntityBuilder.addTextBody("key", apiKey ,ContentType.create("text/plain", Charset.forName("utf-8")));
-			if (fileList != null) {
-				for (int i = 0; i < fileList.size(); i++) {
-					multipartEntityBuilder.addBinaryBody("photo" + (i + 1), fileList.get(i));
+			apiKey = "\"" + apiKey + "\"";
+			multipartEntityBuilder.addTextBody("key", apiKey,
+					ContentType.create("text/plain", Charset.forName("utf-8")));
+			@SuppressWarnings("rawtypes")
+			List<ImageInfo> sendList = new ArrayList();
+			System.out.println("照片张数："+fileList.size());
+			ImageInfo imageInfo = new ImageInfo();
+			for (int i = 0; i < fileList.size(); i++) {//循环照片大小
+				imageInfo=new ImageInfo();
+				imageInfo.setId(fileList.get(i).getId());
+				imageInfo.setImagePath(fileList.get(i).getImagePath());
+				sendList.add(imageInfo);//添加至集合
+				System.out.println(fileList.get(i));
+				if (sendList.size()==1) {//当大于X张照片时进行上传
+					System.out.println(sendList.size());
+					hcResponse=httpClientPost(multipartEntityBuilder, sendList, httpPost, httpClient);
+					sendList.clear();//清空集合
 				}
 			}
 
-			// 生成 HTTP 实体
-			HttpEntity httpEntity = multipartEntityBuilder.build();
-			// 设置 POST 请求的实体部分
-			httpPost.setEntity(httpEntity);
-			// 发送 HTTP 请求
-			HttpResponse httpResponse = httpClient.execute(httpPost);
-
-			int statusCode = httpResponse.getStatusLine().getStatusCode();
-			if (statusCode == HttpStatus.SC_OK) {
-				hcResponse.setCode(""+statusCode);
-				/*
-				 * // 接收远程输入流 inStream = httpResponse.getEntity().getContent();
-				 * // 分段读取输入流数据 ByteArrayOutputStream baos = new
-				 * ByteArrayOutputStream(); byte[] buf = new byte[1024]; int len
-				 * = -1; while ((len = inStream.read(buf)) != -1) {
-				 * baos.write(buf, 0, len); } // 将数据转换为字符串 retStr = new
-				 * String(baos.toByteArray());
-				 */
-			}
 		} catch (Exception e) {
 			hcResponse.setCode("-1");
 			e.printStackTrace();
@@ -220,6 +224,37 @@ public class HttpClientUtil {
 		return hcResponse;
 	}
 
+	public static HttpClientResponse httpClientPost(MultipartEntityBuilder multipartEntityBuilder, List<ImageInfo> sendList,
+			HttpPost httpPost, CloseableHttpClient httpClient) throws ClientProtocolException, IOException, BusinessException {
+		HttpClientResponse hcResponse = new HttpClientResponse();
+		try {
+			for (int i = 0; i < sendList.size(); i++) {
+				multipartEntityBuilder.addTextBody("photo" + (i + 1), sendList.get(i).getImagePath());
+			}
+			// 生成 HTTP 实体
+			HttpEntity httpEntity = multipartEntityBuilder.build();
+			// 设置 POST 请求的实体部分
+			httpPost.setEntity(httpEntity);
+			// 发送 HTTP 请求
+			HttpResponse httpResponse = httpClient.execute(httpPost);
+
+			int statusCode = httpResponse.getStatusLine().getStatusCode();
+			if (statusCode == HttpStatus.SC_OK) {
+				PanoramaDto panoramaDto = new PanoramaDto();
+				panoramaDto.setUploadStatus("2");;
+				panoramaDto.setId(sendList.get(0).getId());
+				panoramaImpl.updatePanorama(panoramaDto);
+				hcResponse.setCode("" + statusCode);
+			}
+		} catch (Exception e) {
+			PanoramaDto panoramaDto = new PanoramaDto();
+			panoramaDto.setUploadStatus("0");
+			panoramaDto.setId(sendList.get(0).getId());
+			panoramaImpl.updatePanorama(panoramaDto);
+			e.printStackTrace();
+		}
+		return hcResponse;
+	}
 	/**
 	 * 发送 SSL POST 请求（HTTPS），K-V形式
 	 * 

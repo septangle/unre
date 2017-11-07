@@ -15,8 +15,7 @@
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="update_by" property="updateBy" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <result column="upload_status" property="uploadStatus" jdbcType="CHAR" />
-		
+        <result column="upload_status" property="uploadStatus" jdbcType="CHAR" />		
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, order_id, image_path, thumb_image_path, stitch_status,
@@ -185,6 +184,9 @@
 			<if test="updateTime != null">
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
 			</if>
+			<if test="uploadStatus != null">
+			    upload_status = #{uploadStatus,jdbcType=CHAR}
+			</if>
 		</set>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
@@ -257,8 +259,8 @@
 		<include refid="Order_And_Panorama_Column_List" />
 		from tbl_order o ,tbl_panorama p
 		where o.id = p.order_id
-		and o.status =
-		'0'
+		and o.status = '0'  
+		and p.upload_status = '0' 
 		<if test="orderId != null">
 			and p.order_id = #{orderId,jdbcType=BIGINT}
 		</if>
@@ -266,8 +268,13 @@
 			and p.stitch_status = #{stitchStatus,jdbcType=CHAR}
 		</if>
 	</select>
-
-
+     
+     <!-- 根据订单Id修改panorama表上传状态 -->
+    <update id="updatePanoramabyOrderId" parameterType="com.unre.photo.comm.dal.model.Panorama">
+     update tbl_panorama
+     set upload_status = #{uploadStatus,jdbcType=CHAR}
+     where order_id = #{orderId,jdbcType=BIGINT} and upload_status='0'
+    </update>
 
 
 

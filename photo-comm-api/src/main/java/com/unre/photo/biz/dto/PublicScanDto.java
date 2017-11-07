@@ -5,6 +5,8 @@ import java.util.Date;
 public class PublicScanDto {
 	
 	private Long memberId;
+	
+	private String memberName;
 
 	private String benacoScanId;
 
@@ -20,6 +22,15 @@ public class PublicScanDto {
 
 	public void setMemberId(Long memberId) {
 		this.memberId = memberId;
+	}
+
+	
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
 	}
 
 	public String getBenacoScanId() {

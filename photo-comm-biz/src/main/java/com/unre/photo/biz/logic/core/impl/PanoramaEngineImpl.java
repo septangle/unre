@@ -22,10 +22,12 @@ import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
 import com.unre.photo.biz.logic.core.IWalkthroughBiz;
 import com.unre.photo.comm.AppConstants;
+import com.unre.photo.comm.dal.dao.PanoramaMapper;
 import com.unre.photo.comm.dal.dao.PhotoMapper;
+import com.unre.photo.comm.dal.model.Panorama;
 import com.unre.photo.comm.dal.model.Photo;
 import com.unre.photo.util.HttpClientResponse;
-import com.unre.photo.util.HttpClientUtil;
+import com.unre.photo.util.ImageInfo;
 import com.unre.photo.util.JsonUtil;
 
 import net.sf.json.JSONObject;
@@ -45,6 +47,8 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	private PhotoMapper photoMapper;
 	@Autowired
 	private IWalkthroughBiz walkthroughBiz;
+	@Autowired
+	private PanoramaMapper panoramaMapper;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -213,7 +217,7 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				String benacoScanId = order.getBenacoScanId();
 				//2.查询全景表中 2D照片拼接完成的 + 订单状态为：未处理 的记录
 				PanoramaDto panDtoParm = new PanoramaDto();
-				panDtoParm.setOrderId(pEngineDto.getOrderId());
+				panDtoParm.setOrderId(order.getId());
 				List<PanoramaDto> panDtoList = panoramaBizImpl.queryStitchedProcessSource(panDtoParm);//queryOrder改成queryStitchedProcessSource
 
 				if (panDtoList == null || panDtoList.size() == 0) {
@@ -230,10 +234,12 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 					continue;
 
 				//3.生成 imageFiles
-				List<File> imageFiles = new ArrayList<File>();
+				ImageInfo imageInfo = new ImageInfo();
+				List<ImageInfo> imageFiles = new ArrayList<ImageInfo>();
 				for (PanoramaDto panDto : panDtoList) {
-					File f = new File(panDto.getImagePath());
-					imageFiles.add(f);
+					imageInfo.setImagePath(panDto.getImagePath());
+					imageInfo.setId(panDto.getId());
+					imageFiles.add(imageInfo);
 				}
 
 				//4.更新订单状态为 "处理中"
@@ -242,6 +248,12 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				orderParm.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
 				orderParm.setVersion(order.getVersion());
 				orderBizImpl.updateOrder(orderParm);
+				
+				//panorama表upload_status状态为1 上传中
+				Panorama panDtoParms = new Panorama();
+				panDtoParm.setOrderId(order.getId());
+				panDtoParm.setUploadStatus(AppConstants.ORDER_STATUS_PROCESSING);//1-上传中
+				panoramaMapper.updatePanoramabyOrderId(panDtoParms);
 
 				//5.调用Benaco 3D照片上传接口
 				String addPhotosUrl = pEngineDto.getApiBaseUrl() + benacoScanId + "/add-photos";

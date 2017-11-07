@@ -26,5 +26,7 @@ public interface PanoramaMapper {
     
     List<Panorama> selectPendingProcessPanorama(Panorama record);
     
+    int updatePanoramabyOrderId(Panorama record);
+    
 
 }

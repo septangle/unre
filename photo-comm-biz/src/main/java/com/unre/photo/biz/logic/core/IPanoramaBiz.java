@@ -94,4 +94,5 @@ public interface IPanoramaBiz {
 	 */
 	public boolean updatePanoramaByPrimaryKey(PanoramaDto panoramaDto) throws BusinessException;
 	
+	
 }
