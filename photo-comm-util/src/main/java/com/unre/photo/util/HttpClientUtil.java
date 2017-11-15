@@ -1,5 +1,6 @@
-package com.unre.photo.biz.logic.core.impl;
+package com.unre.photo.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -43,7 +44,6 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
 import com.unre.photo.util.HttpClientResponse;
-import com.unre.photo.util.ImageInfo;
 
 /**
  * 基于Apache HttpClient的封装，支持HTTP GET、POST请求，支持多文件上传
@@ -177,30 +177,43 @@ public class HttpClientUtil {
 		return hcResponse;
 	}
 
-	public static HttpClientResponse doPostMultipart(String apiUrl, String apiKey, List<ImageInfo> fileList)
+	public static HttpClientResponse doPostMultipart(String apiUrl, String apiKey, File fileList)
 			throws Exception {
 		HttpClientResponse hcResponse = new HttpClientResponse();
-
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost(apiUrl);
-		httpPost.setHeader("accept", "application/json");
-		MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-		//multipartEntityBuilder.addTextBody("key", "\"3c7c6941-2204-4ee7-a4b5-0981e0e6e09c\"",ContentType.create("text/plain", Charset.forName("utf-8")));
-		//TODO benaco 有个小bug 这边的key需要加上单引号
-		apiKey = "\"" + apiKey + "\"";
-		multipartEntityBuilder.addTextBody("key", apiKey, ContentType.create("text/plain", Charset.forName("utf-8")));
-		multipartEntityBuilder.addBinaryBody("photo" + (fileList.get(0).getId()+1), fileList.get(0).getImagePath());
-		// 生成 HTTP 实体
-		HttpEntity httpEntity = multipartEntityBuilder.build();
-		// 设置 POST 请求的实体部分
-		httpPost.setEntity(httpEntity);
-		// 发送 HTTP 请求
-		HttpResponse httpResponse = httpClient.execute(httpPost);
-		int statusCode = httpResponse.getStatusLine().getStatusCode();
-		if (statusCode == HttpStatus.SC_OK) {
-			hcResponse.setCode("" + statusCode);
+		try {
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+			HttpPost httpPost = new HttpPost(apiUrl);
+			httpPost.setHeader("accept", "application/json");
+			MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+			//multipartEntityBuilder.addTextBody("key", "\"3c7c6941-2204-4ee7-a4b5-0981e0e6e09c\"",ContentType.create("text/plain", Charset.forName("utf-8")));
+			//TODO benaco 有个小bug 这边的key需要加上单引号
+			apiKey = "\"" + apiKey + "\"";  
+			multipartEntityBuilder.addTextBody("key", apiKey ,ContentType.create("text/plain", Charset.forName("utf-8")));
+			if (fileList != null) {
+				for (int i = 0; i < 1; i++) {
+					multipartEntityBuilder.addBinaryBody("photo" + (i + 1), fileList);					
+				}	
+			}
+				// 生成 HTTP 实体
+				HttpEntity httpEntity = multipartEntityBuilder.build();
+				// 设置 POST 请求的实体部分
+				httpPost.setEntity(httpEntity);
+				// 发送 HTTP 请求
+				HttpResponse httpResponse = httpClient.execute(httpPost);
+				int statusCode = httpResponse.getStatusLine().getStatusCode();
+				if (statusCode == HttpStatus.SC_OK) {
+					hcResponse.setCode(""+statusCode);
+				}	
+		
+		} catch (IOException e) {
+			System.out.println("发送POST请求出现异常"+e);
+			e.printStackTrace();
+		} catch (Exception e) {
+			hcResponse.setCode("-1");
+			e.printStackTrace();
+		}finally {
+			// inStream.close();
 		}
-
 		return hcResponse;
 	}
 
@@ -219,7 +232,6 @@ public class HttpClientUtil {
 		HttpPost httpPost = new HttpPost(apiUrl);
 		CloseableHttpResponse response = null;
 		String httpStr = null;
-
 		try {
 			httpPost.setConfig(requestConfig);
 			List<NameValuePair> pairList = new ArrayList<NameValuePair>(params.size());

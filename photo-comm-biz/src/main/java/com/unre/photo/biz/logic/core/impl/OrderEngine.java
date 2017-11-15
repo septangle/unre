@@ -26,6 +26,7 @@ import com.unre.photo.comm.dal.model.BalanceTrace;
 import com.unre.photo.comm.dal.model.Member;
 import com.unre.photo.comm.dal.model.MemberLevelItem;
 import com.unre.photo.util.HttpClientResponse;
+import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.JsonUtil;
 import com.unre.photo.util.ModelUtil;
 

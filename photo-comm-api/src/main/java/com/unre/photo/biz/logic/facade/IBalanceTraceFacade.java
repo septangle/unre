@@ -14,4 +14,15 @@ public interface IBalanceTraceFacade {
 	 * @throws BusinessException
 	 */
 	public BalanceTraceResponse insertBalanceTrace(BalanceTraceRequest request) throws Exception;
+	
+	/**
+	 * @author zx
+	 * 
+	 * @param request.BalanceTraceDto
+	 * 
+	 * @return Response.BalanceTraceResponse
+	 * @throws Exception
+	 */
+	public BalanceTraceResponse findBalanceTraceByMemberId(BalanceTraceRequest request) throws Exception;
+	
 }

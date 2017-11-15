@@ -195,11 +195,18 @@ public class AppConstants {
 	public final static String VERIFY_CODE_FAIL_CODE="100100002";
 	public final static String VERIFY_CODE_FAIL = "验证失败";
 	public final static String VERIFY_CODE_FAIL_INVALID = "验证码失效";
+	
+	//BalaceTrace
+	//queryBalanceTrace
+	public final static String QUERY_BALANCE_TRACE_CODE="100110001";
+	public final static String QUERY_BALANCE_TRACE_MESSAGE="查询balanceTrace失败";
 
 	
 
 	public final static String SUBJECT = "盎锐全景平台-修改密码保护验证";
 	
 	public final static String UPDATE_PASSWORD="更新失败:token不一致或memberId保存session失效";
+	
+	public final static String UPDATE_ORDER_BY_ID="修改失败：该ID不存在";
 
 }

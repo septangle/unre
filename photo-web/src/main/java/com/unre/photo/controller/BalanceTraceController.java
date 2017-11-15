@@ -1,6 +1,7 @@
 package com.unre.photo.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.unre.photo.biz.request.BalanceTraceRequest;
 import com.unre.photo.biz.response.BalanceTraceResponse;
-
+import com.unre.photo.comm.AppConstants;
+import com.unre.photo.biz.dto.BalanceTraceDto;
+import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IBalanceTraceFacade;
 
 import com.wordnik.swagger.annotations.ApiImplicitParam;
@@ -42,4 +45,34 @@ public class BalanceTraceController extends BaseController<BalanceTraceControlle
 			HttpServletRequest servletRequest) throws Exception {
            	return balanceFacade.insertBalanceTrace(request);
 	}
+	
+	/**
+	 * @author zx
+	 * 
+	 * @param request
+	 * @return BalanceTraceResponse
+	 */
+	@ApiOperation(value = "查询充值/退款记录", httpMethod = "GET", response = BalanceTraceResponse.class)
+	@RequestMapping(value = "/getBalanceTraceRecord.do", method = RequestMethod.GET)
+	public @ResponseBody BalanceTraceResponse findBalanceTraceRecord(HttpServletRequest servletRequest) throws Exception {
+		
+		HttpSession session = servletRequest.getSession();
+		Long memberId = (Long) session.getAttribute("memberId");
+
+		//判断用户是否登录
+		if (memberId == null) {
+			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
+					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		}
+		
+		BalanceTraceRequest request = new BalanceTraceRequest();
+		BalanceTraceDto balanceTraceDto = new BalanceTraceDto();
+		balanceTraceDto.setMemberId(memberId);
+		request.setBalanceTraceDto(balanceTraceDto);
+		
+		return balanceFacade.findBalanceTraceByMemberId(request);
+	
+	
+	}
+	
 }

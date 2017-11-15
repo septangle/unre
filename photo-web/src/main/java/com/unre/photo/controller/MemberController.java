@@ -29,6 +29,12 @@ import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 
+/**
+ * 平台会员信息
+ * 
+ * @author zx
+ *
+ */
 @Controller
 @RequestMapping("/member")
 public class MemberController extends BaseController<MemberController> {
@@ -37,32 +43,9 @@ public class MemberController extends BaseController<MemberController> {
 	private IMemberFacade memberFacade; //会员
 
 	/**
-	 * 查询当前会员
-	 * @param ID
-	 * @return Member
-	 */
-	/*	@ApiOperation(value = "查询当前会员", httpMethod = "GET", response = MemberResponse.class)
-		@RequestMapping(value = "/getCurrMember", method = RequestMethod.GET)
-		public @ResponseBody MemberResponse findCurrMemberById(HttpServletRequest servletRequest) throws Exception {
-			HttpSession session = servletRequest.getSession();
-			//根据缓存ID查询当前登录会员
-			Long memberId = (Long) session.getAttribute("memberId");
-			if (memberId == null) {
-				throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
-						AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
-			}
-			MemberRequest request = new MemberRequest();
-			MemberDto memberDto = new MemberDto();
-			memberDto.setId(memberId);
-			request.setMemberDto(memberDto);
-			//根据ID查询
-			return memberFacade.findMemberById(request);
-		}*/
-
-	/**
 	 * 登录
 	 * @param request
-	 * @return Member
+	 * @return member
 	 */
 	@ApiOperation(value = "登录", httpMethod = "POST", response = MemberResponse.class)
 	@ApiImplicitParams({
@@ -101,7 +84,7 @@ public class MemberController extends BaseController<MemberController> {
 	/**
 	 * 注册
 	 * @param request
-	 * @return Member
+	 * @return member
 	 */
 	@ApiOperation(value = "注册", httpMethod = "POST", response = MemberResponse.class)
 	@ApiImplicitParams({
@@ -151,7 +134,7 @@ public class MemberController extends BaseController<MemberController> {
 	/**
 	 * 取当前会员单价
 	 * @param ID
-	 * @return PriceDto
+	 * @return priceDto
 	 */
 	@ApiOperation(value = "查询当前用户price", httpMethod = "GET", response = PriceRespnose.class)
 	@RequestMapping(value = "/getPrice.do", method = RequestMethod.GET)
@@ -174,7 +157,7 @@ public class MemberController extends BaseController<MemberController> {
 	}
 
 	/**
-	 * 
+	 * 查询所有用户
 	 * @param ID
 	 * @return 
 	 */

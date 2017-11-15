@@ -132,7 +132,6 @@ public class PanoramaImpl implements IPanoramaBiz {
 		List<PanoramaDto> panoramaDtoList = new ArrayList<PanoramaDto>();
 		try {
 			Panorama ProcessSource = ModelUtil.dtoToModel(processSourceDto, Panorama.class);
-			ProcessSource.setStitchStatus(AppConstants.PANORAMA_STITCHED);
 			List<Panorama> ProcessSourceList = panoramaMapper.selectPendingProcessPanorama(ProcessSource);
 			if (!CollectionUtils.isEmpty(ProcessSourceList)) {
 				for (Panorama p : ProcessSourceList) {

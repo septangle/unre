@@ -112,5 +112,12 @@ public interface IOrderBiz {
 	 * @throws BusinessException
 	 */
 	public List<OrderDto> findStitchedProcessOrder(OrderDto orderDto) throws BusinessException;
-
+	
+	/**
+	 * 根据id修改场景描述
+	 * @param id
+	 * @return
+	 * @throws BusinessesException
+	 */
+    public boolean updateOrderById(OrderDto orderDto) throws BusinessException;
 }

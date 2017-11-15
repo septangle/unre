@@ -20,19 +20,21 @@ import com.unre.photo.biz.dto.PanoramaEngineDto;
 import com.unre.photo.biz.exception.BusinessException;
 import com.unre.photo.biz.logic.facade.IOrderFacade;
 import com.unre.photo.biz.logic.facade.IPanoramaEngineFacade;
-import com.unre.photo.biz.logic.facade.IPanoramaFacade;
 import com.unre.photo.biz.request.OrderRequest;
 import com.unre.photo.biz.request.PanoramaEngineRequest;
-import com.unre.photo.biz.request.PanoramaRequest;
 import com.unre.photo.biz.response.OrderResponse;
 import com.unre.photo.biz.response.PanoramaEngineResponse;
-import com.unre.photo.biz.response.PanoramaResponse;
 import com.unre.photo.comm.AppConstants;
 import com.unre.photo.util.FileUploadUtil;
 import com.unre.photo.util.PhotoUrl;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
-
+/**
+ *场景信息
+ * 
+ * @author zx
+ *
+ */
 @Controller
 @RequestMapping("/engine")
 public class PanoramaEngineController extends BaseController<PanoramaEngineController> {
@@ -46,18 +48,16 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 	@Autowired
 	private PhotoUrl photoUrl; //key、url
 	
-	@Autowired
-	private IPanoramaFacade iPanoramaFacade;
 
 	/**
 	 * 新建场景（上传全景照片）
 	 * @param request
-	 * @return resp
+	 * @return PanoramaEngineResponse
 	 */
 	@RequestMapping(value = "/addPhotos.do", method = RequestMethod.POST)
 	public @ResponseBody PanoramaEngineResponse addPhotos(@RequestParam("title") String title,
 			@RequestParam MultipartFile[] files, @RequestParam("number") String number,
-			@RequestParam("privacy") String privacy, HttpServletRequest servletRequest) throws Exception {
+			@RequestParam(value="privacy",required=false,defaultValue="1") String privacy, HttpServletRequest servletRequest) throws Exception {
 		PanoramaEngineRequest request = new PanoramaEngineRequest();
 		PanoramaEngineDto panoramaEngineDto = new PanoramaEngineDto();
 		request.setPanoramaEngineDto(panoramaEngineDto);
@@ -120,17 +120,6 @@ public class PanoramaEngineController extends BaseController<PanoramaEngineContr
 		return panoramaEngineFacade.addPhotoStitchCompleted(request);
 	}
 	
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "panoramaDto.id", value = "id", required = true, dataType = "Long"), 
-		@ApiImplicitParam(name = "panoramaDto.uploadStatus", value = "uploadStatus", required = true, dataType = "String"), 
-
-	})
-@RequestMapping(value = "/uddatestatus.do", method = RequestMethod.POST)
-public @ResponseBody PanoramaResponse updateStatus(@RequestBody PanoramaRequest request,
-		HttpServletRequest servletRequest) throws Exception {
-
-	return iPanoramaFacade.updatePanorama(request);
-}
 
 	
 

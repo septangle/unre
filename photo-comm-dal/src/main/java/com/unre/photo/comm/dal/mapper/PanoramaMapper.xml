@@ -254,19 +254,14 @@
 
 	<!-- 查寻待处理3D照片(Panorama)记录 -->
 	<select id="selectPendingProcessPanorama" resultMap="BaseResultMap"
-		parameterType="com.unre.photo.comm.dal.model.Panorama">
-		select
-		<include refid="Order_And_Panorama_Column_List" />
-		from tbl_order o ,tbl_panorama p
-		where o.id = p.order_id
-		and o.status = '0'  
-		and p.upload_status = '0' 
-		<if test="orderId != null">
-			and p.order_id = #{orderId,jdbcType=BIGINT}
-		</if>
-		<if test="stitchStatus != null">
-			and p.stitch_status = #{stitchStatus,jdbcType=CHAR}
-		</if>
+		parameterType="com.unre.photo.comm.dal.model.Panorama">		
+		select b.id,a.benaco_scan_id,a.version,b.image_path,b.stitch_status
+		from tbl_order a,tbl_panorama b
+		where a.id=b.order_id
+		and a.`status`=0
+		and a.id=#{orderId,jdbcType=BIGINT}
+        and b.stitch_status='2'
+		
 	</select>
      
      <!-- 根据订单Id修改panorama表上传状态 -->

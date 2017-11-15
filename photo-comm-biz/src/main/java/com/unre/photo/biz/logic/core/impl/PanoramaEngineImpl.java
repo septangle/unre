@@ -22,12 +22,10 @@ import com.unre.photo.biz.logic.core.IPanoramaBiz;
 import com.unre.photo.biz.logic.core.IPanoramaEngineBiz;
 import com.unre.photo.biz.logic.core.IWalkthroughBiz;
 import com.unre.photo.comm.AppConstants;
-import com.unre.photo.comm.dal.dao.PanoramaMapper;
 import com.unre.photo.comm.dal.dao.PhotoMapper;
-import com.unre.photo.comm.dal.model.Panorama;
 import com.unre.photo.comm.dal.model.Photo;
 import com.unre.photo.util.HttpClientResponse;
-import com.unre.photo.util.ImageInfo;
+import com.unre.photo.util.HttpClientUtil;
 import com.unre.photo.util.JsonUtil;
 
 import net.sf.json.JSONObject;
@@ -47,8 +45,6 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	private PhotoMapper photoMapper;
 	@Autowired
 	private IWalkthroughBiz walkthroughBiz;
-	@Autowired
-	private PanoramaMapper panoramaMapper;
 
 	@Override
 	public PanoramaEngineDto createScan(PanoramaEngineDto panoramaEngineDto) throws Exception {
@@ -208,7 +204,6 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 	public boolean startPanoramaProcess(PanoramaEngineDto pEngineDto) throws Exception {
 		boolean retFlg = false;
 		try {
-
 			OrderDto orderParm = new OrderDto();
 			orderParm.setStatus(AppConstants.ORDER_STATUS_INIT);
 			List<OrderDto> orderList = orderBizImpl.findStitchedProcessOrder(orderParm);//findStitchedProcessOrder
@@ -234,13 +229,10 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 					continue;
 
 				//3.生成 imageFiles
-				ImageInfo imageInfo = new ImageInfo();
-				List<ImageInfo> imageFiles = new ArrayList<ImageInfo>();
+				List<File> imageFiles = new ArrayList<File>();
 				for (PanoramaDto panDto : panDtoList) {
-					File file = new File(panDto.getImagePath());
-					imageInfo.setImagePath(file);
-					imageInfo.setId(panDto.getId());
-					imageFiles.add(imageInfo);
+					File f = new File(panDto.getImagePath());
+					imageFiles.add(f);
 				}
 
 				//4.更新订单状态为 "处理中"
@@ -249,46 +241,19 @@ public class PanoramaEngineImpl implements IPanoramaEngineBiz {
 				orderParm.setStatus(AppConstants.ORDER_STATUS_PROCESSING);
 				orderParm.setVersion(order.getVersion());
 				orderBizImpl.updateOrder(orderParm);
-				
-				//panorama表upload_status状态为1 上传中
-				Panorama panDtoParms = new Panorama();
-				panDtoParm.setOrderId(order.getId());
-				panDtoParm.setUploadStatus(AppConstants.ORDER_STATUS_PROCESSING);//1-上传中
-				panoramaMapper.updatePanoramabyOrderId(panDtoParms);
 
 				//5.调用Benaco 3D照片上传接口
 				String addPhotosUrl = pEngineDto.getApiBaseUrl() + benacoScanId + "/add-photos";
 				long start = System.currentTimeMillis();
-				HttpClientResponse hcResponse;
-				PanoramaDto panoramaDto = new PanoramaDto();
-				List<ImageInfo> imageList = new ArrayList<>();
-				try {
-					for (int i = 0; i < imageFiles.size(); i++) {
-						imageInfo.setId(imageFiles.get(i).getId());
-						imageInfo.setImagePath(imageFiles.get(i).getImagePath());
-						imageList.add(imageInfo);
-						hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl, pEngineDto.getApiKey(),
-								imageList);
-						if ("200".equals(hcResponse.getCode())) {
-							panoramaDto.setId(imageFiles.get(i).getId());
-							panoramaDto.setUploadStatus("2");
-							panoramaBizImpl.updatePanorama(panoramaDto);
-						}
-						imageList.clear();
-						System.out.println(hcResponse);
-
-					}
-			
-				} catch (Exception e) {
-					System.out.println("上传异常***");
-					panoramaDto.setId((long)2793);
-					panoramaDto.setUploadStatus("0");
-					panoramaBizImpl.updatePanorama(panoramaDto);
-					e.printStackTrace();
+				for (int i = 0; i < imageFiles.size(); i++) {
+					@SuppressWarnings("unused")
+					HttpClientResponse hcResponse = HttpClientUtil.doPostMultipart(addPhotosUrl, pEngineDto.getApiKey(),
+							imageFiles.get(i));
 				}
+			
 				long end = System.currentTimeMillis();
 				System.out.println("调用Benaco add-photos 耗时==" + (end - start) / 1000 + " 秒");
-/*				if (!"200".equals(hcResponse.getCode())) {
+			/*	if (!"200".equals(hcResponse.getCode())) {
 					return false;
 				}*/
 

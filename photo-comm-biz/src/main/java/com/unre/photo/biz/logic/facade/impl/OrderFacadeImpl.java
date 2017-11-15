@@ -14,7 +14,7 @@ import com.unre.photo.biz.response.OrderResponse;
 import com.unre.photo.comm.AppConstants;
 
 /**
- * @author TDH
+ * @author zx
  *
  */
 @Service
@@ -49,7 +49,7 @@ public class OrderFacadeImpl implements IOrderFacade {
 	public OrderResponse findCurrMemberPanorama(OrderRequest request) throws Exception {
 		List<SceneDto> sceneDtoList = iorderBiz.queryMemberScene(request.getOrderDto());
 		OrderResponse response = new OrderResponse();
-		response.setSceneDtoList(sceneDtoList);;
+		response.setSceneDtoList(sceneDtoList);
 		return response;
 	}
 
@@ -58,7 +58,7 @@ public class OrderFacadeImpl implements IOrderFacade {
 		OrderResponse response = new OrderResponse();
 		OrderDto orderDto = request.getOrderDto();
 		boolean flag = iorderBiz.removeOrder(orderDto);
-		String code = flag ? AppConstants.SUCCESS_MESSAGE : AppConstants.FAIL_MESSAGE;
+		String code = flag ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
 		response.setCode(code);
 		return response;
 	}
@@ -78,6 +78,18 @@ public class OrderFacadeImpl implements IOrderFacade {
 		OrderDto orderDto = request.getOrderDto();
 		List<OrderDto> orderDtoList = iorderBiz.findConsumeOrder(orderDto);
 		response.setOrderDtoList(orderDtoList);
+		return response;
+	}
+
+	@Override
+	public OrderResponse updateOrderById(OrderRequest request) throws Exception {
+		boolean flag = iorderBiz.updateOrderById(request.getOrderDto());
+		String code = flag ? AppConstants.SUCCESS_CODE : AppConstants.FAIL_CODE;
+		OrderResponse response = new OrderResponse();
+		response.setCode(code);
+/*		if (code.equals(AppConstants.FAIL_CODE)) {
+			response.setError(new Error(AppConstants.FAIL_CODE, AppConstants.UPDATE_ORDER_BY_ID));
+		}*/		
 		return response;
 	}
 

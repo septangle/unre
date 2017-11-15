@@ -26,6 +26,12 @@ import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 
+/**
+ * 订单信息
+ * 
+ * @author zx
+ *
+ */
 @Controller
 @RequestMapping("/order")
 public class OrderController extends BaseController<OrderController> {
@@ -74,7 +80,7 @@ public class OrderController extends BaseController<OrderController> {
 	/**
 	 * 删除order场景(更新is_Deleted字段)
 	 * @param ID
-	 * @return resp
+	 * @return OrderResponse
 	 */
 	@ApiOperation(value = "删除订单", httpMethod = "POST", response = OrderResponse.class)
 	@ApiImplicitParams({ @ApiImplicitParam(name = "orderDto.id", value = "ID", required = true, dataType = "long") })
@@ -87,7 +93,7 @@ public class OrderController extends BaseController<OrderController> {
 	/**
 	 * 根据status查询用户场景
 	 * @param description
-	 * @return resp
+	 * @return OrderResponse
 	 */
 	@ApiOperation(value = "根据status查询场景", httpMethod = "POST", response = OrderResponse.class)
 	@ApiImplicitParams({
@@ -106,7 +112,7 @@ public class OrderController extends BaseController<OrderController> {
 	/**
 	 * 根据member_id查询消费记录
 	 * @param memberId
-	 * @resp
+	 * @OrderResponse
 	 */
 	@ApiOperation(value = "查询当前用户消费记录", httpMethod = "GET", response = OrderResponse.class)
 	@RequestMapping(value = "/findRecordsConsumption.do", method = RequestMethod.GET)
@@ -128,7 +134,7 @@ public class OrderController extends BaseController<OrderController> {
 	/**
 	 * 查询该用户下所有2D未拼接的订单
 	 * @param memberId
-	 * @resp
+	 * @OrderResponse
 	 */
 	@ApiOperation(value = "根据memberId查询所有2D未拼接订单", httpMethod = "POST", response = OrderResponse.class)
 	@ApiImplicitParams({
@@ -153,6 +159,31 @@ public class OrderController extends BaseController<OrderController> {
 	@RequestMapping(value = "/getPubilcScan.do", method = RequestMethod.GET)
 	public @ResponseBody WalkthroughResponse findPubilcScan(HttpServletRequest servletRequest) throws Exception {
 		return walkthroughFacade.getPubilcScan();
+
+	}
+	
+	/**
+	 * 更新场景名
+	 * @param id
+	 * @return OrderResponse
+	 */
+	@ApiOperation(value = "根据订单Id修改场景名", httpMethod = "POST", response = OrderResponse.class)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "orderDto.id", value = "Id", required = true, dataType = "Long"),
+			@ApiImplicitParam(name = "orderDto.description", value = "description", required = true, dataType = "String")})
+	@RequestMapping(value = "/updateOrderById.do", method = RequestMethod.POST)
+	public @ResponseBody OrderResponse updateOrderById(@RequestBody OrderRequest request,
+			HttpServletRequest servletRequest) throws Exception {
+		
+		HttpSession session = servletRequest.getSession();
+		MemberDto member = (MemberDto) session.getAttribute("memberDto");
+		
+		//判断会员是否登录
+		if (member == null) {
+			throw new BusinessException(AppConstants.MEMBER_NOT_LOGIN_ERROR_CODE,
+					AppConstants.MEMBER_NOT_LOGIN_ERROR_MESSAGE);
+		}
+		return orderFacade.updateOrderById(request);
 
 	}
 

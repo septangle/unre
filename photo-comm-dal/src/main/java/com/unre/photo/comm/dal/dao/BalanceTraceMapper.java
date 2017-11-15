@@ -1,6 +1,7 @@
 package com.unre.photo.comm.dal.dao;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.unre.photo.comm.dal.model.BalanceTrace;
 
@@ -25,4 +26,8 @@ public interface BalanceTraceMapper {
     
     // 取得会员当年充值总额
     BigDecimal selectAmountSumByMemberID(Long id);
+    
+    List<BalanceTrace> selectBySelective(BalanceTrace record);
+    
+    List<BalanceTrace> selectRecordById(BalanceTrace record);
 }

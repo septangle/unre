@@ -357,9 +357,8 @@
 		select a.id,a.benaco_scan_id,a.version
 		from tbl_order a,tbl_panorama b
 		where a.id=b.order_id
-		and a.`status`=0
+		and a.`status`=#{status,jdbcType=CHAR}
 		and b.stitch_status=2
-		or a.`status`=1 and b.upload_status=0 
 		group by a.id
 	</select>
 

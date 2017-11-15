@@ -2,7 +2,11 @@ package com.unre.photo.biz.logic.facade;
 
 import com.unre.photo.biz.request.PanoramaEngineRequest;
 import com.unre.photo.biz.response.PanoramaEngineResponse;
-
+/**
+ * 
+ * @author zx
+ *
+ */
 public interface IPanoramaEngineFacade {
 	
 	/**

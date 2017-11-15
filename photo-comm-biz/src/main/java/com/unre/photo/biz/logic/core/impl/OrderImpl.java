@@ -101,7 +101,8 @@ public class OrderImpl implements IOrderBiz {
 
 	@Override
 	@Transactional(rollbackFor = BusinessException.class)
-	public boolean saveUploadedImages(String benacoScanId, List<ImageInfoDto> imageInfoList,List<File> thumbFiles) throws BusinessException {
+	public boolean saveUploadedImages(String benacoScanId, List<ImageInfoDto> imageInfoList, List<File> thumbFiles)
+			throws BusinessException {
 		boolean flg = false;
 		try {
 			//1.更新scan状态
@@ -114,7 +115,7 @@ public class OrderImpl implements IOrderBiz {
 			}
 			Order order = orderList.get(0);
 			//2. 新增scan item
-			int count=0;
+			int count = 0;
 			for (ImageInfoDto imageInfo : imageInfoList) {
 				String imageFullPath = imageInfo.getFullPath();
 				PanoramaDto pScanItemDto = new PanoramaDto();
@@ -139,26 +140,26 @@ public class OrderImpl implements IOrderBiz {
 		List<SceneDto> sceneDtoList = new ArrayList<SceneDto>();
 		try {
 			//通用方法，判断Status字段是否存在，进行查询
-			if (orderDto.getStatus()!=null) {
+			if (orderDto.getStatus() != null) {
 				orderDto.setDescription(orderDto.getStatus());
 			}
 			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
 			List<Order> orderList = orderMapper.selectGetMemberScene(order);
 			if (!CollectionUtils.isEmpty(orderList)) {
 				for (Order orderParam : orderList) {
-					SceneDto sceneDto= new SceneDto();
+					SceneDto sceneDto = new SceneDto();
 					sceneDto.setOrderId(orderParam.getId());
 					sceneDto.setMemberId(orderParam.getMemberId());
 					sceneDto.setStatus(orderParam.getStatus());
 					sceneDto.setBenacoScanId(orderParam.getBenacoScanId());
 					sceneDto.setDescription(orderParam.getDescription());
-					
+
 					//取每个Panorama对象的第一张缩略图
-					if (orderParam.getPanorama().size()!=0) {
+					if (orderParam.getPanorama().size() != 0) {
 						sceneDto.setThumbImagePath(orderParam.getPanorama().get(0).getThumbImagePath());
 
 					}
-                    sceneDto.setCreateTime(orderParam.getCreateTime());
+					sceneDto.setCreateTime(orderParam.getCreateTime());
 					sceneDtoList.add(sceneDto);
 				}
 			}
@@ -213,17 +214,15 @@ public class OrderImpl implements IOrderBiz {
 			Order order = ModelUtil.dtoToModel(orderDto, Order.class);
 			int i = orderMapper.updateBySelective(order);
 			if (i == 0) {
-				throw new BusinessException(AppConstants.REMOVE_ORDER_CODE,
-						AppConstants.REMOVE_ORDER_MESSAGE);
+				throw new BusinessException(AppConstants.REMOVE_ORDER_CODE, AppConstants.REMOVE_ORDER_MESSAGE);
 			}
 			flag = true;
-		} catch(BusinessException e){
+		} catch (BusinessException e) {
 			LOGGER.error(e.getMessage());
 			throw e;
 		} catch (Exception e) {
 			LOGGER.error(AppConstants.REMOVE_ORDER_CODE, e);
-			throw new BusinessException(AppConstants.REMOVE_ORDER_CODE,
-					AppConstants.REMOVE_ORDER_MESSAGE);
+			throw new BusinessException(AppConstants.REMOVE_ORDER_CODE, AppConstants.REMOVE_ORDER_MESSAGE);
 
 		}
 		return flag;
@@ -267,5 +266,26 @@ public class OrderImpl implements IOrderBiz {
 		return orderDtoList;
 	}
 
+	@Override
+	public boolean updateOrderById(OrderDto orderDto) throws BusinessException {
+		Order order = ModelUtil.dtoToModel(orderDto, Order.class);
+		boolean flag = false;
+		try {
+			Order orderParam = orderMapper.selectByPrimaryKey(order.getId());
+			if (orderParam != null) {
+				order.setVersion(orderParam.getVersion());
+				int i = orderMapper.updateBySelective(order);
+				if (i == 0) {
+					throw new BusinessException(AppConstants.UPDATE_ORDER_ERROR_CODE,
+							AppConstants.UPDATE_ORDER_ERROR_MESSAGE);
+				}
+				flag = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(AppConstants.UPDATE_ORDER_ERROR_CODE, AppConstants.UPDATE_ORDER_ERROR_MESSAGE);
+		}
+		return flag;
+	}
 
 }

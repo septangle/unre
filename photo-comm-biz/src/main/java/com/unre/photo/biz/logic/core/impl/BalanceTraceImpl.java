@@ -1,8 +1,11 @@
 package com.unre.photo.biz.logic.core.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,4 +125,24 @@ public class BalanceTraceImpl implements IBalanceTraceBiz {
 
 		balanceTraceMapper.insertSelective(balanceTrace);
 	}
+
+	@Override
+	public List<BalanceTraceDto> findBalanceTraceByMemberId(BalanceTraceDto balanceTraceDto) throws BusinessException {
+		List<BalanceTraceDto> balanceTraceDtoList = new ArrayList<BalanceTraceDto>();
+		try {
+			BalanceTrace balanceTrace = ModelUtil.dtoToModel(balanceTraceDto, BalanceTrace.class);
+			List<BalanceTrace> balanceTraceList=balanceTraceMapper.selectRecordById(balanceTrace);
+			if (!CollectionUtils.isEmpty(balanceTraceList)) {
+				for (BalanceTrace balance : balanceTraceList) {
+					balanceTraceDtoList.add(ModelUtil.modelToDto(balance, BalanceTraceDto.class));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(AppConstants.QUERY_BALANCE_TRACE_CODE, AppConstants.QUERY_BALANCE_TRACE_MESSAGE);
+		}
+		return balanceTraceDtoList;
+	}
+
+
 }

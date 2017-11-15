@@ -55,5 +55,12 @@ public interface IOrderFacade {
 	 */
 	public OrderResponse findConsumeOrder(OrderRequest request)throws Exception;
 	
+	/**
+	 * 修改场景名
+	 * @param id
+	 * @return boolean
+	 */
+	public OrderResponse updateOrderById(OrderRequest request) throws Exception;
+	
 
 }
